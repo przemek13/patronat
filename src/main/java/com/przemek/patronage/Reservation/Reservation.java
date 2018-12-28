@@ -23,7 +23,7 @@ public class Reservation {
     LocalDateTime reservationStart;
     LocalDateTime reservationEnd;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     ConferenceRoom conferenceRoom;
 
     public Reservation() {
