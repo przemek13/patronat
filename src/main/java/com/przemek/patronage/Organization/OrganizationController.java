@@ -1,9 +1,12 @@
 package com.przemek.patronage.Organization;
 
+import com.przemek.patronage.Exceptions.NoSuchIdException;
+import com.przemek.patronage.Exceptions.SameNameException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,7 +26,7 @@ public class OrganizationController {
     }
 
     @PostMapping("/organizations")
-    ResponseEntity addOrganization (@RequestBody Organization newOrganization) {
+    ResponseEntity addOrganization (@Valid @RequestBody Organization newOrganization) throws SameNameException {
         service.save(newOrganization);
         return ResponseEntity.ok().build();
     }
@@ -34,7 +37,7 @@ public class OrganizationController {
     }
 
     @DeleteMapping("/organizations/{id}")
-    ResponseEntity deleteOrganization(@PathVariable Long id) {
+    ResponseEntity deleteOrganization(@PathVariable Long id) throws NoSuchIdException {
         service.delete(id);
         return ResponseEntity.ok().build();
     }

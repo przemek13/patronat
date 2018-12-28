@@ -1,5 +1,8 @@
 package com.przemek.patronage.ConferenceRoom;
 
+import com.przemek.patronage.Exceptions.SameNameException;
+import com.przemek.patronage.Organization.Organization;
+import com.przemek.patronage.Organization.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,19 +11,29 @@ import java.util.Objects;
 
 @Service
 public class ConferenceRoomService {
+
     private ConferenceRoomRepository conferenceRooms;
+    private OrganizationRepository organizations;
 
     @Autowired
-    public ConferenceRoomService(ConferenceRoomRepository conferenceRooms) {
+    public ConferenceRoomService(ConferenceRoomRepository conferenceRooms, OrganizationRepository organizations) {
         this.conferenceRooms = Objects.requireNonNull(conferenceRooms, "must be defined.");
+        this.organizations = organizations;
     }
 
     public List<ConferenceRoom> findAll() {
         return conferenceRooms.findAll();
     }
 
-    public void save(ConferenceRoom newConferenceRoom) {
-        conferenceRooms.save(newConferenceRoom);
+    public void save(ConferenceRoom newConferenceRoom, Long id) throws SameNameException {
+        Organization org = organizations.findById(id).get();
+        newConferenceRoom.setOrganization(org);
+        if (conferenceRooms.findByName(newConferenceRoom.getName()) == null) {
+            conferenceRooms.save(newConferenceRoom);
+        } else if (conferenceRooms.findByName(newConferenceRoom.getName()).getName().equals(newConferenceRoom.getName())) {
+            throw new SameNameException("The Conference room with name given already exist. Please choose different name.");
+        }
+//        org.getConferenceRoomsList().add(newConferenceRoom);
     }
 
     ConferenceRoom update(ConferenceRoom newConferenceRoom, Long id) {
