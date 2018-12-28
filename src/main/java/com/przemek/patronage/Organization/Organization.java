@@ -1,5 +1,8 @@
 package com.przemek.patronage.Organization;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import lombok.Data;
 import org.hibernate.annotations.Cascade;
@@ -11,6 +14,9 @@ import java.util.List;
 
 @Data
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Organization {
 
     private @Id
@@ -21,7 +27,7 @@ public class Organization {
 //    @Column(unique = true)
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     List<ConferenceRoom> conferenceRoomsList;
 
     public Organization() {

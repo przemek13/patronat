@@ -1,5 +1,8 @@
 package com.przemek.patronage.ConferenceRoom;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Reservation.Reservation;
 import lombok.Data;
@@ -14,6 +17,9 @@ import java.util.List;
 
 @Data
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class ConferenceRoom {
 
     private @Id
@@ -35,10 +41,10 @@ public class ConferenceRoom {
     private int standingPlaces;
     private int hangingPlaces;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     public List<Reservation> reservations;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     Organization organization;
 
     public ConferenceRoom() {
