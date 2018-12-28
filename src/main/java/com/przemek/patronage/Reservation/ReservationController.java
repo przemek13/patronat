@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 
+@RestController
 public class ReservationController {
 
     private ReservationService service;
@@ -24,8 +25,8 @@ public class ReservationController {
     }
 
     @PostMapping("/reservations/{id}")
-    ResponseEntity addReservation(@RequestBody Reservation newReservation, @PathVariable ConferenceRoom conferenceRoom) {
-        service.save(newReservation, conferenceRoom);
+    ResponseEntity addReservation(@RequestBody Reservation newReservation, @PathVariable Long id) {
+        service.save(newReservation, id);
         return ResponseEntity.ok().build();
     }
 

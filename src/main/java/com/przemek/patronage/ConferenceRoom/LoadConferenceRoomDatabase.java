@@ -14,8 +14,7 @@ public class LoadConferenceRoomDatabase {
     @Bean
     CommandLineRunner initConferenceRoomDatabase(ConferenceRoomRepository conferenceRooms) {
         return args -> {
-            log.info("Preloading " + conferenceRooms.save(new ConferenceRoom("Conference room 1", 10,true,10,10,10, new Organization("Organization 3"))));
-            log.info("Preloading " + conferenceRooms.save(new ConferenceRoom("Conference room 2", 1,true,20,20,20,new Organization("Organization 4"))));
+            log.info("Preloading " + conferenceRooms.save(new ConferenceRoom("BLUE", 10,true,10,10,10, new Organization("Organization 2"))));
         };
     }
 }

@@ -17,7 +17,6 @@ class LoadOrganizationDatabase {
     CommandLineRunner initOrganizationDatabase(OrganizationRepository organizations) {
         return args -> {
             log.info("Preloading " + organizations.save(new Organization("Organization 1")));
-            log.info("Preloading " + organizations.save(new Organization("Organization 2")));
         };
     }
 }

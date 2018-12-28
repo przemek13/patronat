@@ -1,7 +1,6 @@
 package com.przemek.patronage.ConferenceRoom;
 
-import com.przemek.patronage.Organization.Organization;
-import com.przemek.patronage.Organization.OrganizationService;
+import com.przemek.patronage.Exceptions.SameNameException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +23,9 @@ public class ConferenceRoomController {
         return ResponseEntity.ok(service.findAll());
     }
 
-    @PostMapping("/rooms")
-    ResponseEntity addConferenceRoom (@RequestBody ConferenceRoom newConferenceRoom) {
-        service.save(newConferenceRoom);
+    @PostMapping("/rooms/{id}")
+    ResponseEntity addConferenceRoom(@RequestBody ConferenceRoom newConferenceRoom, @PathVariable Long id) throws SameNameException {
+        service.save(newConferenceRoom, id);
         return ResponseEntity.ok().build();
     }
 

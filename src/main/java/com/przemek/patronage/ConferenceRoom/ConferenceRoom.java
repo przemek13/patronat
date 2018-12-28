@@ -21,11 +21,11 @@ public class ConferenceRoom {
     Long id;
     @NotBlank
     @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.")
-    @Column(unique = true)
+//    @Column(unique = true)
     private String name;
     @Nullable
     @Size(min = 2, max = 20, message = "Conference name should have minimum 2 and maximum 20 characters.")
-    @Column(unique = true)
+//    @Column(unique = true)
     private String optionalId;
     @Min(0)
     @Max(10)
