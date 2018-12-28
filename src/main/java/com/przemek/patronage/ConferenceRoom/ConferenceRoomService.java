@@ -1,6 +1,5 @@
 package com.przemek.patronage.ConferenceRoom;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.przemek.patronage.Exceptions.SameNameException;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationRepository;
@@ -31,7 +30,7 @@ public class ConferenceRoomService {
         newConferenceRoom.setOrganization(org);
         if (conferenceRooms.findByName(newConferenceRoom.getName()) == null) {
             org.getConferenceRoomsList().add(newConferenceRoom);
-            conferenceRooms.save(newConferenceRoom);
+            organizations.save(org);
         } else if (conferenceRooms.findByName(newConferenceRoom.getName()).getName().equals(newConferenceRoom.getName())) {
             throw new SameNameException("The Conference room with name given already exist. Please choose different name.");
         }
