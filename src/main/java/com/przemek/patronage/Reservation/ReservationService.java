@@ -2,11 +2,13 @@ package com.przemek.patronage.Reservation;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
+import com.przemek.patronage.Exceptions.NoSuchIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -24,9 +26,13 @@ public class ReservationService {
         return reservations.findAll();
     }
 
-    public void save(Reservation newReservation, Long id) {
+    public void save(Reservation newReservation, Long id) throws NoSuchIdException {
+        if (conferenceRooms.findById(id).equals(Optional.empty())) {
+            throw new NoSuchIdException("The Conference room with id given doesn't exist in the base.");
+        }
         ConferenceRoom room = conferenceRooms.findById(id).get();
         newReservation.setConferenceRoom(room);
+        room.getReservations().add(newReservation);
         reservations.save(newReservation);
     }
 
@@ -45,7 +51,10 @@ public class ReservationService {
                 });
     }
 
-    public void delete(Long id) {
-        reservations.deleteById(id);
+    public void delete(Long id) throws NoSuchIdException {
+        if (reservations.findById(id).equals(Optional.empty())) {
+            throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
+        } else
+            reservations.deleteById(id);
     }
 }

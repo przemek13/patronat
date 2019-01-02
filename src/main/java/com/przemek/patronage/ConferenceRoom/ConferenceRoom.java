@@ -1,11 +1,11 @@
 package com.przemek.patronage.ConferenceRoom;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Reservation.Reservation;
 import lombok.Data;
+import org.springframework.hateoas.core.EmbeddedWrappers;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -21,17 +21,14 @@ import java.util.List;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 public class ConferenceRoom {
-
     private @Id
     @GeneratedValue
     Long id;
     @NotBlank
     @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.")
-//    @Column(unique = true)
     private String name;
     @Nullable
     @Size(min = 2, max = 20, message = "Conference name should have minimum 2 and maximum 20 characters.")
-//    @Column(unique = true)
     private String optionalId;
     @Min(0)
     @Max(10)

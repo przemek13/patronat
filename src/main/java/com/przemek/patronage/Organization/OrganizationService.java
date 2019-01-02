@@ -1,13 +1,11 @@
 package com.przemek.patronage.Organization;
 
-import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
 import com.przemek.patronage.Exceptions.NoSuchIdException;
 import com.przemek.patronage.Exceptions.SameNameException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

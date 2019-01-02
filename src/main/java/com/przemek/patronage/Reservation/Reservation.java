@@ -1,5 +1,7 @@
 package com.przemek.patronage.Reservation;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import lombok.Data;
 
@@ -8,17 +10,17 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-
 @Data
 @Entity
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Reservation {
-
     private @Id
     @GeneratedValue
     Long id;
     @NotBlank
     @Size(min = 2, max = 20, message = "Reservation name should have minimum 2 and maximum 20 characters.")
-    @Column(unique = true)
     private String reservingId;
     LocalDateTime reservationStart;
     LocalDateTime reservationEnd;

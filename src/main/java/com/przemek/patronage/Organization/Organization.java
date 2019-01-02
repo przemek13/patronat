@@ -1,11 +1,10 @@
 package com.przemek.patronage.Organization;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
+import org.springframework.hateoas.core.EmbeddedWrappers;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
