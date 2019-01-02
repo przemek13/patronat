@@ -1,6 +1,6 @@
 package com.przemek.patronage.Reservation;
 
-import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
+import com.przemek.patronage.Exceptions.NoSuchIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,6 @@ public class ReservationController {
     private ReservationService service;
 
     @Autowired
-
     public ReservationController(ReservationService service) {
         this.service = Objects.requireNonNull(service, "must be defined.");
     }
@@ -25,7 +24,7 @@ public class ReservationController {
     }
 
     @PostMapping("/reservations/{id}")
-    ResponseEntity addReservation(@RequestBody Reservation newReservation, @PathVariable Long id) {
+    ResponseEntity addReservation(@RequestBody Reservation newReservation, @PathVariable Long id) throws NoSuchIdException {
         service.save(newReservation, id);
         return ResponseEntity.ok().build();
     }
@@ -36,7 +35,7 @@ public class ReservationController {
     }
 
     @DeleteMapping("/reservations/{id}")
-    ResponseEntity deleteReservation(@PathVariable Long id) {
+    ResponseEntity deleteReservation(@PathVariable Long id) throws NoSuchIdException {
         service.delete(id);
         return ResponseEntity.ok().build();
     }

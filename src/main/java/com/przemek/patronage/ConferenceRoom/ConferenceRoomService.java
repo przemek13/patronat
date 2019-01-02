@@ -1,5 +1,6 @@
 package com.przemek.patronage.ConferenceRoom;
 
+import com.przemek.patronage.Exceptions.NoSuchIdException;
 import com.przemek.patronage.Exceptions.SameNameException;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ConferenceRoomService {
@@ -25,7 +27,10 @@ public class ConferenceRoomService {
         return conferenceRooms.findAll();
     }
 
-    public void save(ConferenceRoom newConferenceRoom, Long id) throws SameNameException {
+    public void save(ConferenceRoom newConferenceRoom, Long id) throws SameNameException, NoSuchIdException {
+        if (organizations.findById(id).equals(Optional.empty())) {
+            throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
+        }
         Organization org = organizations.findById(id).get();
         newConferenceRoom.setOrganization(org);
         if (conferenceRooms.findByName(newConferenceRoom.getName()) == null) {
@@ -55,7 +60,11 @@ public class ConferenceRoomService {
                 });
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws NoSuchIdException {
+        if (conferenceRooms.findById(id).equals(Optional.empty())) {
+            throw new NoSuchIdException("The Conference room with id given doesn't exist in the base.");
+        }
+        else
         conferenceRooms.deleteById(id);
     }
 }
