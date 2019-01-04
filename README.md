@@ -35,14 +35,13 @@ You are able to perform CRUD operations in Reservation System, using CURL tool i
 F.ex. to add an example Conference room to the System:
 
 with your Reservation System application running, in your command line (f.ex. Git Bash shell for Windows) insert:
-
 1. curl -d '{"name":"Organization example name"}' -H "Content-Type: application/json" -X POST localhost:8070/organizations
-
 to add Organization to the System,
 
 then insert:
-
 2. curl -d '{"name": "Conference Room example name","optionalId": null,"floor": 10,"available": true,"sittingPlaces": 10,"standingPlaces": 10,"hangingPlaces": 10}' -H "Content-Type: application/json" -X POST localhost:8070/rooms/<the id number of Organization added earlier to the System>
 
-You should be able to retrieve the related data by simple: curl localhost:8070/rooms.
+You should be able to retrieve the related data by simple: 
+curl localhost:8070/rooms
+in your command line now.
 ```
