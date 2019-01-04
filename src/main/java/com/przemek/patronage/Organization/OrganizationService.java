@@ -1,6 +1,5 @@
 package com.przemek.patronage.Organization;
 
-import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
 import com.przemek.patronage.Exceptions.NoSuchIdException;
 import com.przemek.patronage.Exceptions.SameNameException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,10 @@ import java.util.Optional;
 public class OrganizationService {
 
     private OrganizationRepository organizations;
-    private ConferenceRoomRepository conferenceRooms;
 
     @Autowired
-    public OrganizationService(OrganizationRepository organizations, ConferenceRoomRepository conferenceRooms) {
+    public OrganizationService(OrganizationRepository organizations) {
         this.organizations = Objects.requireNonNull(organizations, "must be defined.");
-        this.conferenceRooms = conferenceRooms;
     }
 
     public List<Organization> findAll() {
@@ -34,7 +31,7 @@ public class OrganizationService {
         }
     }
 
-    Organization update(Organization newOrganization, Long id) {
+    public Organization update(Organization newOrganization, Long id) {
 
         return organizations.findById(id)
                 .map(organization -> {

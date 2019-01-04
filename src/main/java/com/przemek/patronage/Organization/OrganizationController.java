@@ -29,29 +29,31 @@ public class OrganizationController {
     }
 
     @GetMapping("/organizations")
-    public Resources<Resource<Organization>> getOrganizations() {
-
-        List<Resource<Organization>> organizations = service.findAll().stream()
-                .map(assembler::toResource)
-                .collect(Collectors.toList());
-
-        return new Resources<>(organizations,
-                linkTo(methodOn(OrganizationController.class).getOrganizations()).withSelfRel());
+    public ResponseEntity<List<Organization>> getOrganizations() {
+        return ResponseEntity.ok(service.findAll());
     }
 
+//        public Resources<Resource<Organization>> getOrganizations() {
+//        List<Resource<Organization>> organizations = service.findAll().stream()
+//                .map(assembler::toResource)
+//                .collect(Collectors.toList());
+//        return new Resources<>(organizations,
+//                linkTo(methodOn(OrganizationController.class).getOrganizations()).withSelfRel());
+//    }
+
     @PostMapping("/organizations")
-    ResponseEntity addOrganization (@Valid @RequestBody Organization newOrganization) throws SameNameException {
+    public ResponseEntity addOrganization(@Valid @RequestBody Organization newOrganization) throws SameNameException {
         service.save(newOrganization);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/organizations/{id}")
-    ResponseEntity updateOrganization(@RequestBody Organization newOrganization, @PathVariable Long id) {
+    public ResponseEntity updateOrganization(@RequestBody Organization newOrganization, @PathVariable Long id) {
         return ResponseEntity.ok(service.update(newOrganization, id));
     }
 
     @DeleteMapping("/organizations/{id}")
-    ResponseEntity deleteOrganization(@PathVariable Long id) throws NoSuchIdException {
+    public ResponseEntity deleteOrganization(@PathVariable Long id) throws NoSuchIdException {
         service.delete(id);
         return ResponseEntity.ok().build();
     }

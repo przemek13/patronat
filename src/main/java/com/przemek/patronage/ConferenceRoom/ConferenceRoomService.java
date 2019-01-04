@@ -41,7 +41,7 @@ public class ConferenceRoomService {
         }
     }
 
-    ConferenceRoom update(ConferenceRoom newConferenceRoom, Long id) {
+    public ConferenceRoom update(ConferenceRoom newConferenceRoom, Long id) {
 
         return conferenceRooms.findById(id)
                 .map(conferenceRoom -> {
@@ -49,8 +49,8 @@ public class ConferenceRoomService {
                     conferenceRoom.setOptionalId(newConferenceRoom.getOptionalId());
                     conferenceRoom.setFloor(newConferenceRoom.getFloor());
                     conferenceRoom.setAvailable(newConferenceRoom.isAvailable());
-                    conferenceRoom.setSittingPlaces(newConferenceRoom.getSittingPlaces());
-                    conferenceRoom.setStandingPlaces(newConferenceRoom.getStandingPlaces());
+                    conferenceRoom.setSittingAndStandingPlaces(newConferenceRoom.getSittingAndStandingPlaces());
+                    conferenceRoom.setLyingPlaces(newConferenceRoom.getLyingPlaces());
                     conferenceRoom.setHangingPlaces(newConferenceRoom.getHangingPlaces());
                     return conferenceRooms.save(conferenceRoom);
                 })

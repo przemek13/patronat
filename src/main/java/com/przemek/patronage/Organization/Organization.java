@@ -1,10 +1,11 @@
 package com.przemek.patronage.Organization;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import lombok.Data;
-import org.springframework.hateoas.core.EmbeddedWrappers;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -16,6 +17,7 @@ import java.util.List;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Organization {
 
     private @Id
@@ -23,11 +25,11 @@ public class Organization {
     Long id;
     @NotBlank
     @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.")
-//    @Column(unique = true)
     private String name;
 
+    @JsonSerialize(using = OrganizationConferenceRoomSerializer.class)
     @OneToMany(cascade = CascadeType.ALL)
-    List<ConferenceRoom> conferenceRoomsList;
+    private List<ConferenceRoom> conferenceRoomsList;
 
     public Organization() {
     }

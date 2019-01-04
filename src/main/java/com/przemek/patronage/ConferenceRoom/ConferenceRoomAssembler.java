@@ -14,6 +14,6 @@ public class ConferenceRoomAssembler implements ResourceAssembler<ConferenceRoom
     public Resource<ConferenceRoom> toResource(ConferenceRoom conferenceRoom) {
 
         return new Resource<ConferenceRoom>(conferenceRoom,
-                linkTo(methodOn(ConferenceRoomController.class).getConferenceRoom()).withRel("Conference rooms"));
+                linkTo(methodOn(ConferenceRoomController.class).getConferenceRooms()).withRel("Conference rooms"));
     }
 }

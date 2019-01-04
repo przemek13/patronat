@@ -29,7 +29,7 @@ public class EquipmentService {
         equipmentRepository.save(newEquipment);
     }
 
-    Equipment update(Equipment newEquipment, Long id) {
+    public Equipment update(Equipment newEquipment, Long id) {
 
         return equipmentRepository.findById(id)
                 .map(equipment -> {

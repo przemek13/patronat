@@ -1,6 +1,7 @@
 package com.przemek.patronage.Reservation;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
+import com.przemek.patronage.Organization.Organization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -11,9 +12,9 @@ import org.springframework.context.annotation.Configuration;
 public class LoadReservationDatabase {
 
     @Bean
-    CommandLineRunner initReservationDatabase(ReservationRepository reservations) {
+    public CommandLineRunner initReservationDatabase(ReservationRepository reservations) {
         return args -> {
-            log.info("Preloading " + reservations.save(new Reservation("Reserving 1", "2018-12-23T16:15", "2018-12-23T17:00",new ConferenceRoom("RED", false))));
+            log.info("Preloading " + reservations.save(new Reservation("Reserving 1", "2019-03-23T16:00", "2019-03-23T17:00",new ConferenceRoom("Conference Room 2", 5, true, 5, new Organization("Organization 3")))));
         };
     }
 }
