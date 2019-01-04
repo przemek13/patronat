@@ -2,6 +2,6 @@ package com.przemek.patronage;
 
 public class Greeter {
     public String sayHello() {
-        return "Hello hello!";
+        return "Welcome to Reservation System!";
     }
 }

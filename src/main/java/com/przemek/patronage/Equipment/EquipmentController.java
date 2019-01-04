@@ -23,18 +23,18 @@ public class EquipmentController {
     }
 
     @PostMapping("/equipment")
-    ResponseEntity addEquipment(@RequestBody Equipment newEquipment) {
+    public ResponseEntity addEquipment(@RequestBody Equipment newEquipment) {
         service.save(newEquipment);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/equipment/{id}")
-    ResponseEntity updateEquipment(@RequestBody Equipment newEquipment, @PathVariable Long id) {
+    public ResponseEntity updateEquipment(@RequestBody Equipment newEquipment, @PathVariable Long id) {
         return ResponseEntity.ok(service.update(newEquipment, id));
     }
 
     @DeleteMapping("/equipment/{id}")
-    ResponseEntity deleteEquipment(@PathVariable Long id) {
+    public ResponseEntity deleteEquipment(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.ok().build();
     }

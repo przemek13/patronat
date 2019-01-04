@@ -36,7 +36,7 @@ public class ReservationService {
         reservations.save(newReservation);
     }
 
-    Reservation update(Reservation newReservation, Long id) {
+    public Reservation update(Reservation newReservation, Long id) {
 
         return reservations.findById(id)
                 .map(reservation -> {
@@ -53,7 +53,7 @@ public class ReservationService {
 
     public void delete(Long id) throws NoSuchIdException {
         if (reservations.findById(id).equals(Optional.empty())) {
-            throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
+            throw new NoSuchIdException("The Reservation with id given doesn't exist in the base.");
         } else
             reservations.deleteById(id);
     }

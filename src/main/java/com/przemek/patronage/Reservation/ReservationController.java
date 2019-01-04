@@ -24,18 +24,18 @@ public class ReservationController {
     }
 
     @PostMapping("/reservations/{id}")
-    ResponseEntity addReservation(@RequestBody Reservation newReservation, @PathVariable Long id) throws NoSuchIdException {
+    public ResponseEntity addReservation(@RequestBody Reservation newReservation, @PathVariable Long id) throws NoSuchIdException {
         service.save(newReservation, id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/reservations/{id}")
-    ResponseEntity updateReservation(@RequestBody Reservation newReservation, @PathVariable Long id) {
+    public ResponseEntity updateReservation(@RequestBody Reservation newReservation, @PathVariable Long id) {
         return ResponseEntity.ok(service.update(newReservation, id));
     }
 
     @DeleteMapping("/reservations/{id}")
-    ResponseEntity deleteReservation(@PathVariable Long id) throws NoSuchIdException {
+    public ResponseEntity deleteReservation(@PathVariable Long id) throws NoSuchIdException {
         service.delete(id);
         return ResponseEntity.ok().build();
     }

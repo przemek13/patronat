@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Configuration;
 public class LoadConferenceRoomDatabase {
 
     @Bean
-    CommandLineRunner initConferenceRoomDatabase(ConferenceRoomRepository conferenceRooms) {
+    public CommandLineRunner initConferenceRoomDatabase(ConferenceRoomRepository conferenceRooms) {
         return args -> {
-            log.info("Preloading " + conferenceRooms.save(new ConferenceRoom("BLUE", 10, true, 10, 10, 10, new Organization("Organization 2"))));
+            log.info("Preloading " + conferenceRooms.save(new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 2"))));
         };
     }
 }
