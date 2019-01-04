@@ -26,18 +26,14 @@ The Project should have built automatically.
 ```
 
 ## Using the application
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests as appropriate.
+You are able to perform CRUD operations in Reservation System, using CURL tool instructions.
 
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
-
-
-
-Install Gradle build tool on your computer
-In your favorite IDE (f.ex. IntelliJ)
-File -> New -> Project from Version Control -> Git
-Import Gradle Project
-Use default gradle wrapper
-Tick (Use auto-import)
+```
+F.ex. to add an example Conference room to the System: 
+with your Reservation System application running, in your command line (f.ex. Git Bash shell for Windows) insert:
+1. curl -d '{"name":"Organization example name"}' -H "Content-Type: application/json" -X POST localhost:8070/organizations
+to add Organization to the System,
+next insert:
+2. curl -d '{"name": "Conference Room example name","optionalId": null,"floor": 10,"available": true,"sittingPlaces": 10,"standingPlaces": 10,"hangingPlaces": 10}' -H "Content-Type: application/json" -X POST localhost:8070/rooms/<the id number of Organization added earlier to the System>
+```
