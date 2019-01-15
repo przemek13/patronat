@@ -42,14 +42,15 @@ public class OrganizationController {
 //    }
 
     @PostMapping("/organizations")
-    public ResponseEntity addOrganization(@Valid @RequestBody Organization newOrganization) throws SameNameException {
+    public ResponseEntity<Organization> addOrganization(@Valid @RequestBody Organization newOrganization) throws SameNameException {
         service.save(newOrganization);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(newOrganization);
     }
 
     @PutMapping("/organizations/{id}")
     public ResponseEntity updateOrganization(@RequestBody Organization newOrganization, @PathVariable Long id) {
-        return ResponseEntity.ok(service.update(newOrganization, id));
+        service.update(newOrganization, id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/organizations/{id}")

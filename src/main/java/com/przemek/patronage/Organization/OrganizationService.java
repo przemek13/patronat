@@ -47,7 +47,6 @@ public class OrganizationService {
     public void delete(Long id) throws NoSuchIdException {
         if (organizations.findById(id).equals(Optional.empty())) {
             throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
-
         } else
             organizations.deleteById(id);
     }

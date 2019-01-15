@@ -2,8 +2,8 @@ package com.przemek.patronage.ConferenceRoom;
 
 import com.przemek.patronage.Exceptions.NoSuchIdException;
 import com.przemek.patronage.Exceptions.SameNameException;
-import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationRepository;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class ConferenceRoomService {
     @Autowired
     public ConferenceRoomService(ConferenceRoomRepository conferenceRooms, OrganizationRepository organizations) {
         this.conferenceRooms = Objects.requireNonNull(conferenceRooms, "must be defined.");
-        this.organizations = organizations;
+        this.organizations = Objects.requireNonNull(organizations, "must be defined.");
     }
 
     public List<ConferenceRoom> findAll() {
@@ -31,12 +31,12 @@ public class ConferenceRoomService {
         if (organizations.findById(id).equals(Optional.empty())) {
             throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
         }
-        Organization org = organizations.findById(id).get();
+        var org = organizations.findById(id).get();
         newConferenceRoom.setOrganization(org);
         if (conferenceRooms.findByName(newConferenceRoom.getName()) == null) {
             org.getConferenceRoomsList().add(newConferenceRoom);
             organizations.save(org);
-        } else if (conferenceRooms.findByName(newConferenceRoom.getName()).getName().equals(newConferenceRoom.getName())) {
+        } else {
             throw new SameNameException("The Conference room with name given already exist. Please choose different name.");
         }
     }
@@ -63,8 +63,7 @@ public class ConferenceRoomService {
     public void delete(Long id) throws NoSuchIdException {
         if (conferenceRooms.findById(id).equals(Optional.empty())) {
             throw new NoSuchIdException("The Conference room with id given doesn't exist in the base.");
-        }
-        else
-        conferenceRooms.deleteById(id);
+        } else
+            conferenceRooms.deleteById(id);
     }
 }

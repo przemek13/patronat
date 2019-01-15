@@ -1,5 +1,8 @@
 package com.przemek.patronage.ConferenceRoom;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.Equipment.Equipment;
 import com.przemek.patronage.Organization.Organization;
@@ -16,6 +19,10 @@ import java.util.List;
 
 @Data
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ConferenceRoom {
     private @Id
     @GeneratedValue

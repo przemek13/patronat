@@ -1,6 +1,6 @@
 package com.przemek.patronage.Reservation;
 
-import com.przemek.patronage.Organization.AbstractTest;
+import com.przemek.patronage.AbstractTest;
 import com.przemek.patronage.Organization.Organization;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,8 +28,8 @@ public class ReservationControllerTest extends AbstractTest {
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
         String content = mvcResult.getResponse().getContentAsString();
-        Organization[] productlist = super.mapFromJson(content, Organization[].class);
-        assertTrue(productlist.length > 0);
+        Reservation[] reservationlist = super.mapFromJson(content, Reservation[].class);
+        assertTrue(reservationlist.length > 0);
     }
 
     @Test
