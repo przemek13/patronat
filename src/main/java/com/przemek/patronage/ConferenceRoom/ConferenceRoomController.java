@@ -41,9 +41,9 @@ public class ConferenceRoomController {
 //    }
 
     @PostMapping("/rooms/{id}")
-    public ResponseEntity addConferenceRoom(@RequestBody ConferenceRoom newConferenceRoom, @PathVariable Long id) throws SameNameException, NoSuchIdException {
+    public ResponseEntity <ConferenceRoom> addConferenceRoom(@RequestBody ConferenceRoom newConferenceRoom, @PathVariable Long id) throws SameNameException, NoSuchIdException {
         service.save(newConferenceRoom, id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(newConferenceRoom);
     }
 
     @PutMapping("/rooms/{id}")

@@ -1,7 +1,13 @@
 package com.przemek.patronage.Organization;
 
+import com.przemek.patronage.AbstractTest;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -26,8 +32,8 @@ public class OrganizationControllerTest extends AbstractTest {
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
         String content = mvcResult.getResponse().getContentAsString();
-        Organization[] productlist = super.mapFromJson(content, Organization[].class);
-        assertTrue(productlist.length > 0);
+        Organization[] organizationlist = super.mapFromJson(content, Organization[].class);
+        assertTrue(organizationlist.length > 0);
     }
 
     @Test

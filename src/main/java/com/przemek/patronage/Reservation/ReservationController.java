@@ -1,6 +1,9 @@
 package com.przemek.patronage.Reservation;
 
 import com.przemek.patronage.Exceptions.NoSuchIdException;
+import com.przemek.patronage.Exceptions.RoomReservedException;
+import com.przemek.patronage.Exceptions.StartAfterEndException;
+import com.przemek.patronage.Exceptions.WrongDurationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +27,9 @@ public class ReservationController {
     }
 
     @PostMapping("/reservations/{id}")
-    public ResponseEntity addReservation(@RequestBody Reservation newReservation, @PathVariable Long id) throws NoSuchIdException {
+    public ResponseEntity <Reservation> addReservation(@RequestBody Reservation newReservation, @PathVariable Long id) throws NoSuchIdException, WrongDurationException, StartAfterEndException, RoomReservedException {
         service.save(newReservation, id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(newReservation);
     }
 
     @PutMapping("/reservations/{id}")

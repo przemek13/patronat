@@ -1,4 +1,4 @@
-package com.przemek.patronage.Reservation;
+package com.przemek.patronage;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,4 +37,3 @@ public abstract class AbstractTest {
         return objectMapper.readValue(json, clazz);
     }
 }
-
