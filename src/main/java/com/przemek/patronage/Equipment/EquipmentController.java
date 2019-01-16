@@ -23,9 +23,9 @@ public class EquipmentController {
     }
 
     @PostMapping("/equipment")
-    public ResponseEntity addEquipment(@RequestBody Equipment newEquipment) {
+    public ResponseEntity <Equipment> addEquipment(@RequestBody Equipment newEquipment) {
         service.save(newEquipment);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(newEquipment);
     }
 
     @PutMapping("/equipment/{id}")

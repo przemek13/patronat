@@ -26,7 +26,7 @@ public class OrganizationService {
     public void save(Organization newOrganization) throws SameNameException {
         if (organizations.findByName(newOrganization.getName()) == null) {
             organizations.save(newOrganization);
-        } else if (organizations.findByName(newOrganization.getName()).getName().equals(newOrganization.getName())) {
+        } else {
             throw new SameNameException("The Organization with name given already exist. Please choose different name.");
         }
     }

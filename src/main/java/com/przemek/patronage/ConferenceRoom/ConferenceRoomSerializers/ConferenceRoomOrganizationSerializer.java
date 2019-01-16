@@ -1,4 +1,4 @@
-package com.przemek.patronage.ConferenceRoom;
+package com.przemek.patronage.ConferenceRoom.ConferenceRoomSerializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;

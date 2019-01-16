@@ -27,12 +27,10 @@ public class Reservation {
     @NotBlank
     @Size(min = 2, max = 20, message = "Reservation name should have minimum 2 and maximum 20 characters.")
     private String reservingId;
-
     @Future
     private LocalDateTime reservationStart;
     @Future
     private LocalDateTime reservationEnd;
-
     @JsonSerialize(using = ReservationConferenceRoomSerializer.class)
     @ManyToOne(cascade = CascadeType.ALL)
     private ConferenceRoom conferenceRoom;
@@ -41,7 +39,7 @@ public class Reservation {
     }
 
     public Reservation(@NotBlank @Size(min = 2, max = 20, message = "Reservation name should have minimum 2 and maximum 20 characters.") String reservingId,
-                       String reservationStart, String reservationEnd, ConferenceRoom conferenceRoom) {
+                       @Future String reservationStart, @Future String reservationEnd, ConferenceRoom conferenceRoom) {
         this.reservingId = reservingId;
         this.reservationStart = LocalDateTime.parse(reservationStart).truncatedTo(ChronoUnit.MINUTES);
         this.reservationEnd = LocalDateTime.parse(reservationEnd).truncatedTo(ChronoUnit.MINUTES);

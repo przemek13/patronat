@@ -25,7 +25,6 @@ public class EquipmentService {
             newEquipment.setExternalNumber(null);
             newEquipment.setConnections(null);
         }
-
         equipmentRepository.save(newEquipment);
     }
 
@@ -35,7 +34,7 @@ public class EquipmentService {
                 .map(equipment -> {
                     equipment.setProjectorName(newEquipment.getProjectorName());
                     equipment.setPhone(newEquipment.isPhone());
-                    if (equipment.isPhone() == true) {
+                    if (equipment.isPhone()) {
                         equipment.setInternalNumber(newEquipment.getInternalNumber());
                         equipment.setExternalNumber(newEquipment.getExternalNumber());
                         equipment.setConnections(newEquipment.getConnections());

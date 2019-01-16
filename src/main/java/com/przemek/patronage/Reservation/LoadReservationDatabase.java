@@ -14,7 +14,7 @@ public class LoadReservationDatabase {
     @Bean
     public CommandLineRunner initReservationDatabase(ReservationRepository reservations) {
         return args -> {
-            log.info("Preloading " + reservations.save(new Reservation("Reserving 1", "2019-03-23T16:05:03", "2019-03-23T17:00:04",new ConferenceRoom("Conference Room 2", 5, true, 5, new Organization("Organization 3")))));
+            log.info("Preloading " + reservations.save(new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T17:00:00",new ConferenceRoom("Conference Room 2", 5, true, 5, new Organization("Organization 3")))));
         };
     }
 }
