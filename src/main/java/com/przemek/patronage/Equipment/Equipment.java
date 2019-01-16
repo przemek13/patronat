@@ -1,12 +1,12 @@
 package com.przemek.patronage.Equipment;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import lombok.Data;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -14,10 +14,6 @@ import javax.validation.constraints.Pattern;
 @Data
 @Entity
 public class Equipment {
-
-    public Equipment() {
-    }
-
     @Nullable
     private @Id
     @GeneratedValue
@@ -34,22 +30,27 @@ public class Equipment {
     private String externalNumber;
     @Nullable
     private InterfaceConnections connections;
+    @JsonSerialize(using = EquipmentConferenceRoomSerializer.class)
+    @OneToOne (cascade = CascadeType.ALL)
+    private ConferenceRoom conferenceroom;
 
-    public Equipment(@Nullable String projectorName,
-                     boolean isPhone,
+    public Equipment() {
+    }
+
+    public Equipment(@Nullable String projectorName, boolean isPhone,
                      @Min(value = 0, message = "Internal number has to be an integer between 0 and 99") @Max(value = 99, message = "Internal number has to be an integer between 0 and 99") int internalNumber,
-                     @Nullable @Pattern(regexp = "^(\\+\\d{2}\\s\\d{9})$") String externalNumber,
-                     @Nullable InterfaceConnections connections) {
+                     @Nullable @Pattern(regexp = "^(\\+\\d{2}\\s\\d{9})$") String externalNumber, @Nullable InterfaceConnections connections, ConferenceRoom conferenceroom) {
         this.projectorName = projectorName;
         this.isPhone = isPhone;
         this.internalNumber = internalNumber;
         this.externalNumber = externalNumber;
         this.connections = connections;
+        this.conferenceroom = conferenceroom;
     }
 
-    public Equipment(@Nullable String projectorName,
-                     boolean isPhone) {
+    public Equipment(@Nullable String projectorName, boolean isPhone, ConferenceRoom conferenceroom) {
         this.projectorName = projectorName;
         this.isPhone = isPhone;
+        this.conferenceroom = conferenceroom;
     }
 }

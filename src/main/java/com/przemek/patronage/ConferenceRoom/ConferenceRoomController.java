@@ -19,26 +19,16 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class ConferenceRoomController {
 
     private ConferenceRoomService service;
-    private final ConferenceRoomAssembler assembler;
 
     @Autowired
-    public ConferenceRoomController(ConferenceRoomService service, ConferenceRoomAssembler assembler) {
+    public ConferenceRoomController(ConferenceRoomService service) {
         this.service = Objects.requireNonNull(service, "must be defined.");
-        this.assembler = assembler;
     }
 
     @GetMapping("/rooms")
     public ResponseEntity<List<ConferenceRoom>> getConferenceRooms() {
         return ResponseEntity.ok(service.findAll());
     }
-
-//    public Resources<Resource<ConferenceRoom>> getConferenceRooms() {
-//        List<Resource<ConferenceRoom>> rooms = service.findAll().stream()
-//                .map(assembler::toResource)
-//                .collect(Collectors.toList());
-//        return new Resources<>(rooms,
-//                linkTo(methodOn(ConferenceRoomController.class).getConferenceRoom()).withSelfRel());
-//    }
 
     @PostMapping("/rooms/{id}")
     public ResponseEntity <ConferenceRoom> addConferenceRoom(@RequestBody ConferenceRoom newConferenceRoom, @PathVariable Long id) throws SameNameException, NoSuchIdException {

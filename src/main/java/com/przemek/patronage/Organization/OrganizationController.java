@@ -20,12 +20,10 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class OrganizationController {
 
     private OrganizationService service;
-    private final OrganizationResourceAssembler assembler;
 
     @Autowired
-    public OrganizationController(OrganizationService service, OrganizationResourceAssembler assembler) {
+    public OrganizationController(OrganizationService service) {
         this.service = Objects.requireNonNull(service, "must be defined.");
-        this.assembler = assembler;
     }
 
     @GetMapping("/organizations")
@@ -33,16 +31,8 @@ public class OrganizationController {
         return ResponseEntity.ok(service.findAll());
     }
 
-//        public Resources<Resource<Organization>> getOrganizations() {
-//        List<Resource<Organization>> organizations = service.findAll().stream()
-//                .map(assembler::toResource)
-//                .collect(Collectors.toList());
-//        return new Resources<>(organizations,
-//                linkTo(methodOn(OrganizationController.class).getOrganizations()).withSelfRel());
-//    }
-
     @PostMapping("/organizations")
-    public ResponseEntity<Organization> addOrganization(@Valid @RequestBody Organization newOrganization) throws SameNameException {
+    public ResponseEntity <Organization> addOrganization(@Valid @RequestBody Organization newOrganization) throws SameNameException {
         service.save(newOrganization);
         return ResponseEntity.ok(newOrganization);
     }

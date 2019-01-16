@@ -2,7 +2,6 @@ package com.przemek.patronage.Reservation;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
 import com.przemek.patronage.Exceptions.NoSuchIdException;
-import com.przemek.patronage.Exceptions.RoomReservedException;
 import com.przemek.patronage.Exceptions.StartAfterEndException;
 import com.przemek.patronage.Exceptions.WrongDurationException;
 import lombok.var;
@@ -31,37 +30,49 @@ public class ReservationService {
         return reservations.findAll();
     }
 
-    public void save(Reservation newReservation, Long id) throws NoSuchIdException, StartAfterEndException, WrongDurationException, RoomReservedException {
+    public void save(Reservation newReservation, Long id) throws NoSuchIdException, StartAfterEndException, WrongDurationException {
         if (conferenceRooms.findById(id).equals(Optional.empty())) {
             throw new NoSuchIdException("The Conference room with id given doesn't exist in the base.");
         }
         var room = conferenceRooms.findById(id).get();
         newReservation.setConferenceRoom(room);
+        checkReservationDates(newReservation);
+        checkDuration(newReservation);
+        checkIfReserved(newReservation, id);
+        room.setAvailable(false);
+        room.getReservations().add(newReservation);
+        reservations.save(newReservation);
+    }
+
+    private void checkReservationDates(Reservation newReservation) throws StartAfterEndException {
         newReservation.setReservationStart(newReservation.getReservationStart().truncatedTo(ChronoUnit.MINUTES));
         newReservation.setReservationEnd(newReservation.getReservationEnd().truncatedTo(ChronoUnit.MINUTES));
         if (newReservation.getReservationStart().isAfter(newReservation.getReservationEnd())) {
             throw new StartAfterEndException("Reservation start can't be after reservation end.");
         }
+    }
+
+    private void checkDuration(Reservation newReservation) throws WrongDurationException {
         var duration = Duration.between(newReservation.getReservationEnd(), newReservation.getReservationStart());
         var diff = Math.abs(duration.toMinutes());
         if (120L < diff || diff <= 5L) {
             throw new WrongDurationException("Reservation has to be longer than 5 minutes and can not exceed 2 hours.");
         }
+    }
+
+    private void checkIfReserved(Reservation newReservation, Long id) {
         conferenceRooms.findById(id).get().getReservations().stream()
                 .filter(reservation ->
                         (newReservation.getReservationStart().isEqual(reservation.getReservationStart())) ||
-                        (((newReservation.getReservationStart().isAfter(reservation.getReservationStart()))) && ((newReservation.getReservationStart().isBefore(reservation.getReservationEnd())))) ||
-                        (newReservation.getReservationEnd().isEqual(reservation.getReservationEnd())) ||
-                        (((newReservation.getReservationEnd().isAfter(reservation.getReservationStart()) && ((newReservation.getReservationEnd().isBefore(reservation.getReservationEnd())))))) ||
-                        ((newReservation.getReservationStart().isBefore(reservation.getReservationStart()) && (newReservation.getReservationEnd().isAfter(reservation.getReservationEnd()))))
+                                (((newReservation.getReservationStart().isAfter(reservation.getReservationStart()))) && ((newReservation.getReservationStart().isBefore(reservation.getReservationEnd())))) ||
+                                (newReservation.getReservationEnd().isEqual(reservation.getReservationEnd())) ||
+                                (((newReservation.getReservationEnd().isAfter(reservation.getReservationStart()) && ((newReservation.getReservationEnd().isBefore(reservation.getReservationEnd())))))) ||
+                                ((newReservation.getReservationStart().isBefore(reservation.getReservationStart()) && (newReservation.getReservationEnd().isAfter(reservation.getReservationEnd()))))
                 )
                 .findAny()
                 .ifPresent(reservation -> {
                     throw new IllegalArgumentException("Room already reserved in the given period.");
                 });
-        room.setAvailable(false);
-        room.getReservations().add(newReservation);
-        reservations.save(newReservation);
     }
 
     public Reservation update(Reservation newReservation, Long id) {
