@@ -1,83 +1,52 @@
 package com.przemek.patronage.Organization;
 
-import com.przemek.patronage.AbstractTest;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.Collections;
 
-public class OrganizationControllerTest extends AbstractTest {
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-    @Override
-    @Before
-    public void setUp() {
-        super.setUp();
+
+@RunWith(SpringRunner.class)
+@WebMvcTest(OrganizationController.class)
+public class OrganizationControllerTest {
+
+    @Autowired
+    private static OrganizationRepository testOrganizations;
+
+    @TestConfiguration
+    public class OrganizationServiceImplTestContextConfiguration {
+        @Bean
+        public OrganizationService testOrganizationService() {
+            return new OrganizationService(testOrganizations);
+        }
     }
 
-    @Test
-    public void getOrganizationsTest() throws Exception {
-        String uri = "/organizations";
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
-                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    @Autowired
+    private MockMvc mvc;
 
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
-        String content = mvcResult.getResponse().getContentAsString();
-        Organization[] organizationlist = super.mapFromJson(content, Organization[].class);
-        assertTrue(organizationlist.length > 0);
-    }
+    @MockBean
+    private OrganizationService testService;
 
     @Test
-    public void addOrganizationTest() throws Exception {
-        String uri = "/organizations";
-        Organization organization = new Organization();
-        organization.setId(1L);
-        organization.setName("Test Organization 1");
-        String inputJson = super.mapToJson(organization);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(uri)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(inputJson)).andReturn();
-
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
-    }
-
-    @Test
-    public void updateOrganizationTest() throws Exception {
-        String uri = "/organizations/1";
-        Organization organization = new Organization();
-        organization.setName("Test Organization 2");
-        String inputJson = super.mapToJson(organization);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.put(uri)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(inputJson)).andReturn();
-
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
-    }
-
-    @Test
-    public void deleteOrganizationExistingIdTest() throws Exception {
-        String uri = "/organizations/3";
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(uri)).andReturn();
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
-    }
-
-    @Test
-    public void deleteOrganizationNonExistingIdTest() throws Exception {
-        String uri = "/organizations/0";
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(uri)).andReturn();
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(400, status);
+    public void getOrganizations() throws Exception {
+        //given
+        when(testService.findAll()).thenReturn(Collections.singletonList(new Organization("Organization 1")));
+        //when
+        mvc.perform(get("/organizations")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)));
     }
 }

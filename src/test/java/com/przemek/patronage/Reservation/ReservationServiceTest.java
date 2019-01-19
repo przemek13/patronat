@@ -6,6 +6,9 @@ import com.przemek.patronage.Exceptions.NoSuchIdException;
 import com.przemek.patronage.Exceptions.RoomReservedException;
 import com.przemek.patronage.Exceptions.StartAfterEndException;
 import com.przemek.patronage.Exceptions.WrongDurationException;
+import com.przemek.patronage.Organization.Organization;
+import com.przemek.patronage.Organization.OrganizationRepository;
+import lombok.var;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,10 +16,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -28,25 +32,25 @@ public class ReservationServiceTest {
     @Mock
     private ConferenceRoomRepository testConferenceRooms;
     @Mock
+    private OrganizationRepository testOrganizationRepository;
+    @Mock
     private ConferenceRoom testConferenceRoom;
-    @Mock
-    private Reservation testReservation;
-    @Mock
-    private Reservation newTestReservation;
+
+    private Reservation testReservation = new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T17:00:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+
+    private Reservation newTestReservation = new Reservation("Reserving 2", "2019-03-23T18:00:00", "2019-03-23T19:00:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
 
     private Long testId = 1L;
 
     @Before
     public void setTestUpReservationService() {
-        this.testReservationService = new ReservationService(testReservations, testConferenceRooms);
+        this.testReservationService = new ReservationService(testReservations, testConferenceRooms, testOrganizationRepository);
     }
 
     @Test
     public void saveWhenConferenceRoomIdExists() throws NoSuchIdException, RoomReservedException, WrongDurationException, StartAfterEndException {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
-        when(newTestReservation.getReservationStart()).thenReturn(LocalDateTime.parse("2019-03-23T16:00:00"));
-        when(newTestReservation.getReservationEnd()).thenReturn(LocalDateTime.parse("2019-03-23T17:00:00"));
         //when
         testReservationService.save(newTestReservation, testId);
         //then
@@ -61,61 +65,56 @@ public class ReservationServiceTest {
         testReservationService.save(newTestReservation, testId);
     }
 
-    @Test (expected = StartAfterEndException.class)
-    public void saveWhenReservationStartAfterReservationDate() throws NoSuchIdException, WrongDurationException, StartAfterEndException {
+    @Test(expected = StartAfterEndException.class)
+    public void saveWhenReservationStartAfterReservationDate() throws NoSuchIdException, WrongDurationException, StartAfterEndException, RoomReservedException {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
-        when(newTestReservation.getReservationStart()).thenReturn(LocalDateTime.parse("2019-03-23T17:00:00"));
-        when(newTestReservation.getReservationEnd()).thenReturn(LocalDateTime.parse("2019-03-23T16:00:00"));
+        var newTestReservation = new Reservation("Reserving 1", "2019-03-23T17:00:00", "2019-03-23T16:00:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
         //when
         testReservationService.save(newTestReservation, testId);
     }
 
-    @Test (expected = WrongDurationException.class)
-    public void saveWhenReservationDurationTooShort() throws NoSuchIdException, WrongDurationException, StartAfterEndException {
+    @Test(expected = WrongDurationException.class)
+    public void saveWhenReservationDurationTooShort() throws NoSuchIdException, WrongDurationException, StartAfterEndException, IOException, RoomReservedException {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
-        when(newTestReservation.getReservationStart()).thenReturn(LocalDateTime.parse("2019-03-23T16:00:00"));
-        when(newTestReservation.getReservationEnd()).thenReturn(LocalDateTime.parse("2019-03-23T16:05:00"));
+        var newTestReservation = new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T16:05:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
         //when
         testReservationService.save(newTestReservation, testId);
     }
 
-    @Test (expected = WrongDurationException.class)
-    public void saveWhenReservationDurationTooLong() throws NoSuchIdException, WrongDurationException, StartAfterEndException {
+    @Test(expected = WrongDurationException.class)
+    public void saveWhenReservationDurationTooLong() throws NoSuchIdException, WrongDurationException, StartAfterEndException, IOException, RoomReservedException {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
-        when(newTestReservation.getReservationStart()).thenReturn(LocalDateTime.parse("2019-03-23T16:00:00"));
-        when(newTestReservation.getReservationEnd()).thenReturn(LocalDateTime.parse("2019-03-23T18:01:00"));
+        var newTestReservation = new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T18:01:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
         //when
         testReservationService.save(newTestReservation, testId);
     }
 
-    @Test (expected = IllegalArgumentException.class)
-    public void saveWhenReservationStartSameDate() throws NoSuchIdException, WrongDurationException, StartAfterEndException {
+    @Test(expected = RoomReservedException.class)
+    public void saveWhenReservationDuringTheSamePeriod() throws NoSuchIdException, WrongDurationException, StartAfterEndException, RoomReservedException {
         //given
+        when(testConferenceRoom.getReservations()).thenReturn(Collections.singletonList(testReservation));
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
-        when(newTestReservation.getReservationStart()).thenReturn(LocalDateTime.parse("2019-03-23T16:00:00"));
-        when(newTestReservation.getReservationEnd()).thenReturn(LocalDateTime.parse("2019-03-23T17:00:00"));
-        when(testReservation.getReservationStart()).thenReturn(LocalDateTime.parse("2019-03-23T16:00:00"));
-        when(testReservation.getReservationEnd()).thenReturn(LocalDateTime.parse("2019-03-23T18:00:00"));
-        // (newTestReservation.getReservationStart().isEqual(testReservation.getReservationStart())).thenReturn(true);
-        // zwraca: org.mockito.exceptions.misusing.WrongTypeOfReturnValue
+        var testReservation = new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T17:00:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+        var newTestReservation = new Reservation("Reserving 2", "2019-03-23T16:00:00", "2019-03-23T17:00:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
         //when
         testReservationService.save(newTestReservation, testId);
+        //then
     }
 
     @Test
     public void updateWhenReservationIdExists() {
         //given
-        when(testReservations.findById(testId)).thenReturn(Optional.ofNullable(newTestReservation));
+        when(testReservations.findById(testId)).thenReturn(Optional.ofNullable(testReservation));
         //when
         testReservationService.update(newTestReservation, testId);
         //then
-        verify(newTestReservation, times(1)).setReservingId(newTestReservation.getReservingId());
-        verify(newTestReservation, times(1)).setReservationStart(newTestReservation.getReservationStart());
-        verify(newTestReservation, times(1)).setReservationEnd(newTestReservation.getReservationEnd());
-        verify(newTestReservation, times(1)).setConferenceRoom(newTestReservation.getConferenceRoom());
+        assertEquals(testReservation.getReservingId(), newTestReservation.getReservingId());
+        assertEquals(testReservation.getReservationStart(), newTestReservation.getReservationStart());
+        assertEquals(testReservation.getReservationEnd(), newTestReservation.getReservationEnd());
+        assertEquals(testReservation.getConferenceRoom(), newTestReservation.getConferenceRoom());
     }
 
     @Test
@@ -125,7 +124,7 @@ public class ReservationServiceTest {
         //when
         testReservationService.update(newTestReservation, testId);
         //then
-        verify(newTestReservation, times(1)).setId(testId);
+        assertEquals(newTestReservation.getId(), (testId));
     }
 
     @Test

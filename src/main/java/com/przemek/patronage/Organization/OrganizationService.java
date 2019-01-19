@@ -36,6 +36,7 @@ public class OrganizationService {
         return organizations.findById(id)
                 .map(organization -> {
                     organization.setName(newOrganization.getName());
+                    organization.setConferenceRoomsList(newOrganization.getConferenceRoomsList());
                     return organizations.save(organization);
                 })
                 .orElseGet(() -> {

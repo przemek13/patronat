@@ -31,7 +31,7 @@ public class Equipment {
     @Nullable
     private InterfaceConnections connections;
     @JsonSerialize(using = EquipmentConferenceRoomSerializer.class)
-    @OneToOne (cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private ConferenceRoom conferenceroom;
 
     public Equipment() {

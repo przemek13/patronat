@@ -1,79 +1,56 @@
 package com.przemek.patronage.ConferenceRoom;
 
-import com.przemek.patronage.AbstractTest;
 import com.przemek.patronage.Organization.Organization;
-import org.junit.Before;
+import com.przemek.patronage.Organization.OrganizationRepository;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.Collections;
 
-public class ConferenceRoomControllerTest extends AbstractTest {
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-    @Override
-    @Before
-    public void setUp() {
-        super.setUp();
+@RunWith(SpringRunner.class)
+@WebMvcTest(ConferenceRoomController.class)
+public class ConferenceRoomControllerTest {
+
+    @Autowired
+    private static OrganizationRepository testOrganizations;
+
+    @Autowired
+    private static ConferenceRoomRepository testConferenceRooms;
+
+    @TestConfiguration
+    public class ConferenceRoomServiceImplTestContextConfiguration {
+        @Bean
+        public ConferenceRoomService conferenceRoomServiceService() {
+            return new ConferenceRoomService(testConferenceRooms, testOrganizations);
+        }
     }
 
-    @Test
-    public void getConferenceRoomsTest() throws Exception {
-        String uri = "/rooms";
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
-                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+    @Autowired
+    private MockMvc mvc;
 
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
-        String content = mvcResult.getResponse().getContentAsString();
-        ConferenceRoom[] conferenceroomlist = super.mapFromJson(content, ConferenceRoom[].class);
-        assertTrue(conferenceroomlist.length > 0);
-    }
+    @MockBean
+    private ConferenceRoomService testService;
 
     @Test
-    public void addConferenceRoomTest() throws Exception {
-        String uri = "/rooms/3";
-        ConferenceRoom conferenceRoom = new ConferenceRoom();
-        conferenceRoom.setName("Test Room 1");
-        conferenceRoom.setAvailable(true);
-        String inputJson = super.mapToJson(conferenceRoom);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(uri)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(inputJson)).andReturn();
-
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
-    }
-
-    @Test
-    public void updateConferenceRoomTest() throws Exception {
-        String uri = "/rooms/1";
-        ConferenceRoom conferenceRoom = new ConferenceRoom();
-        conferenceRoom.setName("Test Room 2");
-        String inputJson = super.mapToJson(conferenceRoom);
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.put(uri)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(inputJson)).andReturn();
-
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
-    }
-
-    @Test
-    public void deleteConferenceRoomExistingIdTest() throws Exception {
-        String uri = "/rooms/1";
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(uri)).andReturn();
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
-    }
-
-    @Test
-    public void deleteConferenceRoomNonExistingIdTest() throws Exception {
-        String uri = "/rooms/0";
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(uri)).andReturn();
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(400, status);
+    public void getConferenceRooms() throws Exception {
+        //given
+        when(testService.findAll()).thenReturn(Collections.singletonList(new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 1"))));
+        //when
+        mvc.perform(get("/rooms")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)));
     }
 }
