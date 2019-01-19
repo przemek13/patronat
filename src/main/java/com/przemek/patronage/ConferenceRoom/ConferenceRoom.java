@@ -14,10 +14,7 @@ import lombok.Data;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Data
@@ -40,6 +37,7 @@ public class ConferenceRoom {
     @Max(10)
     private int floor;
     private boolean available;
+    @NotNull
     private int sittingAndStandingPlaces;
     @Nullable
     private int lyingPlaces;
@@ -53,7 +51,7 @@ public class ConferenceRoom {
     private Organization organization;
     @Nullable
     @JsonSerialize(using = ConferenceRoomEquipmentSerializer.class)
-    @OneToOne (cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private Equipment equipment;
 
     public ConferenceRoom() {
@@ -61,7 +59,7 @@ public class ConferenceRoom {
 
     public ConferenceRoom(@NotBlank @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.") String name,
                           @Nullable @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.") String optionalId,
-                          @Min(0) @Max(10) int floor, boolean available, int sittingAndStandingPlaces,
+                          @Min(0) @Max(10) int floor, boolean available, @NotNull int sittingAndStandingPlaces,
                           @Nullable int lyingPlaces, @Nullable int hangingPlaces, List<Reservation> reservations, Organization organization, @Nullable Equipment equipment
     ) {
         this.name = name;
@@ -77,7 +75,7 @@ public class ConferenceRoom {
     }
 
     public ConferenceRoom(@NotBlank @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.") String name,
-                          @Min(0) @Max(10) int floor, boolean available, int sittingAndStandingPlaces, Organization organization
+                          @Min(0) @Max(10) int floor, boolean available, @NotNull int sittingAndStandingPlaces, Organization organization
     ) {
         this.name = name;
         this.floor = floor;

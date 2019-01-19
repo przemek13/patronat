@@ -1,9 +1,11 @@
 package com.przemek.patronage.Equipment;
 
+import com.przemek.patronage.Exceptions.NoSuchIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,19 +24,19 @@ public class EquipmentController {
         return ResponseEntity.ok(service.findAll());
     }
 
-    @PostMapping("/equipment")
-    public ResponseEntity <Equipment> addEquipment(@RequestBody Equipment newEquipment) {
-        service.save(newEquipment);
+    @PostMapping("/equipment/{id}")
+    public ResponseEntity<Equipment> addEquipment(@Valid @RequestBody Equipment newEquipment, @PathVariable Long id) throws NoSuchIdException {
+        service.save(newEquipment, id);
         return ResponseEntity.ok(newEquipment);
     }
 
     @PutMapping("/equipment/{id}")
-    public ResponseEntity updateEquipment(@RequestBody Equipment newEquipment, @PathVariable Long id) {
+    public ResponseEntity updateEquipment(@Valid @RequestBody Equipment newEquipment, @PathVariable Long id) {
         return ResponseEntity.ok(service.update(newEquipment, id));
     }
 
     @DeleteMapping("/equipment/{id}")
-    public ResponseEntity deleteEquipment(@PathVariable Long id) {
+    public ResponseEntity deleteEquipment(@PathVariable Long id) throws NoSuchIdException {
         service.delete(id);
         return ResponseEntity.ok().build();
     }

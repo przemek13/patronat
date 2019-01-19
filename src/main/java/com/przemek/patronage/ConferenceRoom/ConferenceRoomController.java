@@ -3,17 +3,12 @@ package com.przemek.patronage.ConferenceRoom;
 import com.przemek.patronage.Exceptions.NoSuchIdException;
 import com.przemek.patronage.Exceptions.SameNameException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 public class ConferenceRoomController {
@@ -31,13 +26,13 @@ public class ConferenceRoomController {
     }
 
     @PostMapping("/rooms/{id}")
-    public ResponseEntity <ConferenceRoom> addConferenceRoom(@RequestBody ConferenceRoom newConferenceRoom, @PathVariable Long id) throws SameNameException, NoSuchIdException {
+    public ResponseEntity<ConferenceRoom> addConferenceRoom(@Valid @RequestBody ConferenceRoom newConferenceRoom, @PathVariable Long id) throws SameNameException, NoSuchIdException {
         service.save(newConferenceRoom, id);
         return ResponseEntity.ok(newConferenceRoom);
     }
 
     @PutMapping("/rooms/{id}")
-    public ResponseEntity updateConferenceRoom(@RequestBody ConferenceRoom newConferenceRoom, @PathVariable Long id) {
+    public ResponseEntity updateConferenceRoom(@Valid @RequestBody ConferenceRoom newConferenceRoom, @PathVariable Long id) {
         return ResponseEntity.ok(service.update(newConferenceRoom, id));
     }
 

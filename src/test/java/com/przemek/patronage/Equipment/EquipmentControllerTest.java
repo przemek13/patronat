@@ -1,9 +1,8 @@
-package com.przemek.patronage.Reservation;
+package com.przemek.patronage.Equipment;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
 import com.przemek.patronage.Organization.Organization;
-import com.przemek.patronage.Organization.OrganizationRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +22,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(ReservationController.class)
-public class ReservationControllerTest {
+@WebMvcTest(EquipmentController.class)
+public class EquipmentControllerTest {
 
     @Autowired
-    private static OrganizationRepository testOrganizations;
+    private static EquipmentRepository testEquipment;
 
     @Autowired
     private static ConferenceRoomRepository testConferenceRooms;
 
-    @Autowired
-    private static ReservationRepository testReservations;
-
     @TestConfiguration
-    public class EquipmentServiceImplTestContextConfiguration {
+    public class ConferenceRoomServiceImplTestContextConfiguration {
         @Bean
-        public ReservationService reservationService() {
-            return new ReservationService(testReservations, testConferenceRooms, testOrganizations);
+        public EquipmentService equipmentService() {
+            return new EquipmentService(testEquipment, testConferenceRooms);
         }
     }
 
@@ -47,14 +43,14 @@ public class ReservationControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private ReservationService testService;
+    private EquipmentService testService;
 
     @Test
-    public void getReservations() throws Exception {
+    public void getEquipment() throws Exception {
         //given
-        when(testService.findAll()).thenReturn(Collections.singletonList(new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T17:00:00", new ConferenceRoom("Conference Room 1", 5, true, 5, new Organization("Organization 1")))));
+        when(testService.findAll()).thenReturn(Collections.singletonList(new Equipment("Hitachi", false, new ConferenceRoom("Conference Room 4", 10, true, 10, new Organization("Organization 5")))));
         //when
-        mvc.perform(get("/reservations")
+        mvc.perform(get("/equipment")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)));
     }

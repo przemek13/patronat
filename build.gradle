@@ -37,4 +37,6 @@ dependencies {
 	compileOnly('org.projectlombok:lombok')
 	compile group: 'org.mockito', name: 'mockito-core', version: '2.13.0'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile "io.springfox:springfox-swagger2:2.9.2"
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.0.2'
 }

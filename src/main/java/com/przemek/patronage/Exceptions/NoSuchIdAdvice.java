@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class NoSuchIdAdvice {
-
     @ResponseBody
     @ExceptionHandler(NoSuchIdException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

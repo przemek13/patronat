@@ -1,9 +1,8 @@
 package com.przemek.patronage.Reservation;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
-import com.przemek.patronage.Exceptions.NoSuchIdException;
-import com.przemek.patronage.Exceptions.StartAfterEndException;
-import com.przemek.patronage.Exceptions.WrongDurationException;
+import com.przemek.patronage.Exceptions.*;
+import com.przemek.patronage.Organization.OrganizationRepository;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,23 +13,52 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.przemek.patronage.Exceptions.WrappedException.throwWrapped;
+
 @Service
 public class ReservationService {
 
     private ReservationRepository reservations;
     private ConferenceRoomRepository conferenceRooms;
+    private OrganizationRepository organizations;
 
     @Autowired
-    public ReservationService(ReservationRepository reservations, ConferenceRoomRepository conferenceRooms) {
+    public ReservationService(ReservationRepository reservations, ConferenceRoomRepository conferenceRooms, OrganizationRepository organizations) {
         this.reservations = Objects.requireNonNull(reservations, "must be defined.");
         this.conferenceRooms = Objects.requireNonNull(conferenceRooms, "must be defined");
+        this.organizations = Objects.requireNonNull(organizations, "must be defined");
     }
 
     public List<Reservation> findAll() {
         return reservations.findAll();
     }
 
-    public void save(Reservation newReservation, Long id) throws NoSuchIdException, StartAfterEndException, WrongDurationException {
+    public List<Reservation> findForOne(Long orgId, Long roomId) throws NoSuchIdException {
+        if (organizations.findById(orgId).equals(Optional.empty())) {
+            throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
+        }
+        try {
+            organizations.findById(orgId).get().getConferenceRoomsList().stream()
+                    .filter(room -> !(room.getId().equals(roomId)))
+                    .findAny()
+                    .ifPresent(reservation -> {
+                        try {
+                            throw new NoSuchIdException("The Conference room with id given doesn't exist in the base.");
+                        } catch (NoSuchIdException e) {
+                            throwWrapped(e);
+                        }
+                    });
+        } catch (WrappedException w) {
+            throw (NoSuchIdException) w.cause;
+        }
+        return organizations.findById(orgId).get().getConferenceRoomsList().stream()
+                .filter(room -> room.getId().equals(roomId))
+                .findAny()
+                .get()
+                .getReservations();
+    }
+
+    public void save(Reservation newReservation, Long id) throws NoSuchIdException, StartAfterEndException, WrongDurationException, RoomReservedException {
         if (conferenceRooms.findById(id).equals(Optional.empty())) {
             throw new NoSuchIdException("The Conference room with id given doesn't exist in the base.");
         }
@@ -60,19 +88,27 @@ public class ReservationService {
         }
     }
 
-    private void checkIfReserved(Reservation newReservation, Long id) {
-        conferenceRooms.findById(id).get().getReservations().stream()
-                .filter(reservation ->
-                        (newReservation.getReservationStart().isEqual(reservation.getReservationStart())) ||
-                                (((newReservation.getReservationStart().isAfter(reservation.getReservationStart()))) && ((newReservation.getReservationStart().isBefore(reservation.getReservationEnd())))) ||
-                                (newReservation.getReservationEnd().isEqual(reservation.getReservationEnd())) ||
-                                (((newReservation.getReservationEnd().isAfter(reservation.getReservationStart()) && ((newReservation.getReservationEnd().isBefore(reservation.getReservationEnd())))))) ||
-                                ((newReservation.getReservationStart().isBefore(reservation.getReservationStart()) && (newReservation.getReservationEnd().isAfter(reservation.getReservationEnd()))))
-                )
-                .findAny()
-                .ifPresent(reservation -> {
-                    throw new IllegalArgumentException("Room already reserved in the given period.");
-                });
+    private void checkIfReserved(Reservation newReservation, Long id) throws RoomReservedException {
+        try {
+            conferenceRooms.findById(id).get().getReservations().stream()
+                    .filter(reservation ->
+                            (newReservation.getReservationStart().isEqual(reservation.getReservationStart())) ||
+                                    (((newReservation.getReservationStart().isAfter(reservation.getReservationStart()))) && ((newReservation.getReservationStart().isBefore(reservation.getReservationEnd())))) ||
+                                    (newReservation.getReservationEnd().isEqual(reservation.getReservationEnd())) ||
+                                    (((newReservation.getReservationEnd().isAfter(reservation.getReservationStart()) && ((newReservation.getReservationEnd().isBefore(reservation.getReservationEnd())))))) ||
+                                    ((newReservation.getReservationStart().isBefore(reservation.getReservationStart()) && (newReservation.getReservationEnd().isAfter(reservation.getReservationEnd()))))
+                    )
+                    .findAny()
+                    .ifPresent(reservation -> {
+                        try {
+                            throw new RoomReservedException("Room is already reserved in the given period.");
+                        } catch (RoomReservedException e) {
+                            throwWrapped(e);
+                        }
+                    });
+        } catch (WrappedException w) {
+            throw (RoomReservedException) w.cause;
+        }
     }
 
     public Reservation update(Reservation newReservation, Long id) {

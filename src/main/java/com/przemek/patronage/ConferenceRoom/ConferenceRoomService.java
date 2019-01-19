@@ -42,7 +42,6 @@ public class ConferenceRoomService {
     }
 
     public ConferenceRoom update(ConferenceRoom newConferenceRoom, Long id) {
-
         return conferenceRooms.findById(id)
                 .map(conferenceRoom -> {
                     conferenceRoom.setName(newConferenceRoom.getName());
@@ -52,6 +51,9 @@ public class ConferenceRoomService {
                     conferenceRoom.setSittingAndStandingPlaces(newConferenceRoom.getSittingAndStandingPlaces());
                     conferenceRoom.setLyingPlaces(newConferenceRoom.getLyingPlaces());
                     conferenceRoom.setHangingPlaces(newConferenceRoom.getHangingPlaces());
+                    conferenceRoom.setReservations(newConferenceRoom.getReservations());
+                    conferenceRoom.setOrganization(newConferenceRoom.getOrganization());
+                    conferenceRoom.setEquipment(newConferenceRoom.getEquipment());
                     return conferenceRooms.save(conferenceRoom);
                 })
                 .orElseGet(() -> {

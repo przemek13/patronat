@@ -13,12 +13,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
+import static junit.framework.TestCase.assertSame;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConferenceRoomServiceTest {
 
-    ConferenceRoomService testConferenceRoomService;
+    private ConferenceRoomService testConferenceRoomService;
 
     @Mock
     private ConferenceRoomRepository testConferenceRooms;
@@ -26,10 +28,10 @@ public class ConferenceRoomServiceTest {
     private OrganizationRepository testOrganizations;
     @Mock
     private Organization testOrganization;
-    @Mock
-    private ConferenceRoom testConferenceRoom;
-    @Mock
-    private ConferenceRoom newTestConferenceRoom;
+
+    private ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 1"));
+
+    private ConferenceRoom newTestConferenceRoom = new ConferenceRoom("Conference Room 2", 1, false, 100, new Organization("Organization 2"));
 
     private Long testId = 1L;
 
@@ -58,7 +60,6 @@ public class ConferenceRoomServiceTest {
         //then
     }
 
-
     @Test(expected = SameNameException.class)
     public void saveWhenConferenceRoomNameExists() throws NoSuchIdException, SameNameException {
         //given
@@ -76,13 +77,11 @@ public class ConferenceRoomServiceTest {
         //when
         testConferenceRoomService.update(newTestConferenceRoom, testId);
         //then
-        verify(testConferenceRoom, times(1)).setName(newTestConferenceRoom.getName());
-        verify(testConferenceRoom, times(1)).setOptionalId(newTestConferenceRoom.getOptionalId());
-        verify(testConferenceRoom, times(1)).setFloor(newTestConferenceRoom.getFloor());
-        verify(testConferenceRoom, times(1)).setAvailable(newTestConferenceRoom.isAvailable());
-        verify(testConferenceRoom, times(1)).setSittingAndStandingPlaces(newTestConferenceRoom.getSittingAndStandingPlaces());
-        verify(testConferenceRoom, times(1)).setLyingPlaces(newTestConferenceRoom.getLyingPlaces());
-        verify(testConferenceRoom, times(1)).setHangingPlaces(newTestConferenceRoom.getHangingPlaces());
+        assertEquals(testConferenceRoom.getName(), (newTestConferenceRoom.getName()));
+        assertSame(testConferenceRoom.getFloor(), (newTestConferenceRoom.getFloor()));
+        assertSame(testConferenceRoom.isAvailable(), (newTestConferenceRoom.isAvailable()));
+        assertSame(testConferenceRoom.getSittingAndStandingPlaces(), (newTestConferenceRoom.getSittingAndStandingPlaces()));
+        assertEquals(testConferenceRoom.getOrganization(), (newTestConferenceRoom.getOrganization()));
     }
 
     @Test
@@ -92,7 +91,7 @@ public class ConferenceRoomServiceTest {
         //when
         testConferenceRoomService.update(newTestConferenceRoom, testId);
         //then
-        verify(newTestConferenceRoom, times(1)).setId(testId);
+        assertEquals(newTestConferenceRoom.getId(), (testId));
     }
 
     @Test
@@ -116,7 +115,6 @@ public class ConferenceRoomServiceTest {
 
     @AfterClass
     public static void tearDownClass() {
-        System.out.println("tear down class");
         System.out.flush();
     }
 }

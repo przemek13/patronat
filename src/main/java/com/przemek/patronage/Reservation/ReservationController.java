@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,18 +24,23 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations")
-    public ResponseEntity<List<Reservation>> getReservations() {
+    public ResponseEntity<List<Reservation>> getAllReservations() {
         return ResponseEntity.ok(service.findAll());
     }
 
+    @GetMapping("/reservations/{orgId}/{roomId}")
+    public ResponseEntity<List<Reservation>> getReservations(@PathVariable Long orgId, @PathVariable Long roomId) throws NoSuchIdException {
+        return ResponseEntity.ok(service.findForOne(orgId, roomId));
+    }
+
     @PostMapping("/reservations/{id}")
-    public ResponseEntity <Reservation> addReservation(@RequestBody Reservation newReservation, @PathVariable Long id) throws NoSuchIdException, WrongDurationException, StartAfterEndException, RoomReservedException {
+    public ResponseEntity<Reservation> addReservation(@Valid @RequestBody Reservation newReservation, @PathVariable Long id) throws NoSuchIdException, WrongDurationException, StartAfterEndException, RoomReservedException, IOException {
         service.save(newReservation, id);
         return ResponseEntity.ok(newReservation);
     }
 
     @PutMapping("/reservations/{id}")
-    public ResponseEntity updateReservation(@RequestBody Reservation newReservation, @PathVariable Long id) {
+    public ResponseEntity updateReservation(@Valid @RequestBody Reservation newReservation, @PathVariable Long id) {
         return ResponseEntity.ok(service.update(newReservation, id));
     }
 

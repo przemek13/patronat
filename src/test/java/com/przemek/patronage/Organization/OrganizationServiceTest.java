@@ -11,18 +11,20 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrganizationServiceTest {
 
     private OrganizationService testOrganizationService;
+
     @Mock
     private OrganizationRepository testOrganizations;
-    @Mock
-    private Organization testOrganization;
-    @Mock
-    private Organization newTestOrganization;
+
+    private Organization testOrganization = new Organization("Organization 1");
+
+    private Organization newTestOrganization = new Organization("Organization 2");
 
     private Long testId = 1L;
 
@@ -41,10 +43,9 @@ public class OrganizationServiceTest {
         verify(testOrganizations, times(1)).save(newTestOrganization);
     }
 
-    @Test (expected = SameNameException.class)
+    @Test(expected = SameNameException.class)
     public void saveWhenOrganizationNameExists() throws SameNameException {
         //given
-        Organization newTestOrganization = new Organization("Test Organization 1");
         when(testOrganizations.findByName(newTestOrganization.getName())).thenReturn(newTestOrganization);
         //when
         testOrganizationService.save(newTestOrganization);
@@ -52,23 +53,23 @@ public class OrganizationServiceTest {
     }
 
     @Test
-    public void updateWhenOrganizationIdExists()  {
+    public void updateWhenOrganizationIdExists() {
         //given
         when(testOrganizations.findById(testId)).thenReturn(Optional.ofNullable(testOrganization));
         //when
         testOrganizationService.update(newTestOrganization, testId);
         //then
-        verify(testOrganization, times(1)).setName(newTestOrganization.getName());
+        assertEquals(testOrganization.getName(), newTestOrganization.getName());
     }
 
     @Test
-    public void updateWhenOrganizationIdNotExist()  {
+    public void updateWhenOrganizationIdNotExist() {
         //given
         when(testOrganizations.findById(testId)).thenReturn(Optional.empty());
         //when
         testOrganizationService.update(newTestOrganization, testId);
         //then
-        verify(newTestOrganization, times(1)).setId(testId);
+        assertEquals(newTestOrganization.getId(), (testId));
     }
 
     @Test
@@ -81,7 +82,7 @@ public class OrganizationServiceTest {
         verify(testOrganizations, times(1)).deleteById(1L);
     }
 
-    @Test (expected = NoSuchIdException.class)
+    @Test(expected = NoSuchIdException.class)
     public void deleteWhenOrganizationIdNotExist() throws NoSuchIdException {
         //given
         when(testOrganizations.findById(testId)).thenReturn(Optional.empty());
