@@ -3,7 +3,6 @@ package com.przemek.patronage.Reservation;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
 import com.przemek.patronage.Exceptions.*;
 import com.przemek.patronage.Organization.OrganizationRepository;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

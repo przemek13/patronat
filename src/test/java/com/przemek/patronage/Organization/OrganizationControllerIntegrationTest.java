@@ -46,23 +46,23 @@ public class OrganizationControllerIntegrationTest {
     }
 
     @Test
-    public void addUserWhenRecordValid() throws Exception {
+    public void addOrganizationWhenRecordValid() throws Exception {
         //given
         //when
         mvc.perform(post("/organizations").contentType(MediaType.APPLICATION_JSON).content(
                 "{\"name\":\"Organization 1\"}"));
-        Organization testOrganization = testRepository.findByName("Organization 1");
+        var testOrganization = testRepository.findByName("Organization 1");
         //then
         Assert.assertNotNull(testOrganization);
     }
 
     @Test
-    public void addUserWhenRecordInValid() throws Exception {
+    public void addOrganizationWhenRecordInValid() throws Exception {
         //given
         //when
         mvc.perform(post("/organizations").contentType(MediaType.APPLICATION_JSON).content(
                 "{\"name\":\"Organization 2\"}"));
-        Organization testOrganization = testRepository.findByName("Organization 1");
+        var testOrganization = testRepository.findByName("Organization 1");
         //then
         Assert.assertNull(testOrganization);
     }

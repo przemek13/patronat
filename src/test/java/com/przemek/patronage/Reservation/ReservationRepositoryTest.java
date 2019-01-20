@@ -2,7 +2,6 @@ package com.przemek.patronage.Reservation;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import com.przemek.patronage.Organization.Organization;
-import lombok.var;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;

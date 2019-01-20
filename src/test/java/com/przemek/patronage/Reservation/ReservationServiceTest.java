@@ -8,7 +8,6 @@ import com.przemek.patronage.Exceptions.StartAfterEndException;
 import com.przemek.patronage.Exceptions.WrongDurationException;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationRepository;
-import lombok.var;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;

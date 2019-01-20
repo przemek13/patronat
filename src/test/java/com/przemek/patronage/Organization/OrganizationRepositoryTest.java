@@ -1,6 +1,5 @@
 package com.przemek.patronage.Organization;
 
-import lombok.var;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,7 +24,7 @@ public class OrganizationRepositoryTest {
     Organization testOrganization = new Organization("Organization 1");
 
     @Test
-    public void saveWhenNoData() {
+    public void returnWhenNoData() {
         //given
         //when
         List<Organization> testOrganizations = testOrganizationRepository.findAll();
