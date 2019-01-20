@@ -3,7 +3,6 @@ package com.przemek.patronage.ConferenceRoom;
 import com.przemek.patronage.Exceptions.NoSuchIdException;
 import com.przemek.patronage.Exceptions.SameNameException;
 import com.przemek.patronage.Organization.OrganizationRepository;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

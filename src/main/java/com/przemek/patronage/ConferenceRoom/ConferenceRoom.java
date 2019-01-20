@@ -10,14 +10,12 @@ import com.przemek.patronage.ConferenceRoom.ConferenceRoomSerializers.Conference
 import com.przemek.patronage.Equipment.Equipment;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Reservation.Reservation;
-import lombok.Data;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@Data
 @Entity
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -82,5 +80,95 @@ public class ConferenceRoom {
         this.available = available;
         this.sittingAndStandingPlaces = sittingAndStandingPlaces;
         this.organization = organization;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Nullable
+    public String getOptionalId() {
+        return optionalId;
+    }
+
+    public void setOptionalId(@Nullable String optionalId) {
+        this.optionalId = optionalId;
+    }
+
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public int getSittingAndStandingPlaces() {
+        return sittingAndStandingPlaces;
+    }
+
+    public void setSittingAndStandingPlaces(int sittingAndStandingPlaces) {
+        this.sittingAndStandingPlaces = sittingAndStandingPlaces;
+    }
+
+    public int getLyingPlaces() {
+        return lyingPlaces;
+    }
+
+    public void setLyingPlaces(int lyingPlaces) {
+        this.lyingPlaces = lyingPlaces;
+    }
+
+    public int getHangingPlaces() {
+        return hangingPlaces;
+    }
+
+    public void setHangingPlaces(int hangingPlaces) {
+        this.hangingPlaces = hangingPlaces;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    @Nullable
+    public Equipment getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(@Nullable Equipment equipment) {
+        this.equipment = equipment;
     }
 }
