@@ -8,21 +8,19 @@ This is a simple reservation system based on REST API - CRUD architecture, reali
 
 ```
 Gradle build tool
-IDE, f.ex. IntelliJ IDEA
+alternatively: IDE, f.ex. IntelliJ IDEA
 CURL
 ```
 
 ### Building the application
 
-In order to build the application, you should create a project in your IDE, using Gradle and this repository source code.
+In order to build the application easily please install Gradle.
 
 ```
-Using IntelliJ IDEA:
-
-1. Open: File -> New -> Project from Version Control -> Git.
-2. Clone this repository URL.
-3. Import Gradle Project.
-4. Choose: Use default gradle wrapper (and Use auto-import).
+In the command line shell:
+1. Go to the directory with "gradlew" file.
+2. Insert: ./gradlew -v
+3. Insert: ./gradlew build
 
 The Project should have built automatically.
 ```
@@ -44,4 +42,10 @@ curl -d '{"name": "Conference Room example name","optionalId": null,"floor": 10,
 You should be able to retrieve the related data by simple: 
 curl localhost:8070/rooms
 in your command line now.
+
+If you need to retrieve the Reservations for particular Conference Room in particular Organization insert:
+curl –l localhost:8070/reservations/1/2
+where, {1} is the exemplary Organization id and {2} is the exemplary Reservation id.
+
+You may find Rest API documentation generated here: http://localhost:8070/swagger-ui.html
 ```
