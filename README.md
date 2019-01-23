@@ -26,7 +26,6 @@ The Project should have built automatically.
 
 Insert gradle bootRun. The application should run and be ready to use i.e. consume your CURL inquiries.
 
-
 ```
 
 ## Using the application
