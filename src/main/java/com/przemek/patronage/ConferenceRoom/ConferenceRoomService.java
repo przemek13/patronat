@@ -34,6 +34,7 @@ public class ConferenceRoomService {
         newConferenceRoom.setOrganization(org);
         if (conferenceRooms.findByName(newConferenceRoom.getName()) == null) {
             org.getConferenceRoomsList().add(newConferenceRoom);
+            conferenceRooms.save(newConferenceRoom);
             organizations.save(org);
         } else {
             throw new SameNameException("The Conference room with name given already exist. Please choose different name.");
