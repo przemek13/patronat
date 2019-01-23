@@ -1,24 +1,27 @@
 package com.przemek.patronage.Equipment;
 
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
+import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
-@Entity
+@Component
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Equipment {
+public class EquipmentDTO {
     @Nullable
     private @Id
     @GeneratedValue
@@ -35,16 +38,18 @@ public class Equipment {
     private String externalNumber;
     @Nullable
     private InterfaceConnections connections;
-    @JsonSerialize(using = EquipmentConferenceRoomSerializer.class)
+    @JsonSerialize(using = EquipmentDTOConferenceRoomDTOSerializer.class)
     @OneToOne(cascade = CascadeType.ALL)
-    private ConferenceRoom conferenceroom;
+    private ConferenceRoomDTO conferenceroom;
 
-    public Equipment() {
+    public EquipmentDTO() {
     }
 
-    public Equipment(@Nullable String projectorName, boolean isPhone,
-                     @Min(value = 0, message = "Internal number has to be an integer between 0 and 99") @Max(value = 99, message = "Internal number has to be an integer between 0 and 99") int internalNumber,
-                     @Nullable @Pattern(regexp = "^(\\+\\d{2}\\s\\d{9})$") String externalNumber, @Nullable InterfaceConnections connections, ConferenceRoom conferenceroom) {
+    public EquipmentDTO(@Nullable String projectorName, boolean isPhone,
+                        @Min(value = 0, message = "Internal number has to be an integer between 0 and 99") @Max(value = 99, message = "Internal number has to be an integer between 0 and 99") int internalNumber,
+                        @Nullable @Pattern(regexp = "^(\\+\\d{2}\\s\\d{9})$") String externalNumber,
+                        @Nullable InterfaceConnections connections,
+                        ConferenceRoomDTO conferenceroom) {
         this.projectorName = projectorName;
         this.isPhone = isPhone;
         this.internalNumber = internalNumber;
@@ -53,7 +58,7 @@ public class Equipment {
         this.conferenceroom = conferenceroom;
     }
 
-    public Equipment(@Nullable String projectorName, boolean isPhone, ConferenceRoom conferenceroom) {
+    public EquipmentDTO(@Nullable String projectorName, boolean isPhone, ConferenceRoomDTO conferenceroom) {
         this.projectorName = projectorName;
         this.isPhone = isPhone;
         this.conferenceroom = conferenceroom;
@@ -112,11 +117,11 @@ public class Equipment {
         this.connections = connections;
     }
 
-    public ConferenceRoom getConferenceroom() {
+    public ConferenceRoomDTO getConferenceroomDTO() {
         return conferenceroom;
     }
 
-    public void setConferenceroom(ConferenceRoom conferenceroom) {
-        this.conferenceroom = conferenceroom;
+    public void setConferenceroomDTO(ConferenceRoomDTO conferenceroomDTO) {
+        this.conferenceroom = conferenceroomDTO;
     }
 }

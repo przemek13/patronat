@@ -3,21 +3,24 @@ package com.przemek.patronage.ConferenceRoom;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.przemek.patronage.Equipment.Equipment;
-import com.przemek.patronage.Organization.Organization;
-import com.przemek.patronage.Reservation.Reservation;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.przemek.patronage.ConferenceRoom.ConferenceRoomSerializers.*;
+import com.przemek.patronage.Equipment.EquipmentDTO;
+import com.przemek.patronage.Organization.OrganizationDTO;
+import com.przemek.patronage.Reservation.ReservationDTO;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;
 
-@Entity
+@Component
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ConferenceRoom {
+public class ConferenceRoomDTO {
     private @Id
     @GeneratedValue
     Long id;
@@ -37,24 +40,29 @@ public class ConferenceRoom {
     private int lyingPlaces;
     @Nullable
     private int hangingPlaces;
-//    @JsonSerialize(using = ConferenceRoomReservationSerializer.class)
+    @JsonSerialize(using = ConferenceRoomDTOReservationDTOSerializer.class)
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Reservation> reservations;
-//    @JsonSerialize(using = ConferenceRoomOrganizationSerializer.class)
+    private List<ReservationDTO> reservationsList;
+    @JsonSerialize(using = ConferenceRoomDTOOrganizationDTOSerializer.class)
     @ManyToOne(cascade = CascadeType.ALL)
-    private Organization organization;
+    private OrganizationDTO organization;
     @Nullable
-//    @JsonSerialize(using = ConferenceRoomEquipmentSerializer.class)
+    @JsonSerialize(using = ConferenceRoomDTOEquipmentDTOSerializer.class)
     @OneToOne(cascade = CascadeType.ALL)
-    private Equipment equipment;
+    private EquipmentDTO equipment;
 
-    public ConferenceRoom() {
+    public ConferenceRoomDTO() {
     }
 
-    public ConferenceRoom(@NotBlank @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.") String name,
-                          @Nullable @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.") String optionalId,
-                          @Min(0) @Max(10) int floor, boolean available, @NotNull int sittingAndStandingPlaces,
-                          @Nullable int lyingPlaces, @Nullable int hangingPlaces, List<Reservation> reservations, Organization organization, @Nullable Equipment equipment
+    public ConferenceRoomDTO(@NotBlank @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.") String name,
+                             @Nullable @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.") String optionalId,
+                             @Min(0) @Max(10) int floor, boolean available,
+                             @NotNull int sittingAndStandingPlaces,
+                             @Nullable int lyingPlaces,
+                             @Nullable int hangingPlaces,
+                             List<ReservationDTO> reservationsList,
+                             OrganizationDTO organization,
+                             @Nullable EquipmentDTO equipment
     ) {
         this.name = name;
         this.optionalId = optionalId;
@@ -63,13 +71,16 @@ public class ConferenceRoom {
         this.sittingAndStandingPlaces = sittingAndStandingPlaces;
         this.lyingPlaces = lyingPlaces;
         this.hangingPlaces = hangingPlaces;
-        this.reservations = reservations;
+        this.reservationsList = reservationsList;
         this.organization = organization;
         this.equipment = equipment;
     }
 
-    public ConferenceRoom(@NotBlank @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.") String name,
-                          @Min(0) @Max(10) int floor, boolean available, @NotNull int sittingAndStandingPlaces, Organization organization
+    public ConferenceRoomDTO(@NotBlank @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.") String name,
+                             @Min(0) @Max(10) int floor,
+                             boolean available,
+                             @NotNull int sittingAndStandingPlaces,
+                             OrganizationDTO organization
     ) {
         this.name = name;
         this.floor = floor;
@@ -143,28 +154,28 @@ public class ConferenceRoom {
         this.hangingPlaces = hangingPlaces;
     }
 
-    public List<Reservation> getReservations() {
-        return reservations;
+    public List<ReservationDTO> getReservationsList() {
+        return reservationsList;
     }
 
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
+    public void setReservationsList(List<ReservationDTO> reservationsList) {
+        this.reservationsList = reservationsList;
     }
 
-    public Organization getOrganization() {
+    public OrganizationDTO getOrganizationDTO() {
         return organization;
     }
 
-    public void setOrganization(Organization organization) {
+    public void setOrganizationDTO(OrganizationDTO organizationDTO) {
         this.organization = organization;
     }
 
     @Nullable
-    public Equipment getEquipment() {
+    public EquipmentDTO getEquipmentDTO() {
         return equipment;
     }
 
-    public void setEquipment(@Nullable Equipment equipment) {
+    public void setEquipmentDTO(@Nullable EquipmentDTO equipment) {
         this.equipment = equipment;
     }
 }
