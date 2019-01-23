@@ -18,11 +18,15 @@ In order to build the application easily please install Gradle.
 
 ```
 In the command line shell:
-1. Go to the directory with "gradlew" file.
+1. Go to the directory with "gradlew" file of the Project folder.
 2. Insert: ./gradlew -v
 3. Insert: ./gradlew build
 
 The Project should have built automatically.
+
+Insert gradle bootRun. The application should run and be ready to use i.e. consume your CURL inquiries.
+
+
 ```
 
 ## Using the application
