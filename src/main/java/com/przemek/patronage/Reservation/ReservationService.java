@@ -17,27 +17,27 @@ import static com.przemek.patronage.Exceptions.WrappedException.throwWrapped;
 @Service
 public class ReservationService {
 
-    private ReservationRepository reservations;
-    private ConferenceRoomRepository conferenceRooms;
-    private OrganizationRepository organizations;
+    private ReservationRepository reservationRepository;
+    private ConferenceRoomRepository conferenceRoomRepository;
+    private OrganizationRepository organizationRepository;
 
     @Autowired
     public ReservationService(ReservationRepository reservations, ConferenceRoomRepository conferenceRooms, OrganizationRepository organizations) {
-        this.reservations = Objects.requireNonNull(reservations, "must be defined.");
-        this.conferenceRooms = Objects.requireNonNull(conferenceRooms, "must be defined");
-        this.organizations = Objects.requireNonNull(organizations, "must be defined");
+        this.reservationRepository = Objects.requireNonNull(reservations, "must be defined.");
+        this.conferenceRoomRepository = Objects.requireNonNull(conferenceRooms, "must be defined");
+        this.organizationRepository = Objects.requireNonNull(organizations, "must be defined");
     }
 
     public List<Reservation> findAll() {
-        return reservations.findAll();
+        return reservationRepository.findAll();
     }
 
-    public List<Reservation> findForOne(Long orgId, Long roomId) throws NoSuchIdException {
-        if (organizations.findById(orgId).equals(Optional.empty())) {
+    public List<Reservation> findForConcreteConferenceRoom(Long orgId, Long roomId) throws NoSuchIdException {
+        if (organizationRepository.findById(orgId).isEmpty()) {
             throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
         }
         try {
-            organizations.findById(orgId).get().getConferenceRoomsList().stream()
+            organizationRepository.findById(orgId).get().getConferenceRoomsList().stream()
                     .filter(room -> !(room.getId().equals(roomId)))
                     .findAny()
                     .ifPresent(reservation -> {
@@ -50,7 +50,7 @@ public class ReservationService {
         } catch (WrappedException w) {
             throw (NoSuchIdException) w.cause;
         }
-        return organizations.findById(orgId).get().getConferenceRoomsList().stream()
+        return organizationRepository.findById(orgId).get().getConferenceRoomsList().stream()
                 .filter(room -> room.getId().equals(roomId))
                 .findAny()
                 .get()
@@ -58,17 +58,17 @@ public class ReservationService {
     }
 
     public void save(Reservation newReservation, Long id) throws NoSuchIdException, StartAfterEndException, WrongDurationException, RoomReservedException {
-        if (conferenceRooms.findById(id).equals(Optional.empty())) {
+        if (conferenceRoomRepository.findById(id).equals(Optional.empty())) {
             throw new NoSuchIdException("The Conference room with id given doesn't exist in the base.");
         }
-        var room = conferenceRooms.findById(id).get();
+        var room = conferenceRoomRepository.findById(id).get();
         newReservation.setConferenceRoom(room);
         checkReservationDates(newReservation);
         checkDuration(newReservation);
         checkIfReserved(newReservation, id);
         room.setAvailable(false);
         room.getReservations().add(newReservation);
-        reservations.save(newReservation);
+        reservationRepository.save(newReservation);
     }
 
     private void checkReservationDates(Reservation newReservation) throws StartAfterEndException {
@@ -89,7 +89,7 @@ public class ReservationService {
 
     private void checkIfReserved(Reservation newReservation, Long id) throws RoomReservedException {
         try {
-            conferenceRooms.findById(id).get().getReservations().stream()
+            conferenceRoomRepository.findById(id).get().getReservations().stream()
                     .filter(reservation ->
                             (newReservation.getReservationStart().isEqual(reservation.getReservationStart())) ||
                                     (((newReservation.getReservationStart().isAfter(reservation.getReservationStart()))) && ((newReservation.getReservationStart().isBefore(reservation.getReservationEnd())))) ||
@@ -112,24 +112,24 @@ public class ReservationService {
 
     public Reservation update(Reservation newReservation, Long id) {
 
-        return reservations.findById(id)
+        return reservationRepository.findById(id)
                 .map(reservation -> {
                     reservation.setReservingId(newReservation.getReservingId());
                     reservation.setReservationStart(newReservation.getReservationStart());
                     reservation.setReservationEnd(newReservation.getReservationEnd());
                     reservation.setConferenceRoom(newReservation.getConferenceRoom());
-                    return reservations.save(reservation);
+                    return reservationRepository.save(reservation);
                 })
                 .orElseGet(() -> {
                     newReservation.setId(id);
-                    return reservations.save(newReservation);
+                    return reservationRepository.save(newReservation);
                 });
     }
 
     public void delete(Long id) throws NoSuchIdException {
-        if (reservations.findById(id).equals(Optional.empty())) {
+        if (reservationRepository.findById(id).isEmpty()) {
             throw new NoSuchIdException("The Reservation with id given doesn't exist in the base.");
         } else
-            reservations.deleteById(id);
+            reservationRepository.deleteById(id);
     }
 }

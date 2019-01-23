@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.przemek.patronage.ConferenceRoom.ConferenceRoomSerializers.*;
+import com.przemek.patronage.ConferenceRoom.ConferenceRoomSerializers.ConferenceRoomEquipmentSerializer;
+import com.przemek.patronage.ConferenceRoom.ConferenceRoomSerializers.ConferenceRoomOrganizationSerializer;
+import com.przemek.patronage.ConferenceRoom.ConferenceRoomSerializers.ConferenceRoomReservationSerializer;
 import com.przemek.patronage.Equipment.EquipmentDTO;
 import com.przemek.patronage.Organization.OrganizationDTO;
 import com.przemek.patronage.Reservation.ReservationDTO;
@@ -40,14 +42,14 @@ public class ConferenceRoomDTO {
     private int lyingPlaces;
     @Nullable
     private int hangingPlaces;
-    @JsonSerialize(using = ConferenceRoomDTOReservationDTOSerializer.class)
+    @JsonSerialize(using = ConferenceRoomReservationSerializer.class)
     @OneToMany(cascade = CascadeType.ALL)
     private List<ReservationDTO> reservationsList;
-    @JsonSerialize(using = ConferenceRoomDTOOrganizationDTOSerializer.class)
+    @JsonSerialize(using = ConferenceRoomOrganizationSerializer.class)
     @ManyToOne(cascade = CascadeType.ALL)
     private OrganizationDTO organization;
     @Nullable
-    @JsonSerialize(using = ConferenceRoomDTOEquipmentDTOSerializer.class)
+    @JsonSerialize(using = ConferenceRoomEquipmentSerializer.class)
     @OneToOne(cascade = CascadeType.ALL)
     private EquipmentDTO equipment;
 
@@ -162,20 +164,20 @@ public class ConferenceRoomDTO {
         this.reservationsList = reservationsList;
     }
 
-    public OrganizationDTO getOrganizationDTO() {
+    public OrganizationDTO getOrganization() {
         return organization;
     }
 
-    public void setOrganizationDTO(OrganizationDTO organizationDTO) {
+    public void setOrganization(OrganizationDTO organization) {
         this.organization = organization;
     }
 
     @Nullable
-    public EquipmentDTO getEquipmentDTO() {
+    public EquipmentDTO getEquipment() {
         return equipment;
     }
 
-    public void setEquipmentDTO(@Nullable EquipmentDTO equipment) {
+    public void setEquipment(@Nullable EquipmentDTO equipment) {
         this.equipment = equipment;
     }
 }

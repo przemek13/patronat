@@ -28,8 +28,8 @@ public class EquipmentController {
     @GetMapping("/equipment")
     public ResponseEntity<List<EquipmentDTO>> getEquipment() {
         return ResponseEntity.ok(service.findAll().stream()
-            .map(equipment -> mapper.convertToDTO(equipment))
-            .collect(Collectors.toList()));
+                .map(equipment -> mapper.convertToDTO(equipment))
+                .collect(Collectors.toList()));
     }
 
     @PostMapping("/equipment/{id}")

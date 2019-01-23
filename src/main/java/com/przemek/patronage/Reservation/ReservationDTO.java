@@ -17,7 +17,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 @Component
 @JsonIdentityInfo(
@@ -37,7 +36,7 @@ public class ReservationDTO {
     @NotNull
     @Future
     private LocalDateTime reservationEnd;
-    @JsonSerialize(using = ReservationDTOConferenceRoomDTOSerializer.class)
+    @JsonSerialize(using = ReservationConferenceRoomSerializer.class)
     @ManyToOne(cascade = CascadeType.ALL)
     private ConferenceRoomDTO conferenceRoom;
 
@@ -86,11 +85,11 @@ public class ReservationDTO {
         this.reservationEnd = reservationEnd;
     }
 
-    public ConferenceRoomDTO getConferenceRoomDTO() {
+    public ConferenceRoomDTO getConferenceRoom() {
         return conferenceRoom;
     }
 
-    public void setConferenceRoomDTO(ConferenceRoomDTO conferenceRoom) {
+    public void setConferenceRoom(ConferenceRoomDTO conferenceRoom) {
         this.conferenceRoom = conferenceRoom;
     }
 }

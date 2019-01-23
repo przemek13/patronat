@@ -7,21 +7,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class EquipmentService {
     private EquipmentRepository equipmentRepository;
-    private ConferenceRoomRepository conferenceRooms;
+    private ConferenceRoomRepository conferenceRoomRepository;
 
     public EquipmentService() {
-
     }
 
     @Autowired
     public EquipmentService(EquipmentRepository equipmentRepository, ConferenceRoomRepository conferenceRooms) {
         this.equipmentRepository = Objects.requireNonNull(equipmentRepository, "must be defined.");
-        this.conferenceRooms = Objects.requireNonNull(conferenceRooms, "must be defined.");
+        this.conferenceRoomRepository = Objects.requireNonNull(conferenceRooms, "must be defined.");
     }
 
     public List<Equipment> findAll() {
@@ -29,7 +27,7 @@ public class EquipmentService {
     }
 
     public void save(Equipment newEquipment, Long id) throws NoSuchIdException {
-        if (conferenceRooms.findById(id).equals(Optional.empty())) {
+        if (conferenceRoomRepository.findById(id).isEmpty()) {
             throw new NoSuchIdException("The Conference room with id given doesn't exist in the base.");
         }
         if (!newEquipment.isPhone()) {
@@ -37,7 +35,7 @@ public class EquipmentService {
             newEquipment.setExternalNumber(null);
             newEquipment.setConnections(null);
         }
-        var room = conferenceRooms.findById(id).get();
+        var room = conferenceRoomRepository.findById(id).get();
         room.setEquipment(newEquipment);
         newEquipment.setConferenceroom(room);
         equipmentRepository.save(newEquipment);
@@ -62,7 +60,7 @@ public class EquipmentService {
     }
 
     public void delete(Long id) throws NoSuchIdException {
-        if (equipmentRepository.findById(id).equals(Optional.empty())) {
+        if (equipmentRepository.findById(id).isEmpty()) {
             throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
         } else
             equipmentRepository.deleteById(id);

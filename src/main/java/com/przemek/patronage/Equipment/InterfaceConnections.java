@@ -6,4 +6,3 @@ import javax.annotation.Resource;
 public enum InterfaceConnections {
     USB, BLUETOOTH;
 }
-

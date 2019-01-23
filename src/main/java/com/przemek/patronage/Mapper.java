@@ -9,9 +9,6 @@ import com.przemek.patronage.Organization.OrganizationDTO;
 import com.przemek.patronage.Reservation.Reservation;
 import com.przemek.patronage.Reservation.ReservationDTO;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -22,7 +19,6 @@ public class Mapper {
     ModelMapper modelMapper = new ModelMapper();
 
     public OrganizationDTO convertToDTO(Organization organization) {
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
         return modelMapper.map(organization, OrganizationDTO.class);
     }
 

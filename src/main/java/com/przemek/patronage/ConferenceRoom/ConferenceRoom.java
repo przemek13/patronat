@@ -1,8 +1,5 @@
 package com.przemek.patronage.ConferenceRoom;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.przemek.patronage.Equipment.Equipment;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Reservation.Reservation;
@@ -13,10 +10,6 @@ import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ConferenceRoom {
     private @Id
     @GeneratedValue
@@ -37,14 +30,11 @@ public class ConferenceRoom {
     private int lyingPlaces;
     @Nullable
     private int hangingPlaces;
-//    @JsonSerialize(using = ConferenceRoomReservationSerializer.class)
     @OneToMany(cascade = CascadeType.ALL)
     private List<Reservation> reservations;
-//    @JsonSerialize(using = ConferenceRoomOrganizationSerializer.class)
     @ManyToOne(cascade = CascadeType.ALL)
     private Organization organization;
     @Nullable
-//    @JsonSerialize(using = ConferenceRoomEquipmentSerializer.class)
     @OneToOne(cascade = CascadeType.ALL)
     private Equipment equipment;
 
@@ -53,8 +43,14 @@ public class ConferenceRoom {
 
     public ConferenceRoom(@NotBlank @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.") String name,
                           @Nullable @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.") String optionalId,
-                          @Min(0) @Max(10) int floor, boolean available, @NotNull int sittingAndStandingPlaces,
-                          @Nullable int lyingPlaces, @Nullable int hangingPlaces, List<Reservation> reservations, Organization organization, @Nullable Equipment equipment
+                          @Min(0) @Max(10) int floor,
+                          boolean available,
+                          @NotNull int sittingAndStandingPlaces,
+                          @Nullable int lyingPlaces,
+                          @Nullable int hangingPlaces,
+                          List<Reservation> reservations,
+                          Organization organization,
+                          @Nullable Equipment equipment
     ) {
         this.name = name;
         this.optionalId = optionalId;
@@ -69,7 +65,10 @@ public class ConferenceRoom {
     }
 
     public ConferenceRoom(@NotBlank @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.") String name,
-                          @Min(0) @Max(10) int floor, boolean available, @NotNull int sittingAndStandingPlaces, Organization organization
+                          @Min(0) @Max(10) int floor,
+                          boolean available,
+                          @NotNull int sittingAndStandingPlaces,
+                          Organization organization
     ) {
         this.name = name;
         this.floor = floor;

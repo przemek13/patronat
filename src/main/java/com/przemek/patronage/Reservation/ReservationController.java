@@ -5,7 +5,6 @@ import com.przemek.patronage.Exceptions.RoomReservedException;
 import com.przemek.patronage.Exceptions.StartAfterEndException;
 import com.przemek.patronage.Exceptions.WrongDurationException;
 import com.przemek.patronage.Mapper;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +31,6 @@ public class ReservationController {
 
     @GetMapping("/reservations")
     public ResponseEntity<List<ReservationDTO>> getAllReservations() {
-//        return ResponseEntity.ok(service.findAll());
         return ResponseEntity.ok(service.findAll().stream()
                 .map(reservation -> mapper.convertToDTO(reservation))
                 .collect(Collectors.toList()));
@@ -40,7 +38,7 @@ public class ReservationController {
 
     @GetMapping("/reservations/{orgId}/{roomId}")
     public ResponseEntity<List<Reservation>> getReservations(@PathVariable Long orgId, @PathVariable Long roomId) throws NoSuchIdException {
-        return ResponseEntity.ok(service.findForOne(orgId, roomId));
+        return ResponseEntity.ok(service.findForConcreteConferenceRoom(orgId, roomId));
     }
 
     @PostMapping("/reservations/{id}")

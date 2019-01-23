@@ -38,7 +38,7 @@ public class EquipmentDTO {
     private String externalNumber;
     @Nullable
     private InterfaceConnections connections;
-    @JsonSerialize(using = EquipmentDTOConferenceRoomDTOSerializer.class)
+    @JsonSerialize(using = EquipmentConferenceRoomSerializer.class)
     @OneToOne(cascade = CascadeType.ALL)
     private ConferenceRoomDTO conferenceroom;
 
@@ -46,7 +46,8 @@ public class EquipmentDTO {
     }
 
     public EquipmentDTO(@Nullable String projectorName, boolean isPhone,
-                        @Min(value = 0, message = "Internal number has to be an integer between 0 and 99") @Max(value = 99, message = "Internal number has to be an integer between 0 and 99") int internalNumber,
+                        @Min(value = 0, message = "Internal number has to be an integer between 0 and 99")
+                        @Max(value = 99, message = "Internal number has to be an integer between 0 and 99") int internalNumber,
                         @Nullable @Pattern(regexp = "^(\\+\\d{2}\\s\\d{9})$") String externalNumber,
                         @Nullable InterfaceConnections connections,
                         ConferenceRoomDTO conferenceroom) {
@@ -117,11 +118,11 @@ public class EquipmentDTO {
         this.connections = connections;
     }
 
-    public ConferenceRoomDTO getConferenceroomDTO() {
+    public ConferenceRoomDTO getConferenceroom() {
         return conferenceroom;
     }
 
-    public void setConferenceroomDTO(ConferenceRoomDTO conferenceroomDTO) {
-        this.conferenceroom = conferenceroomDTO;
+    public void setConferenceroom(ConferenceRoomDTO conferenceroom) {
+        this.conferenceroom = conferenceroom;
     }
 }

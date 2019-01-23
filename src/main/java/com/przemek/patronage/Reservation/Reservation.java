@@ -1,9 +1,5 @@
 package com.przemek.patronage.Reservation;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 
 import javax.persistence.*;
@@ -15,10 +11,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Entity
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Reservation {
     private @Id
     @GeneratedValue
@@ -32,7 +24,6 @@ public class Reservation {
     @NotNull
     @Future
     private LocalDateTime reservationEnd;
-    @JsonSerialize(using = ReservationConferenceRoomSerializer.class)
     @ManyToOne(cascade = CascadeType.ALL)
     private ConferenceRoom conferenceRoom;
 
@@ -40,7 +31,9 @@ public class Reservation {
     }
 
     public Reservation(@NotBlank @Size(min = 2, max = 20, message = "Reservation name should have minimum 2 and maximum 20 characters.") String reservingId,
-                       @NotNull @Future String reservationStart, @NotNull @Future String reservationEnd, ConferenceRoom conferenceRoom) {
+                       @NotNull @Future String reservationStart,
+                       @NotNull @Future String reservationEnd,
+                       ConferenceRoom conferenceRoom) {
         this.reservingId = reservingId;
         this.reservationStart = LocalDateTime.parse(reservationStart).truncatedTo(ChronoUnit.MINUTES);
         this.reservationEnd = LocalDateTime.parse(reservationEnd).truncatedTo(ChronoUnit.MINUTES);

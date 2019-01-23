@@ -11,4 +11,3 @@ public class PatronageApplication {
 		SpringApplication.run(PatronageApplication.class, args);
 	}
 }
-

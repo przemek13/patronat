@@ -8,41 +8,40 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class ConferenceRoomService {
 
-    private ConferenceRoomRepository conferenceRooms;
-    private OrganizationRepository organizations;
+    private ConferenceRoomRepository conferenceRoomRepository;
+    private OrganizationRepository organizationRepository;
 
     @Autowired
-    public ConferenceRoomService(ConferenceRoomRepository conferenceRooms, OrganizationRepository organizations) {
-        this.conferenceRooms = Objects.requireNonNull(conferenceRooms, "must be defined.");
-        this.organizations = Objects.requireNonNull(organizations, "must be defined.");
+    public ConferenceRoomService(ConferenceRoomRepository conferenceRooms, OrganizationRepository organizationRepository) {
+        this.conferenceRoomRepository = Objects.requireNonNull(conferenceRooms, "must be defined.");
+        this.organizationRepository = Objects.requireNonNull(organizationRepository, "must be defined.");
     }
 
     public List<ConferenceRoom> findAll() {
-        return conferenceRooms.findAll();
+        return conferenceRoomRepository.findAll();
     }
 
     public void save(ConferenceRoom newConferenceRoom, Long id) throws SameNameException, NoSuchIdException {
-        if (organizations.findById(id).equals(Optional.empty())) {
+        if (organizationRepository.findById(id).isEmpty()) {
             throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
         }
-        var org = organizations.findById(id).get();
+        var org = organizationRepository.findById(id).get();
         newConferenceRoom.setOrganization(org);
-        if (conferenceRooms.findByName(newConferenceRoom.getName()) == null) {
+        if (conferenceRoomRepository.findByName(newConferenceRoom.getName()) == null) {
             org.getConferenceRoomsList().add(newConferenceRoom);
-            conferenceRooms.save(newConferenceRoom);
-            organizations.save(org);
+            conferenceRoomRepository.save(newConferenceRoom);
+            organizationRepository.save(org);
         } else {
             throw new SameNameException("The Conference room with name given already exist. Please choose different name.");
         }
     }
 
     public ConferenceRoom update(ConferenceRoom newConferenceRoom, Long id) {
-        return conferenceRooms.findById(id)
+        return conferenceRoomRepository.findById(id)
                 .map(conferenceRoom -> {
                     conferenceRoom.setName(newConferenceRoom.getName());
                     conferenceRoom.setOptionalId(newConferenceRoom.getOptionalId());
@@ -54,18 +53,18 @@ public class ConferenceRoomService {
                     conferenceRoom.setReservations(newConferenceRoom.getReservations());
                     conferenceRoom.setOrganization(newConferenceRoom.getOrganization());
                     conferenceRoom.setEquipment(newConferenceRoom.getEquipment());
-                    return conferenceRooms.save(conferenceRoom);
+                    return conferenceRoomRepository.save(conferenceRoom);
                 })
                 .orElseGet(() -> {
                     newConferenceRoom.setId(id);
-                    return conferenceRooms.save(newConferenceRoom);
+                    return conferenceRoomRepository.save(newConferenceRoom);
                 });
     }
 
     public void delete(Long id) throws NoSuchIdException {
-        if (conferenceRooms.findById(id).equals(Optional.empty())) {
+        if (conferenceRoomRepository.findById(id).isEmpty()) {
             throw new NoSuchIdException("The Conference room with id given doesn't exist in the base.");
         } else
-            conferenceRooms.deleteById(id);
+            conferenceRoomRepository.deleteById(id);
     }
 }

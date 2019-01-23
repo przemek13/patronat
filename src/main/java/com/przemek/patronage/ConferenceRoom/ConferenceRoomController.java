@@ -42,7 +42,7 @@ public class ConferenceRoomController {
     }
 
     @PutMapping("/rooms/{id}")
-    public ResponseEntity <ConferenceRoomDTO> updateConferenceRoom(@Valid @RequestBody ConferenceRoomDTO newConferenceRoomDTO, @PathVariable Long id) throws ParseException {
+    public ResponseEntity<ConferenceRoomDTO> updateConferenceRoom(@Valid @RequestBody ConferenceRoomDTO newConferenceRoomDTO, @PathVariable Long id) throws ParseException {
         var newConferenceRoom = mapper.convertToEntity(newConferenceRoomDTO);
         service.update(newConferenceRoom, id);
         newConferenceRoomDTO = mapper.convertToDTO(newConferenceRoom);
