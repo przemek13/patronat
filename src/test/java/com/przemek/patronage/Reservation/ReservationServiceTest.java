@@ -2,10 +2,7 @@ package com.przemek.patronage.Reservation;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
-import com.przemek.patronage.Exceptions.NoSuchIdException;
 import com.przemek.patronage.Exceptions.RoomReservedException;
-import com.przemek.patronage.Exceptions.StartAfterEndException;
-import com.przemek.patronage.Exceptions.WrongDurationException;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationRepository;
 import org.junit.AfterClass;
@@ -47,7 +44,7 @@ public class ReservationServiceTest {
     }
 
     @Test
-    public void saveWhenConferenceRoomIdExists() throws NoSuchIdException, RoomReservedException, WrongDurationException, StartAfterEndException {
+    public void saveWhenConferenceRoomIdExists() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
         //when
@@ -56,16 +53,16 @@ public class ReservationServiceTest {
         verify(testReservations, times(1)).save(newTestReservation);
     }
 
-    @Test(expected = NoSuchIdException.class)
-    public void saveWhenConferenceRoomIdNotExist() throws NoSuchIdException, RoomReservedException, WrongDurationException, StartAfterEndException {
+    @Test(expected = IllegalArgumentException.class)
+    public void saveWhenConferenceRoomIdNotExist() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.empty());
         //when
         testReservationService.save(newTestReservation, testId);
     }
 
-    @Test(expected = StartAfterEndException.class)
-    public void saveWhenReservationStartAfterReservationDate() throws NoSuchIdException, WrongDurationException, StartAfterEndException, RoomReservedException {
+    @Test(expected = IllegalArgumentException.class)
+    public void saveWhenReservationStartAfterReservationDate() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
         var newTestReservation = new Reservation("Reserving 1", "2019-03-23T17:00:00", "2019-03-23T16:00:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
@@ -73,8 +70,8 @@ public class ReservationServiceTest {
         testReservationService.save(newTestReservation, testId);
     }
 
-    @Test(expected = WrongDurationException.class)
-    public void saveWhenReservationDurationTooShort() throws NoSuchIdException, WrongDurationException, StartAfterEndException, IOException, RoomReservedException {
+    @Test(expected = IllegalArgumentException.class)
+    public void saveWhenReservationDurationTooShort() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
         var newTestReservation = new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T16:05:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
@@ -82,8 +79,8 @@ public class ReservationServiceTest {
         testReservationService.save(newTestReservation, testId);
     }
 
-    @Test(expected = WrongDurationException.class)
-    public void saveWhenReservationDurationTooLong() throws NoSuchIdException, WrongDurationException, StartAfterEndException, IOException, RoomReservedException {
+    @Test(expected = IllegalArgumentException.class)
+    public void saveWhenReservationDurationTooLong() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
         var newTestReservation = new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T18:01:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
@@ -92,7 +89,7 @@ public class ReservationServiceTest {
     }
 
     @Test(expected = RoomReservedException.class)
-    public void saveWhenReservationDuringTheSamePeriod() throws NoSuchIdException, WrongDurationException, StartAfterEndException, RoomReservedException {
+    public void saveWhenReservationDuringTheSamePeriod() {
         //given
         when(testConferenceRoom.getReservations()).thenReturn(Collections.singletonList(testReservation));
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
@@ -127,7 +124,7 @@ public class ReservationServiceTest {
     }
 
     @Test
-    public void deleteWhenReservationIdExists() throws NoSuchIdException {
+    public void deleteWhenReservationIdExists() {
         //given
         when(testReservations.findById(testId)).thenReturn(Optional.ofNullable(newTestReservation));
         //when
@@ -136,8 +133,8 @@ public class ReservationServiceTest {
         verify(testReservations, times(1)).deleteById(testId);
     }
 
-    @Test(expected = NoSuchIdException.class)
-    public void deleteWhenReservationIdNotExist() throws NoSuchIdException {
+    @Test(expected = IllegalArgumentException.class)
+    public void deleteWhenReservationIdNotExist() {
         //given
         when(testReservations.findById(testId)).thenReturn(Optional.empty());
         //when

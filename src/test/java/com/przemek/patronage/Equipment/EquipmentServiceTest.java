@@ -2,7 +2,6 @@ package com.przemek.patronage.Equipment;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
-import com.przemek.patronage.Exceptions.NoSuchIdException;
 import com.przemek.patronage.Organization.Organization;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +39,7 @@ public class EquipmentServiceTest {
     }
 
     @Test
-    public void saveWhenConferenceRoomIdExist() throws NoSuchIdException {
+    public void saveWhenConferenceRoomIdExist() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
         //when
@@ -49,8 +48,8 @@ public class EquipmentServiceTest {
         verify(testEquipmentRepository, times(1)).save(newTestEquipment);
     }
 
-    @Test(expected = NoSuchIdException.class)
-    public void saveWhenConferenceRoomIdNotExist() throws NoSuchIdException {
+    @Test(expected = IllegalArgumentException.class)
+    public void saveWhenConferenceRoomIdNotExist() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.empty());
         //when
@@ -84,7 +83,7 @@ public class EquipmentServiceTest {
     }
 
     @Test
-    public void deleteWhenOrganizationIdExists() throws NoSuchIdException {
+    public void deleteWhenOrganizationIdExists() {
         //given
         when(testEquipmentRepository.findById(testId)).thenReturn(Optional.ofNullable(newTestEquipment));
         //when
@@ -93,8 +92,8 @@ public class EquipmentServiceTest {
         verify(testEquipmentRepository, times(1)).deleteById(1L);
     }
 
-    @Test(expected = NoSuchIdException.class)
-    public void deleteWhenOrganizationIdNotExist() throws NoSuchIdException {
+    @Test(expected = IllegalArgumentException.class)
+    public void deleteWhenOrganizationIdNotExist() {
         //given
         when(testEquipmentRepository.findById(testId)).thenReturn(Optional.empty());
         //when

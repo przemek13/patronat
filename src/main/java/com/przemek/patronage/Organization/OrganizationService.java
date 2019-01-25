@@ -1,7 +1,5 @@
 package com.przemek.patronage.Organization;
 
-import com.przemek.patronage.Exceptions.NoSuchIdException;
-import com.przemek.patronage.Exceptions.SameNameException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +20,11 @@ public class OrganizationService {
         return organizationRepository.findAll();
     }
 
-    public void save(Organization newOrganization) throws SameNameException {
+    public void save(Organization newOrganization) {
         if (organizationRepository.findByName(newOrganization.getName()) == null) {
             organizationRepository.save(newOrganization);
         } else {
-            throw new SameNameException("The Organization with name given already exist. Please choose different name.");
+            throw new IllegalArgumentException ("The Organization with name given already exist. Please choose different name.");
         }
     }
 
@@ -44,9 +42,9 @@ public class OrganizationService {
                 });
     }
 
-    public void delete(Long id) throws NoSuchIdException {
+    public void delete(Long id) {
         if (organizationRepository.findById(id).isEmpty()) {
-            throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
+            throw new IllegalArgumentException ("The Organization with id given doesn't exist in the base.");
         } else
             organizationRepository.deleteById(id);
     }

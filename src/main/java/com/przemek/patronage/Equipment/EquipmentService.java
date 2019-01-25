@@ -1,7 +1,6 @@
 package com.przemek.patronage.Equipment;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
-import com.przemek.patronage.Exceptions.NoSuchIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +25,9 @@ public class EquipmentService {
         return equipmentRepository.findAll();
     }
 
-    public void save(Equipment newEquipment, Long id) throws NoSuchIdException {
+    public void save(Equipment newEquipment, Long id) {
         if (conferenceRoomRepository.findById(id).isEmpty()) {
-            throw new NoSuchIdException("The Conference room with id given doesn't exist in the base.");
+            throw new IllegalArgumentException ("The Conference room with id given doesn't exist in the base.");
         }
         if (!newEquipment.isPhone()) {
             newEquipment.setInternalNumber(null);
@@ -59,9 +58,9 @@ public class EquipmentService {
                 });
     }
 
-    public void delete(Long id) throws NoSuchIdException {
+    public void delete(Long id) {
         if (equipmentRepository.findById(id).isEmpty()) {
-            throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
+            throw new IllegalArgumentException ("The Organization with id given doesn't exist in the base.");
         } else
             equipmentRepository.deleteById(id);
     }

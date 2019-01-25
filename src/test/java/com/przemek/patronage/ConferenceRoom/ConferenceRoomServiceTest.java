@@ -1,7 +1,5 @@
 package com.przemek.patronage.ConferenceRoom;
 
-import com.przemek.patronage.Exceptions.NoSuchIdException;
-import com.przemek.patronage.Exceptions.SameNameException;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationRepository;
 import org.junit.AfterClass;
@@ -41,7 +39,7 @@ public class ConferenceRoomServiceTest {
     }
 
     @Test
-    public void saveWhenOrganizationIdExistsAndConferenceRoomNameNotExist() throws NoSuchIdException, SameNameException {
+    public void saveWhenOrganizationIdExistsAndConferenceRoomNameNotExist() {
         //given
         when(testOrganizations.findById(testId)).thenReturn(Optional.of(testOrganization));
         when(testConferenceRooms.findByName(newTestConferenceRoom.getName())).thenReturn(null);
@@ -51,8 +49,8 @@ public class ConferenceRoomServiceTest {
         verify(testOrganizations, times(1)).save(testOrganization);
     }
 
-    @Test(expected = NoSuchIdException.class)
-    public void saveWhenOrganizationIdNotExist() throws NoSuchIdException, SameNameException {
+    @Test(expected = IllegalArgumentException.class)
+    public void saveWhenOrganizationIdNotExist() {
         //given
         when(testOrganizations.findById(testId)).thenReturn(Optional.empty());
         //when
@@ -60,8 +58,8 @@ public class ConferenceRoomServiceTest {
         //then
     }
 
-    @Test(expected = SameNameException.class)
-    public void saveWhenConferenceRoomNameExists() throws NoSuchIdException, SameNameException {
+    @Test(expected = IllegalArgumentException.class)
+    public void saveWhenConferenceRoomNameExists() {
         //given
         when(testOrganizations.findById(testId)).thenReturn(Optional.of(testOrganization));
         when(testConferenceRooms.findByName(newTestConferenceRoom.getName())).thenReturn(newTestConferenceRoom);
@@ -95,7 +93,7 @@ public class ConferenceRoomServiceTest {
     }
 
     @Test
-    public void deleteWhenOrganizationIdExists() throws NoSuchIdException {
+    public void deleteWhenOrganizationIdExists() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(newTestConferenceRoom));
         //when
@@ -104,8 +102,8 @@ public class ConferenceRoomServiceTest {
         verify(testConferenceRooms, times(1)).deleteById(1L);
     }
 
-    @Test(expected = NoSuchIdException.class)
-    public void deleteWhenOrganizationIdNotExist() throws NoSuchIdException {
+    @Test(expected = IllegalArgumentException.class)
+    public void deleteWhenOrganizationIdNotExist() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.empty());
         //when

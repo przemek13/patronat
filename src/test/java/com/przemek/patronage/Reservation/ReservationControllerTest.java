@@ -2,6 +2,7 @@ package com.przemek.patronage.Reservation;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
+import com.przemek.patronage.Mapper;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationRepository;
 import org.junit.Test;
@@ -41,6 +42,7 @@ public class ReservationControllerTest {
         public ReservationService reservationService() {
             return new ReservationService(testReservations, testConferenceRooms, testOrganizations);
         }
+
     }
 
     @Autowired

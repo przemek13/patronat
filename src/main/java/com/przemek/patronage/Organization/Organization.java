@@ -12,8 +12,6 @@ public class Organization {
     private @Id
     @GeneratedValue
     Long id;
-    @NotBlank
-    @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.")
     private String name;
     @OneToMany(cascade = CascadeType.ALL)
     private List<ConferenceRoom> conferenceRoomsList;
@@ -21,13 +19,12 @@ public class Organization {
     public Organization() {
     }
 
-    public Organization(@NotBlank @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.") String name,
-                        List<ConferenceRoom> conferenceRooms) {
+    public Organization(String name, List<ConferenceRoom> conferenceRooms) {
         this.name = name;
         this.conferenceRoomsList = conferenceRooms;
     }
 
-    public Organization(@NotBlank @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.") String name) {
+    public Organization(String name) {
         this.name = name;
     }
 

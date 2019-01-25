@@ -1,7 +1,5 @@
 package com.przemek.patronage.ConferenceRoom;
 
-import com.przemek.patronage.Exceptions.NoSuchIdException;
-import com.przemek.patronage.Exceptions.SameNameException;
 import com.przemek.patronage.Organization.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +14,8 @@ public class ConferenceRoomService {
     private OrganizationRepository organizationRepository;
 
     @Autowired
-    public ConferenceRoomService(ConferenceRoomRepository conferenceRooms, OrganizationRepository organizationRepository) {
-        this.conferenceRoomRepository = Objects.requireNonNull(conferenceRooms, "must be defined.");
+    public ConferenceRoomService(ConferenceRoomRepository conferenceRoomRepository, OrganizationRepository organizationRepository) {
+        this.conferenceRoomRepository = Objects.requireNonNull(conferenceRoomRepository, "must be defined.");
         this.organizationRepository = Objects.requireNonNull(organizationRepository, "must be defined.");
     }
 
@@ -25,18 +23,18 @@ public class ConferenceRoomService {
         return conferenceRoomRepository.findAll();
     }
 
-    public void save(ConferenceRoom newConferenceRoom, Long id) throws SameNameException, NoSuchIdException {
+    public void save(ConferenceRoom newConferenceRoom, Long id) {
         if (organizationRepository.findById(id).isEmpty()) {
-            throw new NoSuchIdException("The Organization with id given doesn't exist in the base.");
+            throw new IllegalArgumentException("The Organization with id given doesn't exist in the base.");
         }
-        var org = organizationRepository.findById(id).get();
-        newConferenceRoom.setOrganization(org);
+        var organization = organizationRepository.findById(id).get();
+        newConferenceRoom.setOrganization(organization);
         if (conferenceRoomRepository.findByName(newConferenceRoom.getName()) == null) {
-            org.getConferenceRoomsList().add(newConferenceRoom);
+            organization.getConferenceRoomsList().add(newConferenceRoom);
             conferenceRoomRepository.save(newConferenceRoom);
-            organizationRepository.save(org);
+            organizationRepository.save(organization);
         } else {
-            throw new SameNameException("The Conference room with name given already exist. Please choose different name.");
+            throw new IllegalArgumentException("The Conference room with name given already exist. Please choose different name.");
         }
     }
 
@@ -61,9 +59,9 @@ public class ConferenceRoomService {
                 });
     }
 
-    public void delete(Long id) throws NoSuchIdException {
+    public void delete(Long id) {
         if (conferenceRoomRepository.findById(id).isEmpty()) {
-            throw new NoSuchIdException("The Conference room with id given doesn't exist in the base.");
+            throw new IllegalArgumentException("The Conference room with id given doesn't exist in the base.");
         } else
             conferenceRoomRepository.deleteById(id);
     }

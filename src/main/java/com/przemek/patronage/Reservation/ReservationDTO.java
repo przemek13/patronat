@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Component
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class ReservationDTO {
     private @Id
     @GeneratedValue
@@ -37,7 +37,6 @@ public class ReservationDTO {
     @Future
     private LocalDateTime reservationEnd;
     @JsonSerialize(using = ReservationConferenceRoomSerializer.class)
-    @ManyToOne(cascade = CascadeType.ALL)
     private ConferenceRoomDTO conferenceRoom;
 
     public ReservationDTO() {

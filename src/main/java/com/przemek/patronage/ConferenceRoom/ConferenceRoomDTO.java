@@ -18,10 +18,10 @@ import javax.validation.constraints.*;
 import java.util.List;
 
 @Component
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class ConferenceRoomDTO {
     private @Id
     @GeneratedValue
@@ -43,14 +43,11 @@ public class ConferenceRoomDTO {
     @Nullable
     private int hangingPlaces;
     @JsonSerialize(using = ConferenceRoomReservationSerializer.class)
-    @OneToMany(cascade = CascadeType.ALL)
     private List<ReservationDTO> reservationsList;
     @JsonSerialize(using = ConferenceRoomOrganizationSerializer.class)
-    @ManyToOne(cascade = CascadeType.ALL)
     private OrganizationDTO organization;
     @Nullable
     @JsonSerialize(using = ConferenceRoomEquipmentSerializer.class)
-    @OneToOne(cascade = CascadeType.ALL)
     private EquipmentDTO equipment;
 
     public ConferenceRoomDTO() {

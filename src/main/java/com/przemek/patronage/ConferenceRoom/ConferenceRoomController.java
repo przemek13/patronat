@@ -1,10 +1,6 @@
 package com.przemek.patronage.ConferenceRoom;
 
-import com.przemek.patronage.Exceptions.NoSuchIdException;
-import com.przemek.patronage.Exceptions.SameNameException;
 import com.przemek.patronage.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,42 +12,40 @@ import java.util.stream.Collectors;
 @RestController
 public class ConferenceRoomController {
 
-    private ConferenceRoomService service;
+    private final ConferenceRoomService service;
 
-    private Mapper mapper;
+    private final Mapper mapper;
 
-    @Autowired
-    public ConferenceRoomController(ConferenceRoomService service, Mapper mapper) {
+    private ConferenceRoomController(ConferenceRoomService service, Mapper mapper) {
         this.service = Objects.requireNonNull(service, "must be defined.");
         this.mapper = Objects.requireNonNull(mapper, "must be defined.");
     }
 
     @GetMapping("/rooms")
-    public ResponseEntity<List<ConferenceRoomDTO>> getConferenceRooms() {
-        return ResponseEntity.ok(service.findAll().stream()
-                .map(conferenceRoom -> mapper.convertToDTO(conferenceRoom))
-                .collect(Collectors.toList()));
+    private List<ConferenceRoomDTO> getConferenceRooms() {
+        return service.findAll().stream()
+                .map(mapper::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/rooms/{id}")
-    public ResponseEntity<ConferenceRoomDTO> addConferenceRoom(@Valid @RequestBody ConferenceRoomDTO newConferenceRoomDTO, @PathVariable Long id) throws SameNameException, NoSuchIdException, ParseException {
+    private ConferenceRoomDTO addConferenceRoom(@Valid @RequestBody ConferenceRoomDTO newConferenceRoomDTO, @PathVariable Long id) throws ParseException {
         var newConferenceRoom = mapper.convertToEntity(newConferenceRoomDTO);
         service.save(newConferenceRoom, id);
         newConferenceRoomDTO = mapper.convertToDTO(newConferenceRoom);
-        return ResponseEntity.ok(newConferenceRoomDTO);
+        return newConferenceRoomDTO;
     }
 
     @PutMapping("/rooms/{id}")
-    public ResponseEntity<ConferenceRoomDTO> updateConferenceRoom(@Valid @RequestBody ConferenceRoomDTO newConferenceRoomDTO, @PathVariable Long id) throws ParseException {
+    private ConferenceRoomDTO updateConferenceRoom(@Valid @RequestBody ConferenceRoomDTO newConferenceRoomDTO, @PathVariable Long id) throws ParseException {
         var newConferenceRoom = mapper.convertToEntity(newConferenceRoomDTO);
         service.update(newConferenceRoom, id);
         newConferenceRoomDTO = mapper.convertToDTO(newConferenceRoom);
-        return ResponseEntity.ok(newConferenceRoomDTO);
+        return newConferenceRoomDTO;
     }
 
     @DeleteMapping("/rooms/{id}")
-    public ResponseEntity deleteConferenceRoom(@PathVariable Long id) throws NoSuchIdException {
+    private void deleteConferenceRoom(@PathVariable Long id) {
         service.delete(id);
-        return ResponseEntity.ok().build();
     }
 }

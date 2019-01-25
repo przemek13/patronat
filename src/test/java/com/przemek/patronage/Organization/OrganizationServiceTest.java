@@ -1,7 +1,5 @@
 package com.przemek.patronage.Organization;
 
-import com.przemek.patronage.Exceptions.NoSuchIdException;
-import com.przemek.patronage.Exceptions.SameNameException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +32,7 @@ public class OrganizationServiceTest {
     }
 
     @Test
-    public void saveWhenOrganizationNameNotExist() throws SameNameException {
+    public void saveWhenOrganizationNameNotExist() {
         //given
         when(testOrganizations.findByName(newTestOrganization.getName())).thenReturn(null);
         //when
@@ -43,8 +41,8 @@ public class OrganizationServiceTest {
         verify(testOrganizations, times(1)).save(newTestOrganization);
     }
 
-    @Test(expected = SameNameException.class)
-    public void saveWhenOrganizationNameExists() throws SameNameException {
+    @Test(expected = IllegalArgumentException.class)
+    public void saveWhenOrganizationNameExists() {
         //given
         when(testOrganizations.findByName(newTestOrganization.getName())).thenReturn(newTestOrganization);
         //when
@@ -73,7 +71,7 @@ public class OrganizationServiceTest {
     }
 
     @Test
-    public void deleteWhenOrganizationIdExists() throws NoSuchIdException {
+    public void deleteWhenOrganizationIdExists() {
         //given
         when(testOrganizations.findById(testId)).thenReturn(Optional.ofNullable(newTestOrganization));
         //when
@@ -82,8 +80,8 @@ public class OrganizationServiceTest {
         verify(testOrganizations, times(1)).deleteById(1L);
     }
 
-    @Test(expected = NoSuchIdException.class)
-    public void deleteWhenOrganizationIdNotExist() throws NoSuchIdException {
+    @Test(expected = IllegalArgumentException.class)
+    public void deleteWhenOrganizationIdNotExist() {
         //given
         when(testOrganizations.findById(testId)).thenReturn(Optional.empty());
         //when

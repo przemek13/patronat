@@ -16,15 +16,14 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
-@Component
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@Component
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class EquipmentDTO {
     @Nullable
-    private @Id
-    @GeneratedValue
+    private
     Long id;
     @Nullable
     private String projectorName;
@@ -39,7 +38,6 @@ public class EquipmentDTO {
     @Nullable
     private InterfaceConnections connections;
     @JsonSerialize(using = EquipmentConferenceRoomSerializer.class)
-    @OneToOne(cascade = CascadeType.ALL)
     private ConferenceRoomDTO conferenceroom;
 
     public EquipmentDTO() {

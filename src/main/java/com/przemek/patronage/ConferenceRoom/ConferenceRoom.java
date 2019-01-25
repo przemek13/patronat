@@ -14,44 +14,25 @@ public class ConferenceRoom {
     private @Id
     @GeneratedValue
     Long id;
-    @NotBlank
-    @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.")
     private String name;
-    @Nullable
-    @Size(min = 2, max = 20, message = "Conference name should have minimum 2 and maximum 20 characters.")
     private String optionalId;
-    @Min(0)
-    @Max(10)
     private int floor;
     private boolean available;
-    @NotNull
     private int sittingAndStandingPlaces;
-    @Nullable
     private int lyingPlaces;
-    @Nullable
     private int hangingPlaces;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Reservation> reservations;
     @ManyToOne(cascade = CascadeType.ALL)
     private Organization organization;
-    @Nullable
     @OneToOne(cascade = CascadeType.ALL)
     private Equipment equipment;
 
     public ConferenceRoom() {
     }
 
-    public ConferenceRoom(@NotBlank @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.") String name,
-                          @Nullable @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.") String optionalId,
-                          @Min(0) @Max(10) int floor,
-                          boolean available,
-                          @NotNull int sittingAndStandingPlaces,
-                          @Nullable int lyingPlaces,
-                          @Nullable int hangingPlaces,
-                          List<Reservation> reservations,
-                          Organization organization,
-                          @Nullable Equipment equipment
-    ) {
+    public ConferenceRoom(String name, String optionalId, int floor,
+                          boolean available, int sittingAndStandingPlaces, int lyingPlaces, int hangingPlaces, List<Reservation> reservations, Organization organization, Equipment equipment) {
         this.name = name;
         this.optionalId = optionalId;
         this.floor = floor;
@@ -64,12 +45,7 @@ public class ConferenceRoom {
         this.equipment = equipment;
     }
 
-    public ConferenceRoom(@NotBlank @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.") String name,
-                          @Min(0) @Max(10) int floor,
-                          boolean available,
-                          @NotNull int sittingAndStandingPlaces,
-                          Organization organization
-    ) {
+    public ConferenceRoom(String name, int floor, boolean available, int sittingAndStandingPlaces, Organization organization) {
         this.name = name;
         this.floor = floor;
         this.available = available;
@@ -93,7 +69,6 @@ public class ConferenceRoom {
         this.name = name;
     }
 
-    @Nullable
     public String getOptionalId() {
         return optionalId;
     }
@@ -158,12 +133,11 @@ public class ConferenceRoom {
         this.organization = organization;
     }
 
-    @Nullable
     public Equipment getEquipment() {
         return equipment;
     }
 
-    public void setEquipment(@Nullable Equipment equipment) {
+    public void setEquipment(Equipment equipment) {
         this.equipment = equipment;
     }
 }

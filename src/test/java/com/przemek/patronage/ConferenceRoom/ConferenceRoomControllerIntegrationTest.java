@@ -62,7 +62,7 @@ public class ConferenceRoomControllerIntegrationTest {
                         "        \"name\": \"Conference Room 1\",\n" +
                         "        \"floor\": 10,\n" +
                         "        \"available\": true,\n" +
-                        "        \"sittingAndStandingPlaces\": 0\n" +
+                        "        \"sittingAndStandingPlaces\": 10\n" +
                         "    }"));
         ConferenceRoom testConferenceRoom = testConferenceRoomRepository.findByName("Conference Room 1");
         //then

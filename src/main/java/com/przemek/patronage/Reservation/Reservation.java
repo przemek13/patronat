@@ -15,14 +15,8 @@ public class Reservation {
     private @Id
     @GeneratedValue
     Long id;
-    @NotBlank
-    @Size(min = 2, max = 20, message = "Reservation name should have minimum 2 and maximum 20 characters.")
     private String reservingId;
-    @NotNull
-    @Future
     private LocalDateTime reservationStart;
-    @NotNull
-    @Future
     private LocalDateTime reservationEnd;
     @ManyToOne(cascade = CascadeType.ALL)
     private ConferenceRoom conferenceRoom;
@@ -30,10 +24,7 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(@NotBlank @Size(min = 2, max = 20, message = "Reservation name should have minimum 2 and maximum 20 characters.") String reservingId,
-                       @NotNull @Future String reservationStart,
-                       @NotNull @Future String reservationEnd,
-                       ConferenceRoom conferenceRoom) {
+    public Reservation(String reservingId, String reservationStart, String reservationEnd, ConferenceRoom conferenceRoom) {
         this.reservingId = reservingId;
         this.reservationStart = LocalDateTime.parse(reservationStart).truncatedTo(ChronoUnit.MINUTES);
         this.reservationEnd = LocalDateTime.parse(reservationEnd).truncatedTo(ChronoUnit.MINUTES);

@@ -16,19 +16,16 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Component
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class OrganizationDTO {
-    private @Id
-    @GeneratedValue
-    Long id;
+    private Long id;
     @NotBlank
     @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.")
     private String name;
     @JsonSerialize(using = OrganizationConferenceRoomSerializer.class)
-    @OneToMany(cascade = CascadeType.ALL)
     private List<ConferenceRoomDTO> conferenceRoomsList;
 
     public OrganizationDTO() {
