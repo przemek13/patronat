@@ -24,7 +24,7 @@ public class OrganizationService {
         if (organizationRepository.findByName(newOrganization.getName()) == null) {
             organizationRepository.save(newOrganization);
         } else {
-            throw new IllegalArgumentException ("The Organization with name given already exist. Please choose different name.");
+            throw new IllegalArgumentException("The Organization with name given already exist. Please choose different name.");
         }
     }
 
@@ -44,7 +44,7 @@ public class OrganizationService {
 
     public void delete(Long id) {
         if (organizationRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException ("The Organization with id given doesn't exist in the base.");
+            throw new IllegalArgumentException("The Organization with id given doesn't exist in the base.");
         } else
             organizationRepository.deleteById(id);
     }

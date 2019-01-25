@@ -27,7 +27,7 @@ public class EquipmentService {
 
     public void save(Equipment newEquipment, Long id) {
         if (conferenceRoomRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException ("The Conference room with id given doesn't exist in the base.");
+            throw new IllegalArgumentException("The Conference room with id given doesn't exist in the base.");
         }
         if (!newEquipment.isPhone()) {
             newEquipment.setInternalNumber(null);
@@ -60,7 +60,7 @@ public class EquipmentService {
 
     public void delete(Long id) {
         if (equipmentRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException ("The Organization with id given doesn't exist in the base.");
+            throw new IllegalArgumentException("The Organization with id given doesn't exist in the base.");
         } else
             equipmentRepository.deleteById(id);
     }

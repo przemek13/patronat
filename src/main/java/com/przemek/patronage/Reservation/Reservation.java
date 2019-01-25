@@ -1,22 +1,30 @@
 package com.przemek.patronage.Reservation;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class Reservation {
     private @Id
     @GeneratedValue
     Long id;
     private String reservingId;
+    @JsonDeserialize(using = JsonDateDeserializer.class)
+    @JsonSerialize(using = JsonDateSerializer.class)
     private LocalDateTime reservationStart;
+    @JsonDeserialize(using = JsonDateDeserializer.class)
+    @JsonSerialize(using = JsonDateSerializer.class)
     private LocalDateTime reservationEnd;
     @ManyToOne(cascade = CascadeType.ALL)
     private ConferenceRoom conferenceRoom;
@@ -24,11 +32,12 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(String reservingId, String reservationStart, String reservationEnd, ConferenceRoom conferenceRoom) {
+    public Reservation(String reservingId, LocalDateTime reservationStart, LocalDateTime reservationEnd, ConferenceRoom conferenceRoom) {
         this.reservingId = reservingId;
-        this.reservationStart = LocalDateTime.parse(reservationStart).truncatedTo(ChronoUnit.MINUTES);
-        this.reservationEnd = LocalDateTime.parse(reservationEnd).truncatedTo(ChronoUnit.MINUTES);
+        this.reservationStart = reservationStart;
+        this.reservationEnd = reservationEnd;
         this.conferenceRoom = conferenceRoom;
+        //truncatedTo(ChronoUnit.MINUTES)
     }
 
     public Long getId() {

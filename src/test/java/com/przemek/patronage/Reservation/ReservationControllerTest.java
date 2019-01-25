@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -54,7 +55,7 @@ public class ReservationControllerTest {
     @Test
     public void getReservations() throws Exception {
         //given
-        when(testService.findAll()).thenReturn(Collections.singletonList(new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T17:00:00", new ConferenceRoom("Conference Room 1", 5, true, 5, new Organization("Organization 1")))));
+        when(testService.findAll()).thenReturn(Collections.singletonList(new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")))));
         //when
         mvc.perform(get("/reservations")
                 .contentType(MediaType.APPLICATION_JSON))

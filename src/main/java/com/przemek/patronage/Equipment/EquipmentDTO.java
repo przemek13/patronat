@@ -8,23 +8,19 @@ import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.CascadeType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
-//@Component
-//@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
-//@JsonIgnoreProperties(ignoreUnknown = true)
+
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Component
 public class EquipmentDTO {
     @Nullable
-    private
-    Long id;
+    private Long id;
     @Nullable
     private String projectorName;
     private boolean isPhone;

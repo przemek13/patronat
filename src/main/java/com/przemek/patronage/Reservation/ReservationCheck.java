@@ -23,7 +23,7 @@ public class ReservationCheck {
         newReservation.setReservationStart(newReservation.getReservationStart().truncatedTo(ChronoUnit.MINUTES));
         newReservation.setReservationEnd(newReservation.getReservationEnd().truncatedTo(ChronoUnit.MINUTES));
         if (newReservation.getReservationStart().isAfter(newReservation.getReservationEnd())) {
-            throw new IllegalArgumentException ("Reservation start can't be after reservation end.");
+            throw new IllegalArgumentException("Reservation start can't be after reservation end.");
         }
     }
 
@@ -46,7 +46,7 @@ public class ReservationCheck {
                 )
                 .findAny()
                 .ifPresent(reservation -> {
-                    throw new RoomReservedException ("The room is already reserved in the given period.");
+                    throw new RoomReservedException("The room is already reserved in the given period.");
                 });
     }
 }

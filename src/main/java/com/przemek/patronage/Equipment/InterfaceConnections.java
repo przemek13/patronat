@@ -4,11 +4,11 @@ import javax.annotation.Resource;
 
 @Resource
 public enum InterfaceConnections {
-    USB ("USB"), BLUETOOTH ("BLUETOOTH");
+    USB("USB"), BLUETOOTH("BLUETOOTH");
 
     private final String name;
 
-    private InterfaceConnections (String name) {
+    private InterfaceConnections(String name) {
         this.name = name;
     }
 

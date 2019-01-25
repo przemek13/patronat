@@ -3,38 +3,40 @@ package com.przemek.patronage.Reservation;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.CascadeType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
+
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Component
-//@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
-//@JsonIgnoreProperties(ignoreUnknown = true)
-public class ReservationDTO {
-    private @Id
-    @GeneratedValue
-    Long id;
+public class ReservationDTO implements Serializable {
+    @Id
+    private Long id;
     @NotBlank
     @Size(min = 2, max = 20, message = "Reservation name should have minimum 2 and maximum 20 characters.")
     private String reservingId;
     @NotNull
     @Future
+    @JsonDeserialize(using = JsonDateDeserializer.class)
+    @JsonSerialize(using = JsonDateSerializer.class)
     private LocalDateTime reservationStart;
     @NotNull
     @Future
+    @JsonDeserialize(using = JsonDateDeserializer.class)
+    @JsonSerialize(using = JsonDateSerializer.class)
     private LocalDateTime reservationEnd;
     @JsonSerialize(using = ReservationConferenceRoomSerializer.class)
     private ConferenceRoomDTO conferenceRoom;
@@ -43,12 +45,12 @@ public class ReservationDTO {
     }
 
     public ReservationDTO(@NotBlank @Size(min = 2, max = 20, message = "Reservation name should have minimum 2 and maximum 20 characters.") String reservingId,
-                          @NotNull @Future String reservationStart,
-                          @NotNull @Future String reservationEnd,
+                          @NotNull @Future LocalDateTime reservationStart,
+                          @NotNull @Future LocalDateTime reservationEnd,
                           ConferenceRoomDTO conferenceRoom) {
         this.reservingId = reservingId;
-        this.reservationStart = LocalDateTime.parse(reservationStart).truncatedTo(ChronoUnit.MINUTES);
-        this.reservationEnd = LocalDateTime.parse(reservationEnd).truncatedTo(ChronoUnit.MINUTES);
+        this.reservationStart = reservationStart;
+        this.reservationEnd = reservationEnd;
         this.conferenceRoom = conferenceRoom;
     }
 

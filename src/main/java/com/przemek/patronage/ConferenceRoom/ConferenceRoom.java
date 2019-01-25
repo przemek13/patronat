@@ -1,14 +1,20 @@
 package com.przemek.patronage.ConferenceRoom;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.przemek.patronage.Equipment.Equipment;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Reservation.Reservation;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.util.List;
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class ConferenceRoom {
     private @Id

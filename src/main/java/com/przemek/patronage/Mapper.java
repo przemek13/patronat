@@ -1,5 +1,6 @@
 package com.przemek.patronage;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
 import com.przemek.patronage.Equipment.Equipment;
@@ -8,45 +9,59 @@ import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationDTO;
 import com.przemek.patronage.Reservation.Reservation;
 import com.przemek.patronage.Reservation.ReservationDTO;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 
+//import org.modelmapper.ModelMapper;
+
 @Component
 public class Mapper {
 
-    ModelMapper modelMapper = new ModelMapper();
+    public Mapper() {
+    }
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+//    ModelMapper modelMapper = new ModelMapper();
 
     public OrganizationDTO convertToDTO(Organization organization) {
-        return modelMapper.map(organization, OrganizationDTO.class);
+        return objectMapper.convertValue(organization, OrganizationDTO.class);
+//        return modelMapper.map(organization, OrganizationDTO.class);
     }
 
     public Organization convertToEntity(OrganizationDTO organizationDTO) throws ParseException {
-        return modelMapper.map(organizationDTO, Organization.class);
+        return objectMapper.convertValue(organizationDTO, Organization.class);
+//        return modelMapper.map(organizationDTO, Organization.class);
     }
 
     public EquipmentDTO convertToDTO(Equipment equipment) {
-        return modelMapper.map(equipment, EquipmentDTO.class);
+        return objectMapper.convertValue(equipment, EquipmentDTO.class);
+//        return modelMapper.map(equipment, EquipmentDTO.class);
     }
 
     public Equipment convertToEntity(EquipmentDTO equipmentDTO) throws ParseException {
-        return modelMapper.map(equipmentDTO, Equipment.class);
+        return objectMapper.convertValue(equipmentDTO, Equipment.class);
+//        return modelMapper.map(equipmentDTO, Equipment.class);
     }
 
     public ConferenceRoomDTO convertToDTO(ConferenceRoom conferenceRoom) {
-        return modelMapper.map(conferenceRoom, ConferenceRoomDTO.class);
+        return objectMapper.convertValue(conferenceRoom, ConferenceRoomDTO.class);
+//        return modelMapper.map(conferenceRoom, ConferenceRoomDTO.class);
     }
 
     public ConferenceRoom convertToEntity(ConferenceRoomDTO conferenceRoomDTO) throws ParseException {
-        return modelMapper.map(conferenceRoomDTO, ConferenceRoom.class);
+        return objectMapper.convertValue(conferenceRoomDTO, ConferenceRoom.class);
+//        return modelMapper.map(conferenceRoomDTO, ConferenceRoom.class);
     }
 
     public ReservationDTO convertToDTO(Reservation reservation) {
-        return modelMapper.map(reservation, ReservationDTO.class);
+        return objectMapper.convertValue(reservation, ReservationDTO.class);
+//        return modelMapper.map(reservation, ReservationDTO.class);
     }
 
     public Reservation convertToEntity(ReservationDTO reservationDTO) throws ParseException {
-        return modelMapper.map(reservationDTO, Reservation.class);
+        return objectMapper.convertValue(reservationDTO, Reservation.class);
+//        return modelMapper.map(reservationDTO, Reservation.class);
     }
 }

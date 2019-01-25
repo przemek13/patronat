@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -32,9 +33,9 @@ public class ReservationServiceTest {
     @Mock
     private ConferenceRoom testConferenceRoom;
 
-    private Reservation testReservation = new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T17:00:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+    private Reservation testReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
 
-    private Reservation newTestReservation = new Reservation("Reserving 2", "2019-03-23T18:00:00", "2019-03-23T19:00:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+    private Reservation newTestReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 17, 00), LocalDateTime.of(2019, 3, 23, 18, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
 
     private Long testId = 1L;
 
@@ -65,7 +66,7 @@ public class ReservationServiceTest {
     public void saveWhenReservationStartAfterReservationDate() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
-        var newTestReservation = new Reservation("Reserving 1", "2019-03-23T17:00:00", "2019-03-23T16:00:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+        var newTestReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
         //when
         testReservationService.save(newTestReservation, testId);
     }
@@ -74,7 +75,7 @@ public class ReservationServiceTest {
     public void saveWhenReservationDurationTooShort() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
-        var newTestReservation = new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T16:05:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+        var newTestReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
         //when
         testReservationService.save(newTestReservation, testId);
     }
@@ -83,8 +84,8 @@ public class ReservationServiceTest {
     public void saveWhenReservationDurationTooLong() {
         //given
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
-        var newTestReservation = new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T18:01:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
-        //when
+        var newTestReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+                //when
         testReservationService.save(newTestReservation, testId);
     }
 
@@ -93,8 +94,8 @@ public class ReservationServiceTest {
         //given
         when(testConferenceRoom.getReservations()).thenReturn(Collections.singletonList(testReservation));
         when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
-        var testReservation = new Reservation("Reserving 1", "2019-03-23T16:00:00", "2019-03-23T17:00:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
-        var newTestReservation = new Reservation("Reserving 2", "2019-03-23T16:00:00", "2019-03-23T17:00:00", new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+        var testReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+        var newTestReservation = new Reservation("Reserving 2", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
         //when
         testReservationService.save(newTestReservation, testId);
         //then

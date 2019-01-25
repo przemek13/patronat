@@ -13,19 +13,18 @@ import com.przemek.patronage.Reservation.ReservationDTO;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.List;
 
+
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Component
-//@JsonIdentityInfo(
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
-//@JsonIgnoreProperties(ignoreUnknown = true)
-public class ConferenceRoomDTO {
-    private @Id
-    @GeneratedValue
-    Long id;
+public class ConferenceRoomDTO implements Serializable {
+    private Long id;
     @NotBlank
     @Size(min = 2, max = 20, message = "Conference room name should have minimum 2 and maximum 20 characters.")
     private String name;
