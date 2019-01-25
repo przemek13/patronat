@@ -55,7 +55,6 @@ public class ReservationService {
         reservationCheck.checkReservationDates(newReservation);
         reservationCheck.checkDuration(newReservation);
         reservationCheck.checkIfReserved(newReservation, id);
-        room.setAvailable(false);
         room.getReservations().add(newReservation);
         reservationRepository.save(newReservation);
     }

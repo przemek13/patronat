@@ -1,7 +1,6 @@
 package com.przemek.patronage.ConferenceRoom;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomSerializers.ConferenceRoomEquipmentSerializer;
@@ -21,7 +20,6 @@ import java.util.List;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Component
 public class ConferenceRoomDTO implements Serializable {
     private Long id;
@@ -42,7 +40,7 @@ public class ConferenceRoomDTO implements Serializable {
     @Nullable
     private int hangingPlaces;
     @JsonSerialize(using = ConferenceRoomReservationSerializer.class)
-    private List<ReservationDTO> reservationsList;
+    private List<ReservationDTO> reservations;
     @JsonSerialize(using = ConferenceRoomOrganizationSerializer.class)
     private OrganizationDTO organization;
     @Nullable
@@ -58,7 +56,7 @@ public class ConferenceRoomDTO implements Serializable {
                              @NotNull int sittingAndStandingPlaces,
                              @Nullable int lyingPlaces,
                              @Nullable int hangingPlaces,
-                             List<ReservationDTO> reservationsList,
+                             List<ReservationDTO> reservations,
                              OrganizationDTO organization,
                              @Nullable EquipmentDTO equipment
     ) {
@@ -69,7 +67,7 @@ public class ConferenceRoomDTO implements Serializable {
         this.sittingAndStandingPlaces = sittingAndStandingPlaces;
         this.lyingPlaces = lyingPlaces;
         this.hangingPlaces = hangingPlaces;
-        this.reservationsList = reservationsList;
+        this.reservations = reservations;
         this.organization = organization;
         this.equipment = equipment;
     }
@@ -152,12 +150,12 @@ public class ConferenceRoomDTO implements Serializable {
         this.hangingPlaces = hangingPlaces;
     }
 
-    public List<ReservationDTO> getReservationsList() {
-        return reservationsList;
+    public List<ReservationDTO> getReservations() {
+        return reservations;
     }
 
-    public void setReservationsList(List<ReservationDTO> reservationsList) {
-        this.reservationsList = reservationsList;
+    public void setReservations(List<ReservationDTO> reservations) {
+        this.reservations = reservations;
     }
 
     public OrganizationDTO getOrganization() {

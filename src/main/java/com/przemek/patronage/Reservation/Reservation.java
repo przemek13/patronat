@@ -1,8 +1,5 @@
 package com.przemek.patronage.Reservation;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
@@ -10,10 +7,6 @@ import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 public class Reservation {
     private @Id
