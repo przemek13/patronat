@@ -14,34 +14,23 @@ public class OrganizationController {
 
     private final OrganizationService service;
 
-    private final Mapper mapper;
-
-    private OrganizationController(OrganizationService service, Mapper mapper) {
+    private OrganizationController(OrganizationService service) {
         this.service = Objects.requireNonNull(service, "must be defined.");
-        this.mapper = Objects.requireNonNull(mapper, "must be defined.");
     }
 
     @GetMapping("/organizations")
     private List<OrganizationDTO> getOrganizations() {
-        return service.findAll().stream()
-                .map(mapper::convertToDTO)
-                .collect(Collectors.toList());
+        return service.findAll();
     }
 
     @PostMapping("/organizations")
-    private OrganizationDTO addOrganization(@Valid @RequestBody OrganizationDTO newOrganizationDTO) throws ParseException {
-        var newOrganization = mapper.convertToEntity(newOrganizationDTO);
-        service.save(newOrganization);
-        newOrganizationDTO = mapper.convertToDTO(newOrganization);
-        return newOrganizationDTO;
+    private OrganizationDTO addOrganization(@Valid @RequestBody OrganizationDTO newOrganizationDTO) {
+        return service.save(newOrganizationDTO);
     }
 
     @PutMapping("/organizations/{id}")
-    private OrganizationDTO updateOrganization(@Valid @RequestBody OrganizationDTO newOrganizationDTO, @PathVariable Long id) throws ParseException {
-        var newOrganization = mapper.convertToEntity(newOrganizationDTO);
-        service.update(newOrganization, id);
-        newOrganizationDTO = mapper.convertToDTO(newOrganization);
-        return newOrganizationDTO;
+    private OrganizationDTO updateOrganization(@Valid @RequestBody OrganizationDTO newOrganizationDTO, @PathVariable Long id) {
+        return service.update(newOrganizationDTO, id);
     }
 
     @DeleteMapping("/organizations/{id}")

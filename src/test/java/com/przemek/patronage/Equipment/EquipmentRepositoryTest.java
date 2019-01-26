@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -39,9 +40,9 @@ public class EquipmentRepositoryTest {
         //given
         //when
         testEquipmentRepository.save(testEquipment);
-        var testComparedEquipment = testEquipmentRepository.findByProjectorName("Hitachi");
+        var testComparedEquipment = testEquipmentRepository.findById(testEquipment.getId());
         //then
-        Assert.assertEquals(testEquipment, testComparedEquipment);
+        Assert.assertEquals(Optional.of(testEquipment), testComparedEquipment);
     }
 
     @Test

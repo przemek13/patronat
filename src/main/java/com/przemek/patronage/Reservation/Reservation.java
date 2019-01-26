@@ -13,11 +13,7 @@ public class Reservation {
     @GeneratedValue
     Long id;
     private String reservingId;
-    @JsonDeserialize(using = JsonDateDeserializer.class)
-    @JsonSerialize(using = JsonDateSerializer.class)
     private LocalDateTime reservationStart;
-    @JsonDeserialize(using = JsonDateDeserializer.class)
-    @JsonSerialize(using = JsonDateSerializer.class)
     private LocalDateTime reservationEnd;
     @ManyToOne(cascade = CascadeType.ALL)
     private ConferenceRoom conferenceRoom;
@@ -30,7 +26,6 @@ public class Reservation {
         this.reservationStart = reservationStart;
         this.reservationEnd = reservationEnd;
         this.conferenceRoom = conferenceRoom;
-        //truncatedTo(ChronoUnit.MINUTES)
     }
 
     public Long getId() {

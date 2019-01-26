@@ -14,34 +14,23 @@ public class EquipmentController {
 
     private final EquipmentService service;
 
-    private final Mapper mapper;
-
     private EquipmentController(EquipmentService service, Mapper mapper) {
         this.service = Objects.requireNonNull(service, "must be defined.");
-        this.mapper = Objects.requireNonNull(mapper, "must be defined.");
     }
 
     @GetMapping("/equipment")
     private List<EquipmentDTO> getEquipment() {
-        return service.findAll().stream()
-                .map(mapper::convertToDTO)
-                .collect(Collectors.toList());
+        return service.findAll();
     }
 
     @PostMapping("/equipment/{id}")
     private EquipmentDTO addEquipment(@Valid @RequestBody EquipmentDTO newEquipmentDTO, @PathVariable Long id) throws ParseException {
-        var newEquipment = mapper.convertToEntity(newEquipmentDTO);
-        service.save(newEquipment, id);
-        newEquipmentDTO = mapper.convertToDTO(newEquipment);
-        return newEquipmentDTO;
+        return service.save(newEquipmentDTO, id);
     }
 
     @PutMapping("/equipment/{id}")
     private EquipmentDTO updateEquipment(@Valid @RequestBody EquipmentDTO newEquipmentDTO, @PathVariable Long id) throws ParseException {
-        var newEquipment = mapper.convertToEntity(newEquipmentDTO);
-        service.update(newEquipment, id);
-        newEquipmentDTO = mapper.convertToDTO(newEquipment);
-        return newEquipmentDTO;
+        return service.update(newEquipmentDTO, id);
     }
 
     @DeleteMapping("/equipment/{id}")

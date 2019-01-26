@@ -1,6 +1,5 @@
 package com.przemek.patronage.Reservation;
 
-import com.przemek.patronage.Exceptions.RoomReservedException;
 import com.przemek.patronage.Mapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,32 +23,22 @@ public class ReservationController {
 
     @GetMapping("/reservations")
     private List<ReservationDTO> getAllReservations() {
-        return service.findAll().stream()
-                .map(mapper::convertToDTO)
-                .collect(Collectors.toList());
+        return service.findAll();
     }
 
     @GetMapping("/reservations/{orgId}/{roomId}")
     private List<ReservationDTO> getReservations(@PathVariable Long orgId, @PathVariable Long roomId) {
-        return service.findForConcreteConferenceRoom(orgId, roomId).stream()
-                .map(mapper::convertToDTO)
-                .collect(Collectors.toList());
+        return service.findForConcreteConferenceRoom(orgId, roomId);
     }
 
     @PostMapping("/reservations/{id}")
-    private ReservationDTO addReservation(@Valid @RequestBody ReservationDTO newReservationDTO, @PathVariable Long id) throws RoomReservedException, ParseException {
-        var newReservation = mapper.convertToEntity(newReservationDTO);
-        service.save(newReservation, id);
-        newReservationDTO = mapper.convertToDTO(newReservation);
-        return newReservationDTO;
+    private ReservationDTO addReservation(@Valid @RequestBody ReservationDTO newReservationDTO, @PathVariable Long id) {
+        return service.save(newReservationDTO, id);
     }
 
     @PutMapping("/reservations/{id}")
     private ReservationDTO updateReservation(@Valid @RequestBody ReservationDTO newReservationDTO, @PathVariable Long id) throws ParseException {
-        var newReservation = mapper.convertToEntity(newReservationDTO);
-        service.update(newReservation, id);
-        newReservationDTO = mapper.convertToDTO(newReservation);
-        return newReservationDTO;
+        return service.update(newReservationDTO, id);
     }
 
     @DeleteMapping("/reservations/{id}")

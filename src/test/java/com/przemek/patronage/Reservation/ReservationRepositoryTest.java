@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -40,9 +41,9 @@ public class ReservationRepositoryTest {
         //given
         //when
         testReservationRepository.save(testReservation);
-        var testComparedReservation = testReservationRepository.findByReservingId("Reserving 1");
+        var testComparedReservation = testReservationRepository.findById(testReservation.getId());
         //then
-        Assert.assertEquals(testReservation, testComparedReservation);
+        Assert.assertEquals(Optional.of(testReservation), testComparedReservation);
     }
 
     @Test

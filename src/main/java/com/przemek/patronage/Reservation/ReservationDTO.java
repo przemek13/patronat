@@ -1,5 +1,6 @@
 package com.przemek.patronage.Reservation;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
@@ -20,13 +21,11 @@ public class ReservationDTO implements Serializable {
     private String reservingId;
     @NotNull
     @Future
-    @JsonDeserialize(using = JsonDateDeserializer.class)
-    @JsonSerialize(using = JsonDateSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime reservationStart;
     @NotNull
     @Future
-    @JsonDeserialize(using = JsonDateDeserializer.class)
-    @JsonSerialize(using = JsonDateSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime reservationEnd;
     @JsonSerialize(using = ReservationConferenceRoomSerializer.class)
     private ConferenceRoomDTO conferenceRoom;

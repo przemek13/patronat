@@ -1,29 +1,36 @@
 package com.przemek.patronage.ConferenceRoom;
 
+import com.przemek.patronage.Mapper;
 import com.przemek.patronage.Organization.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ConferenceRoomService {
 
     private ConferenceRoomRepository conferenceRoomRepository;
     private OrganizationRepository organizationRepository;
+    private Mapper mapper;
 
     @Autowired
-    public ConferenceRoomService(ConferenceRoomRepository conferenceRoomRepository, OrganizationRepository organizationRepository) {
+    public ConferenceRoomService(ConferenceRoomRepository conferenceRoomRepository, OrganizationRepository organizationRepository, Mapper mapper) {
         this.conferenceRoomRepository = Objects.requireNonNull(conferenceRoomRepository, "must be defined.");
         this.organizationRepository = Objects.requireNonNull(organizationRepository, "must be defined.");
+        this.mapper = Objects.requireNonNull(mapper, "must be defined.");
     }
 
-    public List<ConferenceRoom> findAll() {
-        return conferenceRoomRepository.findAll();
+    public List<ConferenceRoomDTO> findAll() {
+        return conferenceRoomRepository.findAll().stream()
+                .map(mapper::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public void save(ConferenceRoom newConferenceRoom, Long id) {
+    public ConferenceRoomDTO save(ConferenceRoomDTO newConferenceRoomDTO, Long id) {
+        var newConferenceRoom = mapper.convertToEntity(newConferenceRoomDTO);
         if (organizationRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("The Organization with id given doesn't exist in the base.");
         }
@@ -33,12 +40,14 @@ public class ConferenceRoomService {
             organization.getConferenceRoomsList().add(newConferenceRoom);
             conferenceRoomRepository.save(newConferenceRoom);
             organizationRepository.save(organization);
+            return mapper.convertToDTO(newConferenceRoom);
         } else {
             throw new IllegalArgumentException("The Conference room with name given already exist. Please choose different name.");
         }
     }
 
-    public ConferenceRoom update(ConferenceRoom newConferenceRoom, Long id) {
+    public ConferenceRoomDTO update(ConferenceRoomDTO newConferenceRoomDTO, Long id) {
+        var newConferenceRoom = mapper.convertToEntity(newConferenceRoomDTO);
         return conferenceRoomRepository.findById(id)
                 .map(conferenceRoom -> {
                     conferenceRoom.setName(newConferenceRoom.getName());
@@ -49,20 +58,22 @@ public class ConferenceRoomService {
                     conferenceRoom.setLyingPlaces(newConferenceRoom.getLyingPlaces());
                     conferenceRoom.setHangingPlaces(newConferenceRoom.getHangingPlaces());
                     conferenceRoom.setReservations(newConferenceRoom.getReservations());
-                    conferenceRoom.setOrganization(newConferenceRoom.getOrganization());
+//                    conferenceRoom.setOrganization(newConferenceRoom.getOrganization());
                     conferenceRoom.setEquipment(newConferenceRoom.getEquipment());
-                    return conferenceRoomRepository.save(conferenceRoom);
+                    conferenceRoomRepository.save(conferenceRoom);
+                    return mapper.convertToDTO(conferenceRoom);
                 })
                 .orElseGet(() -> {
                     newConferenceRoom.setId(id);
-                    return conferenceRoomRepository.save(newConferenceRoom);
+                    conferenceRoomRepository.save(newConferenceRoom);
+                    return mapper.convertToDTO(newConferenceRoom);
                 });
     }
 
     public void delete(Long id) {
         if (conferenceRoomRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("The Conference room with id given doesn't exist in the base.");
-        } else
-            conferenceRoomRepository.deleteById(id);
+        }
+        conferenceRoomRepository.deleteById(id);
     }
 }
