@@ -20,11 +20,10 @@ public class EquipmentRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
-
     @Autowired
     private EquipmentRepository testEquipmentRepository;
 
-    Equipment testEquipment = new Equipment("Hitachi", false, new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+    private Equipment newTestEquipment = new Equipment("Hitachi", false, new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
 
     @Test
     public void saveWhenNoData() {
@@ -39,25 +38,19 @@ public class EquipmentRepositoryTest {
     public void saveAndReturn() {
         //given
         //when
-        testEquipmentRepository.save(testEquipment);
-        var testComparedEquipment = testEquipmentRepository.findById(testEquipment.getId());
+        testEquipmentRepository.save(newTestEquipment);
+        var testComparedEquipment = testEquipmentRepository.findById(newTestEquipment.getId());
         //then
-        Assert.assertEquals(Optional.of(testEquipment), testComparedEquipment);
+        Assert.assertEquals(Optional.of(newTestEquipment), testComparedEquipment);
     }
 
     @Test
     public void PersistAndReflectListSize() {
         //given
         //when
-        entityManager.persist(testEquipment);
+        entityManager.persist(newTestEquipment);
         List<Equipment> testEquipmentList = testEquipmentRepository.findAll();
         //then
         Assert.assertEquals(1, testEquipmentList.size());
     }
-
-    @AfterClass
-    public static void tearDownClass() {
-        System.out.flush();
-    }
-
 }

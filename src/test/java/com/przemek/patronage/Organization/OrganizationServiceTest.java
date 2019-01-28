@@ -30,13 +30,13 @@ public class OrganizationServiceTest {
     }
 
     @Mock
-    private OrganizationRepository testOrganizations;
+    private OrganizationRepository testOrganizationRepository;
     @Autowired
     private Mapper mapper;
 
     private OrganizationService testOrganizationService;
 
-    private Organization testOrganization = new Organization("Organization1");
+    private Organization testOrganization = new Organization("Organization 1");
 
     private Organization newTestOrganization = new Organization("Organization 2");
 
@@ -46,23 +46,23 @@ public class OrganizationServiceTest {
 
     @Before
     public void setUpTestOrganizationService() {
-        this.testOrganizationService = new OrganizationService(testOrganizations, mapper);
+        this.testOrganizationService = new OrganizationService(testOrganizationRepository, mapper);
     }
 
     @Test
     public void saveWhenOrganizationNameNotExist() {
         //given
-        when(testOrganizations.findByName(newTestOrganization.getName())).thenReturn(null);
+        when(testOrganizationRepository.findByName(newTestOrganization.getName())).thenReturn(null);
         //when
         testOrganizationService.save(newTestOrganizationDTO);
         //then
-        verify(testOrganizations, times(1)).save(any(Organization.class));
+        verify(testOrganizationRepository, times(1)).save(any(Organization.class));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void saveWhenOrganizationNameExists() {
         //given
-        when(testOrganizations.findByName(newTestOrganization.getName())).thenReturn(newTestOrganization);
+        when(testOrganizationRepository.findByName(newTestOrganization.getName())).thenReturn(newTestOrganization);
         //when
         testOrganizationService.save(newTestOrganizationDTO);
         //then
@@ -71,7 +71,7 @@ public class OrganizationServiceTest {
     @Test
     public void updateWhenOrganizationIdExists() {
         //given
-        when(testOrganizations.findById(testId)).thenReturn((Optional.ofNullable(testOrganization)));
+        when(testOrganizationRepository.findById(testId)).thenReturn((Optional.ofNullable(testOrganization)));
         //when
         testOrganizationService.update(newTestOrganizationDTO, testId);
         //then
@@ -81,7 +81,7 @@ public class OrganizationServiceTest {
     @Test
     public void updateWhenOrganizationIdNotExist() {
         //given
-        when(testOrganizations.findById(testId)).thenReturn(Optional.empty());
+        when(testOrganizationRepository.findById(testId)).thenReturn(Optional.empty());
         //when
         testOrganizationService.update(newTestOrganizationDTO, testId);
         //then
@@ -91,24 +91,19 @@ public class OrganizationServiceTest {
     @Test
     public void deleteWhenOrganizationIdExists() {
         //given
-        when(testOrganizations.findById(testId)).thenReturn(Optional.ofNullable(newTestOrganization));
+        when(testOrganizationRepository.findById(testId)).thenReturn(Optional.ofNullable(newTestOrganization));
         //when
         testOrganizationService.delete(testId);
         //then
-        verify(testOrganizations, times(1)).deleteById(1L);
+        verify(testOrganizationRepository, times(1)).deleteById(1L);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void deleteWhenOrganizationIdNotExist() {
         //given
-        when(testOrganizations.findById(testId)).thenReturn(Optional.empty());
+        when(testOrganizationRepository.findById(testId)).thenReturn(Optional.empty());
         //when
         testOrganizationService.delete(testId);
         //then
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        System.out.flush();
     }
 }

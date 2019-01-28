@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 @Service
 public class ReservationService {
 
@@ -36,23 +35,6 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
-//    public List<Reservation> findForConcreteConferenceRoom(Long orgId, Long roomId) {
-//        if (organizationRepository.findById(orgId).isEmpty()) {
-//            throw new IllegalArgumentException("The Organization with id given doesn't exist in the base.");
-//        }
-//        organizationRepository.findById(orgId).get().getConferenceRoomsList().stream()
-//                .filter(room -> !(room.getId().equals(roomId)))
-//                .findAny()
-//                .ifPresent(room -> {
-//                    throw new IllegalArgumentException("The Conference room with id given doesn't exist in the base.");
-//                });
-//        return organizationRepository.findById(orgId).get().getConferenceRoomsList().stream()
-//                .filter(room -> room.getId().equals(roomId))
-//                .findAny()
-//                .get()
-//                .getReservations();
-//    }
-
     public List<ReservationDTO> findForConcreteConferenceRoom(Long orgId, Long roomId) {
         return organizationRepository.findById(orgId)
                 .orElseThrow(() -> new IllegalArgumentException("The Organization with id given doesn't exist in the base."))
@@ -60,7 +42,7 @@ public class ReservationService {
                 .stream()
                 .filter(room -> room.getId().equals(roomId))
                 .findAny()
-                .orElseThrow(()->new IllegalArgumentException("The Conference room with id given doesn't exist in the base."))
+                .orElseThrow(() -> new IllegalArgumentException("The Conference room with id given doesn't exist in the base."))
                 .getReservations().stream()
                 .map(mapper::convertToDTO)
                 .collect(Collectors.toList());

@@ -14,7 +14,7 @@ public class ConferenceRoomController {
 
     private final ConferenceRoomService service;
 
-    private ConferenceRoomController(ConferenceRoomService service, Mapper mapper) {
+    private ConferenceRoomController(ConferenceRoomService service) {
         this.service = Objects.requireNonNull(service, "must be defined.");
     }
 

@@ -27,40 +27,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ConferenceRoomControllerTest {
 
     @Autowired
-    private static OrganizationRepository testOrganizations;
-
-    @Autowired
-    private static ConferenceRoomRepository testConferenceRooms;
-
-    @Autowired
-    private static Mapper mapper;
-
-    @TestConfiguration
-    public class ConferenceRoomServiceImplTestContextConfiguration {
-        @Bean
-        public ConferenceRoomService conferenceRoomServiceService() {
-            return new ConferenceRoomService(testConferenceRooms, testOrganizations, mapper);
-        }
-    }
-
-    @TestConfiguration
-    static class MapperImplTestContextConfiguration {
-        @Bean
-        public Mapper mapper() {
-            return new Mapper();
-        }
-    }
-
-    @Autowired
     private MockMvc mvc;
-
     @MockBean
-    private ConferenceRoomService testService;
+    private ConferenceRoomService testConferenceRoomService;
 
     @Test
     public void getConferenceRooms() throws Exception {
         //given
-        when(testService.findAll()).thenReturn(Collections.singletonList(new ConferenceRoomDTO("Conference Room 1", 10, true, 10, new OrganizationDTO("Organization 1"))));
+        when(testConferenceRoomService.findAll()).thenReturn(Collections.singletonList(new ConferenceRoomDTO("Conference Room 1", 10, true, 10, new OrganizationDTO("Organization 1"))));
         //when
         mvc.perform(get("/rooms")
                 .contentType(MediaType.APPLICATION_JSON))

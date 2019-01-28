@@ -1,7 +1,6 @@
 package com.przemek.patronage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
@@ -9,8 +8,8 @@ import com.przemek.patronage.Equipment.Equipment;
 import com.przemek.patronage.Equipment.EquipmentDTO;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationDTO;
-import com.przemek.patronage.Reservation.JsonDateDeserializer;
-import com.przemek.patronage.Reservation.JsonDateSerializer;
+import com.przemek.patronage.Reservation.ReservationSerializers.JsonDateDeserializer;
+import com.przemek.patronage.Reservation.ReservationSerializers.JsonDateSerializer;
 import com.przemek.patronage.Reservation.Reservation;
 import com.przemek.patronage.Reservation.ReservationDTO;
 import org.springframework.stereotype.Component;
@@ -56,7 +55,6 @@ public class Mapper {
 
     public ReservationDTO convertToDTO(Reservation reservation) {
         return objectMapper.convertValue(reservation, ReservationDTO.class);
-
     }
 
     public Reservation convertToEntity(ReservationDTO reservationDTO) {

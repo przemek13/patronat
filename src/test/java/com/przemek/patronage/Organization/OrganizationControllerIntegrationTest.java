@@ -26,23 +26,23 @@ public class OrganizationControllerIntegrationTest {
 
     @Autowired
     private MockMvc mvc;
-
     @Autowired
-    private OrganizationRepository testRepository;
+    private OrganizationRepository testOrganizationRepository;
 
     @After
     public void resetDb() {
-        testRepository.deleteAll();
+        testOrganizationRepository.deleteAll();
     }
 
     @Test
     public void getOrganizations() throws Exception {
         //given
-        testRepository.save(new Organization("Organization 1"));
+        testOrganizationRepository.save(new Organization("Organization 1"));
         //when
         mvc.perform(get("/organizations")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)));
+        //then
     }
 
     @Test
@@ -51,7 +51,7 @@ public class OrganizationControllerIntegrationTest {
         //when
         mvc.perform(post("/organizations").contentType(MediaType.APPLICATION_JSON).content(
                 "{\"name\":\"Organization 1\"}"));
-        var testOrganization = testRepository.findByName("Organization 1");
+        var testOrganization = testOrganizationRepository.findByName("Organization 1");
         //then
         Assert.assertNotNull(testOrganization);
     }
@@ -62,7 +62,7 @@ public class OrganizationControllerIntegrationTest {
         //when
         mvc.perform(post("/organizations").contentType(MediaType.APPLICATION_JSON).content(
                 "{\"name\":\"Organization 2\"}"));
-        var testOrganization = testRepository.findByName("Organization 1");
+        var testOrganization = testOrganizationRepository.findByName("Organization 1");
         //then
         Assert.assertNull(testOrganization);
     }

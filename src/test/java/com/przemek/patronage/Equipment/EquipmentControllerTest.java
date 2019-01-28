@@ -31,40 +31,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EquipmentControllerTest {
 
     @Autowired
-    private static EquipmentRepository testEquipment;
-
-    @Autowired
-    private static ConferenceRoomRepository testConferenceRooms;
-
-    @Autowired
-    private static Mapper mapper;
-
-    @TestConfiguration
-    public class ConferenceRoomServiceImplTestContextConfiguration {
-        @Bean
-        public EquipmentService equipmentService() {
-            return new EquipmentService(testEquipment, testConferenceRooms, mapper);
-        }
-    }
-
-    @TestConfiguration
-    static class MapperImplTestContextConfiguration {
-        @Bean
-        public Mapper mapper() {
-            return new Mapper();
-        }
-    }
-
-    @Autowired
     private MockMvc mvc;
-
     @MockBean
-    private EquipmentService testService;
+    private EquipmentService testEquipmentService;
 
     @Test
     public void getEquipment() throws Exception {
         //given
-        when(testService.findAll()).thenReturn(Collections.singletonList(new EquipmentDTO("Hitachi", false, new ConferenceRoomDTO("Conference Room 4", 10, true, 10, new OrganizationDTO("Organization 5")))));
+        when(testEquipmentService.findAll()).thenReturn(Collections.singletonList(new EquipmentDTO("Hitachi", false, new ConferenceRoomDTO("Conference Room 4", 10, true, 10, new OrganizationDTO("Organization 5")))));
         //when
         mvc.perform(get("/equipment")
                 .contentType(MediaType.APPLICATION_JSON))

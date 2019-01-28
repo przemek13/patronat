@@ -14,7 +14,7 @@ public class EquipmentController {
 
     private final EquipmentService service;
 
-    private EquipmentController(EquipmentService service, Mapper mapper) {
+    private EquipmentController(EquipmentService service) {
         this.service = Objects.requireNonNull(service, "must be defined.");
     }
 

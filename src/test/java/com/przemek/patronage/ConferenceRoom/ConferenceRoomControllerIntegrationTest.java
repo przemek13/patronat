@@ -28,15 +28,10 @@ public class ConferenceRoomControllerIntegrationTest {
 
     @Autowired
     private MockMvc mvc;
-
     @Autowired
     private ConferenceRoomRepository testConferenceRoomRepository;
-
     @Autowired
     private OrganizationRepository testOrganizationRepository;
-
-//    ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 1"));
-
     @After
     public void resetDb() {
         testConferenceRoomRepository.deleteAll();

@@ -14,11 +14,8 @@ public class ReservationController {
 
     private final ReservationService service;
 
-    private final Mapper mapper;
-
-    protected ReservationController(ReservationService service, Mapper mapper) {
+    protected ReservationController(ReservationService service) {
         this.service = Objects.requireNonNull(service, "must be defined.");
-        this.mapper = Objects.requireNonNull(mapper, "must be defined.");
     }
 
     @GetMapping("/reservations")

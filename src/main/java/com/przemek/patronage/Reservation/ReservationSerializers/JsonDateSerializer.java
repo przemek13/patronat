@@ -1,4 +1,4 @@
-package com.przemek.patronage.Reservation;
+package com.przemek.patronage.Reservation.ReservationSerializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;

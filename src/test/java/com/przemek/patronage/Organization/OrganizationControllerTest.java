@@ -19,38 +19,23 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-
 @RunWith(SpringRunner.class)
 @WebMvcTest(OrganizationController.class)
 public class OrganizationControllerTest {
 
     @Autowired
-    private static OrganizationRepository testOrganizations;
-
-    @Autowired
-    private static Mapper mapper;
-
-    @TestConfiguration
-    public class OrganizationServiceImplTestContextConfiguration {
-        @Bean
-        public OrganizationService testOrganizationService() {
-            return new OrganizationService(testOrganizations, mapper);
-        }
-    }
-
-    @Autowired
     private MockMvc mvc;
-
     @MockBean
-    private OrganizationService testService;
+    private OrganizationService testOrganizationService;
 
     @Test
     public void getOrganizations() throws Exception {
         //given
-        when(testService.findAll()).thenReturn(Collections.singletonList(new OrganizationDTO("Organization 1")));
+        when(testOrganizationService.findAll()).thenReturn(Collections.singletonList(new OrganizationDTO("Organization 1")));
         //when
         mvc.perform(get("/organizations")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)));
+        //then
     }
 }

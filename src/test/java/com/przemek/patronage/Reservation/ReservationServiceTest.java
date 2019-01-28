@@ -57,9 +57,9 @@ public class ReservationServiceTest {
     @Autowired
     private ReservationCheck reservationCheck;
     @Mock
-    private ReservationRepository testReservations;
+    private ReservationRepository testReservationRepository;
     @Autowired
-    private ConferenceRoomRepository testConferenceRooms;
+    private ConferenceRoomRepository testConferenceRoomRepository;
     @Autowired
     private OrganizationRepository testOrganizationRepository;
 
@@ -73,34 +73,34 @@ public class ReservationServiceTest {
 
     private Reservation testReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), testConferenceRoom);
 
-    private Reservation newTestReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), testConferenceRoom);
+    private Reservation newTestReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 2", 1, true, 10, new Organization("Organization 2")));
 
-    private ReservationDTO newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 17, 00), LocalDateTime.of(2019, 3, 23, 18, 00), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
+    private ReservationDTO newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 17, 00), LocalDateTime.of(2019, 3, 23, 18, 00), new ConferenceRoomDTO("Conference Room 2", 1, true, 10, new OrganizationDTO("Organization 2")));
 
     private Long testId = 1L;
 
     @Before
     public void setUpTestReservationService() {
-        this.testReservationService = new ReservationService(testReservations, testConferenceRooms, testOrganizationRepository, mapper, reservationCheck);
+        this.testReservationService = new ReservationService(testReservationRepository, testConferenceRoomRepository, testOrganizationRepository, mapper, reservationCheck);
     }
 
     @Test
     public void saveWhenConferenceRoomIdExists() {
         //given
         testOrganizationRepository.save(testOrganization);
-        testConferenceRooms.save(testConferenceRoom);
+        testConferenceRoomRepository.save(testConferenceRoom);
         reservatonsList.add(testReservation);
         //when
         testReservationService.save(newTestReservationDTO, testConferenceRoom.getId());
         //then
-        verify(testReservations, times(1)).save(any(Reservation.class));
+        verify(testReservationRepository, times(1)).save(any(Reservation.class));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void saveWhenConferenceRoomIdNotExist() {
         //given
         testOrganizationRepository.save(testOrganization);
-        testConferenceRooms.save(testConferenceRoom);
+        testConferenceRoomRepository.save(testConferenceRoom);
         reservatonsList.add(testReservation);
         //when
         testReservationService.save(newTestReservationDTO, 10L);
@@ -110,7 +110,7 @@ public class ReservationServiceTest {
     public void saveWhenReservationStartAfterReservationDate() {
         //given
         testOrganizationRepository.save(testOrganization);
-        testConferenceRooms.save(testConferenceRoom);
+        testConferenceRoomRepository.save(testConferenceRoom);
         reservatonsList.add(testReservation);
         var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 15, 00), LocalDateTime.of(2019, 3, 23, 14, 00), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
         //when
@@ -122,7 +122,7 @@ public class ReservationServiceTest {
     public void saveWhenReservationDurationTooShort() {
         //given
         testOrganizationRepository.save(testOrganization);
-        testConferenceRooms.save(testConferenceRoom);
+        testConferenceRoomRepository.save(testConferenceRoom);
         reservatonsList.add(testReservation);
         var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 14, 00), LocalDateTime.of(2019, 3, 23, 14, 05), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
         //when
@@ -132,7 +132,7 @@ public class ReservationServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void saveWhenReservationDurationTooLong() {
         //given
-        when(testConferenceRooms.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
+        when(testConferenceRoomRepository.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
         var newTestReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
                 //when
         testReservationService.save(newTestReservationDTO, testId);
@@ -142,7 +142,7 @@ public class ReservationServiceTest {
     public void saveWhenReservationDuringTheSamePeriod() {
         //given
         testOrganizationRepository.save(testOrganization);
-        testConferenceRooms.save(testConferenceRoom);
+        testConferenceRoomRepository.save(testConferenceRoom);
         reservatonsList.add(testReservation);
         var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
         //when
@@ -153,7 +153,7 @@ public class ReservationServiceTest {
     @Test
     public void updateWhenReservationIdExists() {
         //given
-        when(testReservations.findById(testId)).thenReturn(Optional.ofNullable(testReservation));
+        when(testReservationRepository.findById(testId)).thenReturn(Optional.ofNullable(testReservation));
         //when
         testReservationService.update(newTestReservationDTO, testId);
         //then
@@ -165,7 +165,7 @@ public class ReservationServiceTest {
     @Test
     public void updateWhenReservationNotExist() {
         //given
-        when(testReservations.findById(testId)).thenReturn(Optional.empty());
+        when(testReservationRepository.findById(testId)).thenReturn(Optional.empty());
         //when
         testReservationService.update(newTestReservationDTO, testId);
         //then
@@ -175,24 +175,19 @@ public class ReservationServiceTest {
     @Test
     public void deleteWhenReservationIdExists() {
         //given
-        when(testReservations.findById(testId)).thenReturn(Optional.ofNullable(newTestReservation));
+        when(testReservationRepository.findById(testId)).thenReturn(Optional.ofNullable(newTestReservation));
         //when
         testReservationService.delete(testId);
         //then
-        verify(testReservations, times(1)).deleteById(testId);
+        verify(testReservationRepository, times(1)).deleteById(testId);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void deleteWhenReservationIdNotExist() {
         //given
-        when(testReservations.findById(testId)).thenReturn(Optional.empty());
+        when(testReservationRepository.findById(testId)).thenReturn(Optional.empty());
         //when
         testReservationService.delete(testId);
         //then
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        System.out.flush();
     }
 }

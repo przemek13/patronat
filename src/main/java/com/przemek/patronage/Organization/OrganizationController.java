@@ -1,6 +1,7 @@
 package com.przemek.patronage.Organization;
 
 import com.przemek.patronage.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

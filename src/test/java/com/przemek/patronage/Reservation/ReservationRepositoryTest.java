@@ -21,11 +21,10 @@ public class ReservationRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
-
     @Autowired
     private ReservationRepository testReservationRepository;
 
-    Reservation testReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+    private Reservation testReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
 
     @Test
     public void saveWhenNoData() {
@@ -55,10 +54,4 @@ public class ReservationRepositoryTest {
         //then
         Assert.assertEquals(1, testReservations.size());
     }
-
-    @AfterClass
-    public static void tearDownClass() {
-        System.out.flush();
-    }
-
 }

@@ -32,40 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ReservationControllerTest {
 
     @Autowired
-    private static OrganizationRepository testOrganizations;
-
-    @Autowired
-    private static ConferenceRoomRepository testConferenceRooms;
-
-    @Autowired
-    private static ReservationRepository testReservations;
-
-    @Autowired
-    private static Mapper mapper;
-
-    @Autowired
-    private static ReservationCheck reservationCheck;
-
-    @TestConfiguration
-    public class ReservationServiceImplTestContextConfiguration {
-        @Bean
-        public ReservationService reservationService() {
-            return new ReservationService(testReservations, testConferenceRooms, testOrganizations, mapper, reservationCheck);
-        }
-
-    }
-
-    @TestConfiguration
-    static class MapperImplTestContextConfiguration {
-        @Bean
-        public Mapper mapper() {
-            return new Mapper();
-        }
-    }
-
-    @Autowired
     private MockMvc mvc;
-
     @MockBean
     private ReservationService testService;
 
@@ -77,5 +44,6 @@ public class ReservationControllerTest {
         mvc.perform(get("/reservations")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)));
+        //then
     }
 }

@@ -18,11 +18,10 @@ public class ConferenceRoomRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
-
     @Autowired
     private ConferenceRoomRepository testConferenceRoomRepository;
 
-    ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1"));
+    private ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1"));
 
     @Test
     public void saveWhenNoData() {
@@ -51,10 +50,5 @@ public class ConferenceRoomRepositoryTest {
         List<ConferenceRoom> testOrganizations = testConferenceRoomRepository.findAll();
         //then
         Assert.assertEquals(1, testOrganizations.size());
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        System.out.flush();
     }
 }

@@ -1,9 +1,9 @@
 package com.przemek.patronage.Reservation;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
+import com.przemek.patronage.Reservation.ReservationSerializers.ReservationConferenceRoomSerializer;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Future;

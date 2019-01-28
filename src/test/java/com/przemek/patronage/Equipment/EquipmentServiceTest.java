@@ -36,17 +36,16 @@ public class EquipmentServiceTest {
     }
 
     private EquipmentService testEquipmentService;
-
     @Autowired
     private Mapper mapper;
     @Mock
     private EquipmentRepository testEquipmentRepository;
     @Autowired
-    private ConferenceRoomRepository testConferenceRooms;
+    private ConferenceRoomRepository testConferenceRoomRepository;
 
     private ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 1"));
 
-    private Equipment testEquipment = new Equipment("BenQ", true, 1, "+12 123456789", InterfaceConnections.BLUETOOTH, new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 1")));
+    private Equipment testEquipment = new Equipment("BenQ", true, 1, "+12 123456789", InterfaceConnections.BLUETOOTH, testConferenceRoom);
 
     private EquipmentDTO newTestEquipmentDTO = new EquipmentDTO("Hitachi", false, new ConferenceRoomDTO("Conference Room 1", 10, true, 10, new OrganizationDTO("Organization 1")));
 
@@ -54,13 +53,13 @@ public class EquipmentServiceTest {
 
     @Before
     public void setUpTestEquipmentService() {
-        this.testEquipmentService = new EquipmentService(testEquipmentRepository, testConferenceRooms, mapper);
+        this.testEquipmentService = new EquipmentService(testEquipmentRepository, testConferenceRoomRepository, mapper);
     }
 
     @Test
     public void saveWhenConferenceRoomIdExist() {
         //given
-        testConferenceRooms.save(testConferenceRoom);
+        testConferenceRoomRepository.save(testConferenceRoom);
         //when
         testEquipmentService.save(newTestEquipmentDTO, testConferenceRoom.getId());
         //then
@@ -70,7 +69,7 @@ public class EquipmentServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void saveWhenConferenceRoomIdNotExist() {
         //given
-        testConferenceRooms.save(testConferenceRoom);
+        testConferenceRoomRepository.save(testConferenceRoom);
         //when
         testEquipmentService.save(newTestEquipmentDTO, 10L);
         //then

@@ -17,11 +17,10 @@ public class OrganizationRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
-
     @Autowired
     private OrganizationRepository testOrganizationRepository;
 
-    Organization testOrganization = new Organization("Organization 1");
+    private Organization testOrganization = new Organization("Organization 1");
 
     @Test
     public void returnWhenNoData() {
@@ -50,10 +49,5 @@ public class OrganizationRepositoryTest {
         List<Organization> testOrganizations = testOrganizationRepository.findAll();
         //then
         Assert.assertEquals(1, testOrganizations.size());
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        System.out.flush();
     }
 }

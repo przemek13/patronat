@@ -21,8 +21,6 @@ public class ReservationCheck {
     }
 
     protected void checkReservationDates(Reservation newReservation) {
-//        newReservation.setReservationStart(newReservation.getReservationStart());
-//        newReservation.setReservationEnd(newReservation.getReservationEnd());
         if (newReservation.getReservationStart().isAfter(newReservation.getReservationEnd())) {
             throw new IllegalArgumentException("Reservation start can't be after reservation end.");
         }
