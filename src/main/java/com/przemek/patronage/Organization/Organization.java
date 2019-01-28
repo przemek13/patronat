@@ -1,8 +1,11 @@
 package com.przemek.patronage.Organization;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
+import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity

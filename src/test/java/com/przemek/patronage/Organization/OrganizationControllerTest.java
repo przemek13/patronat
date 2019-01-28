@@ -1,5 +1,6 @@
 package com.przemek.patronage.Organization;
 
+import com.przemek.patronage.Mapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,30 +24,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(OrganizationController.class)
 public class OrganizationControllerTest {
 
-//    @Autowired
-//    private static OrganizationRepository testOrganizations;
-//
-//    @TestConfiguration
-//    public class OrganizationServiceImplTestContextConfiguration {
-//        @Bean
-//        public OrganizationService testOrganizationService() {
-//            return new OrganizationService(testOrganizations);
-//        }
-//    }
-//
-//    @Autowired
-//    private MockMvc mvc;
-//
-//    @MockBean
-//    private OrganizationService testService;
-//
-//    @Test
-//    public void getOrganizations() throws Exception {
-//        //given
-//        when(testService.findAll()).thenReturn(Collections.singletonList(new Organization("Organization 1")));
-//        //when
-//        mvc.perform(get("/organizations")
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$", hasSize(1)));
-//    }
+    @Autowired
+    private static OrganizationRepository testOrganizations;
+
+    @Autowired
+    private static Mapper mapper;
+
+    @TestConfiguration
+    public class OrganizationServiceImplTestContextConfiguration {
+        @Bean
+        public OrganizationService testOrganizationService() {
+            return new OrganizationService(testOrganizations, mapper);
+        }
+    }
+
+    @Autowired
+    private MockMvc mvc;
+
+    @MockBean
+    private OrganizationService testService;
+
+    @Test
+    public void getOrganizations() throws Exception {
+        //given
+        when(testService.findAll()).thenReturn(Collections.singletonList(new OrganizationDTO("Organization 1")));
+        //when
+        mvc.perform(get("/organizations")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
 }

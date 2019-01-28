@@ -23,6 +23,13 @@ public class OrganizationDTO {
     public OrganizationDTO(Long id,
                            @NotBlank @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.") String name,
                            List<ConferenceRoomDTO> conferenceRooms) {
+        this.id = id;
+        this.name = name;
+        this.conferenceRoomsList = conferenceRooms;
+    }
+
+    public OrganizationDTO(@NotBlank @Size(min = 2, max = 20, message = "Organization name should have minimum 2 and maximum 20 characters.") String name,
+                           List<ConferenceRoomDTO> conferenceRooms) {
         this.name = name;
         this.conferenceRoomsList = conferenceRooms;
     }

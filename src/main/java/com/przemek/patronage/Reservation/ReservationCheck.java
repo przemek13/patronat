@@ -3,6 +3,7 @@ package com.przemek.patronage.Reservation;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
 import com.przemek.patronage.Exceptions.RoomReservedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -20,8 +21,8 @@ public class ReservationCheck {
     }
 
     protected void checkReservationDates(Reservation newReservation) {
-        newReservation.setReservationStart(newReservation.getReservationStart().truncatedTo(ChronoUnit.MINUTES));
-        newReservation.setReservationEnd(newReservation.getReservationEnd().truncatedTo(ChronoUnit.MINUTES));
+//        newReservation.setReservationStart(newReservation.getReservationStart());
+//        newReservation.setReservationEnd(newReservation.getReservationEnd());
         if (newReservation.getReservationStart().isAfter(newReservation.getReservationEnd())) {
             throw new IllegalArgumentException("Reservation start can't be after reservation end.");
         }

@@ -58,7 +58,6 @@ public class ConferenceRoomService {
                     conferenceRoom.setLyingPlaces(newConferenceRoom.getLyingPlaces());
                     conferenceRoom.setHangingPlaces(newConferenceRoom.getHangingPlaces());
                     conferenceRoom.setReservations(newConferenceRoom.getReservations());
-//                    conferenceRoom.setOrganization(newConferenceRoom.getOrganization());
                     conferenceRoom.setEquipment(newConferenceRoom.getEquipment());
                     conferenceRoomRepository.save(conferenceRoom);
                     return mapper.convertToDTO(conferenceRoom);

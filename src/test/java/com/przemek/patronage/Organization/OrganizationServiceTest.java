@@ -1,99 +1,114 @@
 package com.przemek.patronage.Organization;
 
+import com.przemek.patronage.Mapper;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
+@DataJpaTest
 public class OrganizationServiceTest {
 
-//    private OrganizationService testOrganizationService;
-//
-//    @Mock
-//    private OrganizationRepository testOrganizations;
-//
-//    private Organization testOrganization = new Organization("Organization 1");
-//
-//    private Organization newTestOrganization = new Organization("Organization 2");
-//
-//    private Long testId = 1L;
-//
-//
-//    @Before
-//    public void setUpTestOrganizationService() {
-//        this.testOrganizationService = new OrganizationService(testOrganizations);
-//    }
-//
-//    @Test
-//    public void saveWhenOrganizationNameNotExist() {
-//        //given
-//        when(testOrganizations.findByName(newTestOrganization.getName())).thenReturn(null);
-//        //when
-//        testOrganizationService.save(newTestOrganization);
-//        newTestOrganization = newTestOrganization
-//        //then
-//        verify(testOrganizations, times(1)).save(newTestOrganization);
-//    }
-//
-//    @Test(expected = IllegalArgumentException.class)
-//    public void saveWhenOrganizationNameExists() {
-//        //given
-//        when(testOrganizations.findByName(newTestOrganization.getName())).thenReturn(newTestOrganization);
-//        //when
-//        testOrganizationService.save(newTestOrganization);
-//        //then
-//    }
-//
-//    @Test
-//    public void updateWhenOrganizationIdExists() {
-//        //given
-//        when(testOrganizations.findById(testId)).thenReturn(Optional.ofNullable(testOrganization));
-//        //when
-//        testOrganizationService.update(newTestOrganization, testId);
-//        //then
-//        assertEquals(testOrganization.getName(), newTestOrganization.getName());
-//    }
-//
-//    @Test
-//    public void updateWhenOrganizationIdNotExist() {
-//        //given
-//        when(testOrganizations.findById(testId)).thenReturn(Optional.empty());
-//        //when
-//        testOrganizationService.update(newTestOrganization, testId);
-//        //then
-//        assertEquals(newTestOrganization.getId(), (testId));
-//    }
-//
-//    @Test
-//    public void deleteWhenOrganizationIdExists() {
-//        //given
-//        when(testOrganizations.findById(testId)).thenReturn(Optional.ofNullable(newTestOrganization));
-//        //when
-//        testOrganizationService.delete(testId);
-//        //then
-//        verify(testOrganizations, times(1)).deleteById(1L);
-//    }
-//
-//    @Test(expected = IllegalArgumentException.class)
-//    public void deleteWhenOrganizationIdNotExist() {
-//        //given
-//        when(testOrganizations.findById(testId)).thenReturn(Optional.empty());
-//        //when
-//        testOrganizationService.delete(testId);
-//        //then
-//    }
-//
-//    @AfterClass
-//    public static void tearDownClass() {
-//        System.out.println("tear down class");
-//        System.out.flush();
-//    }
+    @TestConfiguration
+    static class MapperImplTestContextConfiguration {
+        @Bean
+        public Mapper mapper() {
+            return new Mapper();
+        }
+    }
+
+    @Mock
+    private OrganizationRepository testOrganizations;
+    @Autowired
+    private Mapper mapper;
+
+    private OrganizationService testOrganizationService;
+
+    private Organization testOrganization = new Organization("Organization1");
+
+    private Organization newTestOrganization = new Organization("Organization 2");
+
+    private OrganizationDTO newTestOrganizationDTO = new OrganizationDTO("Organization 2");
+
+    private Long testId = 1L;
+
+    @Before
+    public void setUpTestOrganizationService() {
+        this.testOrganizationService = new OrganizationService(testOrganizations, mapper);
+    }
+
+    @Test
+    public void saveWhenOrganizationNameNotExist() {
+        //given
+        when(testOrganizations.findByName(newTestOrganization.getName())).thenReturn(null);
+        //when
+        testOrganizationService.save(newTestOrganizationDTO);
+        //then
+        verify(testOrganizations, times(1)).save(any(Organization.class));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void saveWhenOrganizationNameExists() {
+        //given
+        when(testOrganizations.findByName(newTestOrganization.getName())).thenReturn(newTestOrganization);
+        //when
+        testOrganizationService.save(newTestOrganizationDTO);
+        //then
+    }
+
+    @Test
+    public void updateWhenOrganizationIdExists() {
+        //given
+        when(testOrganizations.findById(testId)).thenReturn((Optional.ofNullable(testOrganization)));
+        //when
+        testOrganizationService.update(newTestOrganizationDTO, testId);
+        //then
+        assertEquals(testOrganization.getName(), newTestOrganization.getName());
+    }
+
+    @Test
+    public void updateWhenOrganizationIdNotExist() {
+        //given
+        when(testOrganizations.findById(testId)).thenReturn(Optional.empty());
+        //when
+        testOrganizationService.update(newTestOrganizationDTO, testId);
+        //then
+//        assertEquals(newTestOrganizationDTO.getId(), testId);
+    }
+
+    @Test
+    public void deleteWhenOrganizationIdExists() {
+        //given
+        when(testOrganizations.findById(testId)).thenReturn(Optional.ofNullable(newTestOrganization));
+        //when
+        testOrganizationService.delete(testId);
+        //then
+        verify(testOrganizations, times(1)).deleteById(1L);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void deleteWhenOrganizationIdNotExist() {
+        //given
+        when(testOrganizations.findById(testId)).thenReturn(Optional.empty());
+        //when
+        testOrganizationService.delete(testId);
+        //then
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        System.out.flush();
+    }
 }

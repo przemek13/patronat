@@ -1,8 +1,11 @@
 package com.przemek.patronage.Equipment;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
+import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
+import com.przemek.patronage.Mapper;
 import com.przemek.patronage.Organization.Organization;
+import com.przemek.patronage.Organization.OrganizationDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,33 +30,44 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(EquipmentController.class)
 public class EquipmentControllerTest {
 
-//    @Autowired
-//    private static EquipmentRepository testEquipment;
-//
-//    @Autowired
-//    private static ConferenceRoomRepository testConferenceRooms;
-//
-//    @TestConfiguration
-//    public class ConferenceRoomServiceImplTestContextConfiguration {
-//        @Bean
-//        public EquipmentService equipmentService() {
-//            return new EquipmentService(testEquipment, testConferenceRooms);
-//        }
-//    }
-//
-//    @Autowired
-//    private MockMvc mvc;
-//
-//    @MockBean
-//    private EquipmentService testService;
-//
-//    @Test
-//    public void getEquipment() throws Exception {
-//        //given
-//        when(testService.findAll()).thenReturn(Collections.singletonList(new Equipment("Hitachi", false, new ConferenceRoom("Conference Room 4", 10, true, 10, new Organization("Organization 5")))));
-//        //when
-//        mvc.perform(get("/equipment")
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$", hasSize(1)));
-//    }
+    @Autowired
+    private static EquipmentRepository testEquipment;
+
+    @Autowired
+    private static ConferenceRoomRepository testConferenceRooms;
+
+    @Autowired
+    private static Mapper mapper;
+
+    @TestConfiguration
+    public class ConferenceRoomServiceImplTestContextConfiguration {
+        @Bean
+        public EquipmentService equipmentService() {
+            return new EquipmentService(testEquipment, testConferenceRooms, mapper);
+        }
+    }
+
+    @TestConfiguration
+    static class MapperImplTestContextConfiguration {
+        @Bean
+        public Mapper mapper() {
+            return new Mapper();
+        }
+    }
+
+    @Autowired
+    private MockMvc mvc;
+
+    @MockBean
+    private EquipmentService testService;
+
+    @Test
+    public void getEquipment() throws Exception {
+        //given
+        when(testService.findAll()).thenReturn(Collections.singletonList(new EquipmentDTO("Hitachi", false, new ConferenceRoomDTO("Conference Room 4", 10, true, 10, new OrganizationDTO("Organization 5")))));
+        //when
+        mvc.perform(get("/equipment")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
 }

@@ -49,6 +49,15 @@ public class ConferenceRoom {
         this.equipment = equipment;
     }
 
+    public ConferenceRoom(String name, int floor, boolean available, int sittingAndStandingPlaces, Organization organization, List<Reservation> reservations) {
+        this.name = name;
+        this.floor = floor;
+        this.available = available;
+        this.sittingAndStandingPlaces = sittingAndStandingPlaces;
+        this.organization = organization;
+        this.reservations = reservations;
+    }
+
     public ConferenceRoom(String name, int floor, boolean available, int sittingAndStandingPlaces, Organization organization) {
         this.name = name;
         this.floor = floor;

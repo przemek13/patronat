@@ -2,6 +2,7 @@ package com.przemek.patronage.ConferenceRoom;
 
 import com.przemek.patronage.Mapper;
 import com.przemek.patronage.Organization.Organization;
+import com.przemek.patronage.Organization.OrganizationDTO;
 import com.przemek.patronage.Organization.OrganizationRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,41 +26,44 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ConferenceRoomController.class)
 public class ConferenceRoomControllerTest {
 
-//    @Autowired
-//    private static OrganizationRepository testOrganizations;
-//
-//    @Autowired
-//    private static ConferenceRoomRepository testConferenceRooms;
-//
-//    @TestConfiguration
-//    public class ConferenceRoomServiceImplTestContextConfiguration {
-//        @Bean
-//        public ConferenceRoomService conferenceRoomServiceService() {
-//            return new ConferenceRoomService(testConferenceRooms, testOrganizations);
-//        }
-//    }
-//
-//    @TestConfiguration
-//    static class MapperImplTestContextConfiguration {
-//        @Bean
-//        public Mapper mapper() {
-//            return new Mapper();
-//        }
-//    }
-//
-//    @Autowired
-//    private MockMvc mvc;
-//
-//    @MockBean
-//    private ConferenceRoomService testService;
-//
-//    @Test
-//    public void getConferenceRooms() throws Exception {
-//        //given
-//        when(testService.findAll()).thenReturn(Collections.singletonList(new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 1"))));
-//        //when
-//        mvc.perform(get("/rooms")
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$", hasSize(1)));
-//    }
+    @Autowired
+    private static OrganizationRepository testOrganizations;
+
+    @Autowired
+    private static ConferenceRoomRepository testConferenceRooms;
+
+    @Autowired
+    private static Mapper mapper;
+
+    @TestConfiguration
+    public class ConferenceRoomServiceImplTestContextConfiguration {
+        @Bean
+        public ConferenceRoomService conferenceRoomServiceService() {
+            return new ConferenceRoomService(testConferenceRooms, testOrganizations, mapper);
+        }
+    }
+
+    @TestConfiguration
+    static class MapperImplTestContextConfiguration {
+        @Bean
+        public Mapper mapper() {
+            return new Mapper();
+        }
+    }
+
+    @Autowired
+    private MockMvc mvc;
+
+    @MockBean
+    private ConferenceRoomService testService;
+
+    @Test
+    public void getConferenceRooms() throws Exception {
+        //given
+        when(testService.findAll()).thenReturn(Collections.singletonList(new ConferenceRoomDTO("Conference Room 1", 10, true, 10, new OrganizationDTO("Organization 1"))));
+        //when
+        mvc.perform(get("/rooms")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
 }

@@ -88,7 +88,6 @@ public class ReservationService {
                     reservation.setReservingId(newReservation.getReservingId());
                     reservation.setReservationStart(newReservation.getReservationStart());
                     reservation.setReservationEnd(newReservation.getReservationEnd());
-//                    reservation.setConferenceRoom(newReservation.getConferenceRoom());
                     reservationRepository.save(reservation);
                     return mapper.convertToDTO(reservation);
                 })

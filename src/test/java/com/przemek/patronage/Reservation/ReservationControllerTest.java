@@ -1,10 +1,13 @@
 package com.przemek.patronage.Reservation;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
+import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
 import com.przemek.patronage.Mapper;
 import com.przemek.patronage.Organization.Organization;
+import com.przemek.patronage.Organization.OrganizationDTO;
 import com.przemek.patronage.Organization.OrganizationRepository;
+import com.przemek.patronage.Organization.OrganizationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,37 +31,51 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ReservationController.class)
 public class ReservationControllerTest {
 
-//    @Autowired
-//    private static OrganizationRepository testOrganizations;
-//
-//    @Autowired
-//    private static ConferenceRoomRepository testConferenceRooms;
-//
-//    @Autowired
-//    private static ReservationRepository testReservations;
-//
-//    @TestConfiguration
-//    public class EquipmentServiceImplTestContextConfiguration {
-//        @Bean
-//        public ReservationService reservationService() {
-//            return new ReservationService(testReservations, testConferenceRooms, testOrganizations);
-//        }
-//
-//    }
-//
-//    @Autowired
-//    private MockMvc mvc;
-//
-//    @MockBean
-//    private ReservationService testService;
-//
-//    @Test
-//    public void getReservations() throws Exception {
-//        //given
-//        when(testService.findAll()).thenReturn(Collections.singletonList(new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")))));
-//        //when
-//        mvc.perform(get("/reservations")
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$", hasSize(1)));
-//    }
+    @Autowired
+    private static OrganizationRepository testOrganizations;
+
+    @Autowired
+    private static ConferenceRoomRepository testConferenceRooms;
+
+    @Autowired
+    private static ReservationRepository testReservations;
+
+    @Autowired
+    private static Mapper mapper;
+
+    @Autowired
+    private static ReservationCheck reservationCheck;
+
+    @TestConfiguration
+    public class ReservationServiceImplTestContextConfiguration {
+        @Bean
+        public ReservationService reservationService() {
+            return new ReservationService(testReservations, testConferenceRooms, testOrganizations, mapper, reservationCheck);
+        }
+
+    }
+
+    @TestConfiguration
+    static class MapperImplTestContextConfiguration {
+        @Bean
+        public Mapper mapper() {
+            return new Mapper();
+        }
+    }
+
+    @Autowired
+    private MockMvc mvc;
+
+    @MockBean
+    private ReservationService testService;
+
+    @Test
+    public void getReservations() throws Exception {
+        //given
+        when(testService.findAll()).thenReturn(Collections.singletonList(new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")))));
+        //when
+        mvc.perform(get("/reservations")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
 }

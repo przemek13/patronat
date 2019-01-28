@@ -57,7 +57,6 @@ public class EquipmentService {
                     equipment.setInternalNumber(newEquipment.getInternalNumber());
                     equipment.setExternalNumber(newEquipment.getExternalNumber());
                     equipment.setConnections(newEquipment.getConnections());
-                    equipment.setConferenceroom(newEquipment.getConferenceroom());
                     equipmentRepository.save(equipment);
                     return mapper.convertToDTO(equipment);
                 })
