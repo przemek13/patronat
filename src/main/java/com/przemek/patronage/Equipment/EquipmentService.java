@@ -11,17 +11,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class EquipmentService {
-    private EquipmentRepository equipmentRepository;
-    private ConferenceRoomRepository conferenceRoomRepository;
-    private Mapper mapper;
-
-    public EquipmentService() {
-    }
+    private final EquipmentRepository equipmentRepository;
+    private final ConferenceRoomRepository conferenceRoomRepository;
+    private final Mapper mapper;
 
     @Autowired
-    public EquipmentService(EquipmentRepository equipmentRepository, ConferenceRoomRepository conferenceRooms, Mapper mapper) {
+    public EquipmentService(EquipmentRepository equipmentRepository, ConferenceRoomRepository conferenceRoomRepository, Mapper mapper) {
         this.equipmentRepository = Objects.requireNonNull(equipmentRepository, "must be defined.");
-        this.conferenceRoomRepository = Objects.requireNonNull(conferenceRooms, "must be defined.");
+        this.conferenceRoomRepository = Objects.requireNonNull(conferenceRoomRepository, "must be defined.");
         this.mapper = Objects.requireNonNull(mapper, "must be defined.");
     }
 
@@ -61,7 +58,6 @@ public class EquipmentService {
                     return mapper.convertToDTO(equipment);
                 })
                 .orElseGet(() -> {
-                    newEquipment.setId(id);
                     equipmentRepository.save(newEquipment);
                     return mapper.convertToDTO(newEquipment);
                 });

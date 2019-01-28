@@ -85,7 +85,7 @@ public class OrganizationServiceTest {
         //when
         testOrganizationService.update(newTestOrganizationDTO, testId);
         //then
-//        assertEquals(newTestOrganizationDTO.getId(), testId);
+        verify(testOrganizationRepository, times(1)).save(any(Organization.class));
     }
 
     @Test

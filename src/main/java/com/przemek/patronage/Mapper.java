@@ -8,8 +8,8 @@ import com.przemek.patronage.Equipment.Equipment;
 import com.przemek.patronage.Equipment.EquipmentDTO;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationDTO;
-import com.przemek.patronage.Reservation.ReservationSerializers.JsonDateDeserializer;
-import com.przemek.patronage.Reservation.ReservationSerializers.JsonDateSerializer;
+import com.przemek.patronage.Serializers.JsonDateDeserializer;
+import com.przemek.patronage.Serializers.JsonDateSerializer;
 import com.przemek.patronage.Reservation.Reservation;
 import com.przemek.patronage.Reservation.ReservationDTO;
 import org.springframework.stereotype.Component;
@@ -23,6 +23,10 @@ public class Mapper {
 
     public Mapper() {
         objectMapper = new ObjectMapper();
+        provideJavaDateModul();
+    }
+
+    private void provideJavaDateModul () {
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(LocalDateTime.class, new JsonDateSerializer());
         javaTimeModule.addDeserializer(LocalDateTime.class, new JsonDateDeserializer());

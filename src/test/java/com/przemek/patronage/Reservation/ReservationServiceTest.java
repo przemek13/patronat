@@ -127,15 +127,19 @@ public class ReservationServiceTest {
         var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 14, 00), LocalDateTime.of(2019, 3, 23, 14, 05), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
         //when
         testReservationService.save(newTestReservationDTO, testConferenceRoom.getId());
+        //then
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void saveWhenReservationDurationTooLong() {
         //given
-        when(testConferenceRoomRepository.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
-        var newTestReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
-                //when
-        testReservationService.save(newTestReservationDTO, testId);
+        testOrganizationRepository.save(testOrganization);
+        testConferenceRoomRepository.save(testConferenceRoom);
+        reservatonsList.add(testReservation);
+        var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 10, 00), LocalDateTime.of(2019, 3, 23, 12, 01), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
+        //when
+        testReservationService.save(newTestReservationDTO, testConferenceRoom.getId());
+        //then
     }
 
     @Test(expected = RoomReservedException.class)
@@ -163,13 +167,13 @@ public class ReservationServiceTest {
     }
 
     @Test
-    public void updateWhenReservationNotExist() {
+    public void updateWhenReservationIdNotExist() {
         //given
         when(testReservationRepository.findById(testId)).thenReturn(Optional.empty());
         //when
         testReservationService.update(newTestReservationDTO, testId);
         //then
-//        assertEquals(newTestReservation.getId(), (testId));
+        verify(testReservationRepository, times(1)).save(any(Reservation.class));
     }
 
     @Test

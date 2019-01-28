@@ -74,7 +74,6 @@ public class ReservationService {
                     return mapper.convertToDTO(reservation);
                 })
                 .orElseGet(() -> {
-                    newReservation.setId(id);
                     reservationRepository.save(newReservation);
                     return mapper.convertToDTO(newReservation);
                 });

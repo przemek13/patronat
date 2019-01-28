@@ -3,8 +3,8 @@ package com.przemek.patronage.Exceptions;
 import org.springframework.http.HttpStatus;
 
 public class ApiException {
-    private HttpStatus status;
-    private String message;
+    private final HttpStatus status;
+    private final String message;
 
     public ApiException(HttpStatus status, String message) {
         super();

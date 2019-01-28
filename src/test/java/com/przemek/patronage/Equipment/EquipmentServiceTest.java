@@ -96,7 +96,7 @@ public class EquipmentServiceTest {
         //when
         testEquipmentService.update(newTestEquipmentDTO, testId);
         //then
-//        assertEquals(newTestEquipmentDTO.getId(), (testId));
+        verify(testEquipmentRepository, times(1)).save(any(Equipment.class));
     }
 
     @Test

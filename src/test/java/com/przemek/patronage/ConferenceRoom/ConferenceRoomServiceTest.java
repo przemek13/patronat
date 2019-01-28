@@ -86,10 +86,11 @@ public class ConferenceRoomServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void saveWhenConferenceRoomNameExists() {
         //given
-        when(testOrganizationRepository.findById(testId)).thenReturn(Optional.of(testOrganization));
-//        when(testConferenceRooms.findByName(newTestConferenceRoom.getName())) .thenReturn(newTestConferenceRoom);
+        testOrganizationRepository.save(testOrganization);
+        when(testConferenceRoomRepossitory.findByName(testConferenceRoom.getName())).thenReturn(testConferenceRoom);
+        var newTestConferenceRoomDTO = new ConferenceRoomDTO ("Conference Room 1", 1, false, 100, new OrganizationDTO("Organization 1"));
         //when
-        testConferenceRoomService.save(newTestConferenceRoomDTO, testId);
+        testConferenceRoomService.save(newTestConferenceRoomDTO, testConferenceRoom.getOrganization().getId());
         //then
     }
 
@@ -113,7 +114,7 @@ public class ConferenceRoomServiceTest {
         //when
         testConferenceRoomService.update(newTestConferenceRoomDTO, testId);
         //then
-//        assertEquals(newTestConferenceRoom.getId(), (testId));
+        verify(testConferenceRoomRepossitory, times(1)).save(any(ConferenceRoom.class));
     }
 
     @Test

@@ -13,7 +13,7 @@ import java.util.Objects;
 @Component
 public class ReservationCheck {
 
-    private ConferenceRoomRepository conferenceRoomRepository;
+    private final ConferenceRoomRepository conferenceRoomRepository;
 
     @Autowired
     public ReservationCheck(ConferenceRoomRepository conferenceRoomRepository) {

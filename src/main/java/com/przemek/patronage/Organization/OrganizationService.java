@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 @Service
 public class OrganizationService {
 
-    private OrganizationRepository organizationRepository;
-    private Mapper mapper;
+    private final OrganizationRepository organizationRepository;
+    private final Mapper mapper;
 
     @Autowired
     public OrganizationService(OrganizationRepository organizations, Mapper mapper) {
@@ -42,10 +42,9 @@ public class OrganizationService {
                     organization.setName(newOrganization.getName());
                     organization.setConferenceRoomsList(newOrganization.getConferenceRoomsList());
                     organizationRepository.save(organization);
-                    return mapper.convertToDTO(organization);
+                    return mapper.convertToDTO(newOrganization);
                 })
                 .orElseGet(() -> {
-                    newOrganization.setId(id);
                     organizationRepository.save(newOrganization);
                     return mapper.convertToDTO(newOrganization);
                 });

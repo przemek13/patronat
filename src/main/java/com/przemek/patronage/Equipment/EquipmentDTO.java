@@ -2,6 +2,7 @@ package com.przemek.patronage.Equipment;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
+import com.przemek.patronage.Serializers.EquipmentConferenceRoomSerializer;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 

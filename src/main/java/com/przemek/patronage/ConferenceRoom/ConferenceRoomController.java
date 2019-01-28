@@ -12,29 +12,29 @@ import java.util.stream.Collectors;
 @RestController
 public class ConferenceRoomController {
 
-    private final ConferenceRoomService service;
+    private final ConferenceRoomService conferenceRoomService;
 
     private ConferenceRoomController(ConferenceRoomService service) {
-        this.service = Objects.requireNonNull(service, "must be defined.");
+        this.conferenceRoomService = Objects.requireNonNull(service, "must be defined.");
     }
 
     @GetMapping("/rooms")
     private List<ConferenceRoomDTO> getConferenceRooms() {
-        return service.findAll();
+        return conferenceRoomService.findAll();
     }
 
     @PostMapping("/rooms/{id}")
     private ConferenceRoomDTO addConferenceRoom(@Valid @RequestBody ConferenceRoomDTO newConferenceRoomDTO, @PathVariable Long id) {
-        return service.save(newConferenceRoomDTO, id);
+        return conferenceRoomService.save(newConferenceRoomDTO, id);
     }
 
     @PutMapping("/rooms/{id}")
     private ConferenceRoomDTO updateConferenceRoom(@Valid @RequestBody ConferenceRoomDTO newConferenceRoomDTO, @PathVariable Long id) {
-        return service.update(newConferenceRoomDTO, id);
+        return conferenceRoomService.update(newConferenceRoomDTO, id);
     }
 
     @DeleteMapping("/rooms/{id}")
     private void deleteConferenceRoom(@PathVariable Long id) {
-        service.delete(id);
+        conferenceRoomService.delete(id);
     }
 }

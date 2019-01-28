@@ -3,7 +3,7 @@ package com.przemek.patronage.Reservation;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
-import com.przemek.patronage.Reservation.ReservationSerializers.ReservationConferenceRoomSerializer;
+import com.przemek.patronage.Serializers.ReservationConferenceRoomSerializer;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Future;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Component
-public class ReservationDTO implements Serializable {
+public class ReservationDTO {
     private Long id;
     @NotBlank
     @Size(min = 2, max = 20, message = "Reservation name should have minimum 2 and maximum 20 characters.")

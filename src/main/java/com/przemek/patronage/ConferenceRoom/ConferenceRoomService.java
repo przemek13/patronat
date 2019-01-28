@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 @Service
 public class ConferenceRoomService {
 
-    private ConferenceRoomRepository conferenceRoomRepository;
-    private OrganizationRepository organizationRepository;
-    private Mapper mapper;
+    private final ConferenceRoomRepository conferenceRoomRepository;
+    private final OrganizationRepository organizationRepository;
+    private final Mapper mapper;
 
     @Autowired
     public ConferenceRoomService(ConferenceRoomRepository conferenceRoomRepository, OrganizationRepository organizationRepository, Mapper mapper) {
@@ -41,9 +41,8 @@ public class ConferenceRoomService {
             conferenceRoomRepository.save(newConferenceRoom);
             organizationRepository.save(organization);
             return mapper.convertToDTO(newConferenceRoom);
-        } else {
-            throw new IllegalArgumentException("The Conference room with name given already exist. Please choose different name.");
         }
+        throw new IllegalArgumentException("The Conference room with name given already exist. Please choose different name.");
     }
 
     public ConferenceRoomDTO update(ConferenceRoomDTO newConferenceRoomDTO, Long id) {
@@ -63,7 +62,6 @@ public class ConferenceRoomService {
                     return mapper.convertToDTO(conferenceRoom);
                 })
                 .orElseGet(() -> {
-                    newConferenceRoom.setId(id);
                     conferenceRoomRepository.save(newConferenceRoom);
                     return mapper.convertToDTO(newConferenceRoom);
                 });

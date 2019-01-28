@@ -1,4 +1,4 @@
-package com.przemek.patronage.Reservation.ReservationSerializers;
+package com.przemek.patronage.Serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -7,13 +7,13 @@ import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
 
 import java.io.IOException;
 
-public class ReservationConferenceRoomSerializer extends StdSerializer<ConferenceRoomDTO> {
+public class EquipmentConferenceRoomSerializer extends StdSerializer<ConferenceRoomDTO> {
 
-    public ReservationConferenceRoomSerializer() {
+    public EquipmentConferenceRoomSerializer() {
         this(null);
     }
 
-    protected ReservationConferenceRoomSerializer(Class<ConferenceRoomDTO> t) {
+    protected EquipmentConferenceRoomSerializer(Class<ConferenceRoomDTO> t) {
         super(t);
     }
 
