@@ -1,7 +1,6 @@
 package com.przemek.patronage.ConferenceRoom;
 
 import com.przemek.patronage.Organization.Organization;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +20,7 @@ public class ConferenceRoomRepositoryTest {
     @Autowired
     private ConferenceRoomRepository testConferenceRoomRepository;
 
-    private ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1"));
+    private final ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1"));
 
     @Test
     public void saveWhenNoData() {

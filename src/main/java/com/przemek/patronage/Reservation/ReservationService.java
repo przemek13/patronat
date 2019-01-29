@@ -3,25 +3,22 @@ package com.przemek.patronage.Reservation;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
 import com.przemek.patronage.Mapper;
 import com.przemek.patronage.Organization.OrganizationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
 
-    private ReservationRepository reservationRepository;
-    private ConferenceRoomRepository conferenceRoomRepository;
-    private OrganizationRepository organizationRepository;
-    private Mapper mapper;
-    private ReservationCheck reservationCheck;
-    private ReservationDataChange reservationDataChange;
+    private final ReservationRepository reservationRepository;
+    private final ConferenceRoomRepository conferenceRoomRepository;
+    private final OrganizationRepository organizationRepository;
+    private final Mapper mapper;
+    private final ReservationCheck reservationCheck;
+    private final ReservationDataChange reservationDataChange;
 
-    @Autowired
     public ReservationService(ReservationRepository reservations, ConferenceRoomRepository conferenceRooms, OrganizationRepository organizations, Mapper mapper, ReservationCheck reservationCheck, ReservationDataChange reservationDataChange) {
         this.reservationRepository = Objects.requireNonNull(reservations, "must be defined.");
         this.conferenceRoomRepository = Objects.requireNonNull(conferenceRooms, "must be defined");
@@ -52,7 +49,7 @@ public class ReservationService {
 
     public ReservationDTO save(ReservationDTO newReservationDTO, Long id) {
         var newReservation = mapper.convertToEntity(newReservationDTO);
-        if (conferenceRoomRepository.findById(id).equals(Optional.empty())) {
+        if (conferenceRoomRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("The Conference room with id given doesn't exist in the base.");
         }
         var room = conferenceRoomRepository.findById(id).get();

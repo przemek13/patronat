@@ -4,7 +4,6 @@ import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationRepository;
 import com.przemek.patronage.PatronageApplication;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -36,7 +34,7 @@ public class ConferenceRoomControllerIntegrationTest {
     private OrganizationRepository testOrganizationRepository;
 
     @After
-    public void resetConferenceRoomtDb() {
+    public void resetConferenceRoomDb() {
         testConferenceRoomRepository.deleteAll();
     }
 

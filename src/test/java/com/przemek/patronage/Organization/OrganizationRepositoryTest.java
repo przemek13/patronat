@@ -1,6 +1,5 @@
 package com.przemek.patronage.Organization;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +19,7 @@ public class OrganizationRepositoryTest {
     @Autowired
     private OrganizationRepository testOrganizationRepository;
 
-    private Organization testOrganization = new Organization("Organization 1");
+    private final Organization testOrganization = new Organization("Organization 1");
 
     @Test
     public void returnWhenNoData() {

@@ -2,7 +2,6 @@ package com.przemek.patronage.Equipment;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import com.przemek.patronage.Organization.Organization;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +22,7 @@ public class EquipmentRepositoryTest {
     @Autowired
     private EquipmentRepository testEquipmentRepository;
 
-    private Equipment newTestEquipment = new Equipment("Hitachi", false, new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
+    private final Equipment newTestEquipment = new Equipment("Hitachi", false, new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1")));
 
     @Test
     public void saveWhenNoData() {

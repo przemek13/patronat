@@ -1,20 +1,12 @@
 package com.przemek.patronage.Reservation;
 
-import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomDTO;
-import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
-import com.przemek.patronage.Mapper;
-import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationDTO;
-import com.przemek.patronage.Organization.OrganizationRepository;
-import com.przemek.patronage.Organization.OrganizationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,7 +31,7 @@ public class ReservationControllerTest {
     @Test
     public void getReservations() throws Exception {
         //given
-        when(testService.findAll()).thenReturn(Collections.singletonList(new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")))));
+        when(testService.findAll()).thenReturn(Collections.singletonList(new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 0), LocalDateTime.of(2019, 3, 23, 17, 0), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")))));
         //when
         //then
         mvc.perform(get("/reservations")

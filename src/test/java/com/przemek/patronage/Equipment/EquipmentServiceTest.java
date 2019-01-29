@@ -10,8 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -54,13 +52,13 @@ public class EquipmentServiceTest {
     @Autowired
     private EquipmentDataChange testEquipmentDataChange;
 
-    private ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 1"));
+    private final ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 1"));
 
-    private Equipment testEquipment = new Equipment("BenQ", true, 1, "+12 123456789", InterfaceConnections.BLUETOOTH, testConferenceRoom);
+    private final Equipment testEquipment = new Equipment("BenQ", true, 1, "+12 123456789", InterfaceConnections.BLUETOOTH, testConferenceRoom);
 
-    private EquipmentDTO newTestEquipmentDTO = new EquipmentDTO("Hitachi", false, new ConferenceRoomDTO("Conference Room 1", 10, true, 10, new OrganizationDTO("Organization 1")));
+    private final EquipmentDTO newTestEquipmentDTO = new EquipmentDTO("Hitachi", false, new ConferenceRoomDTO("Conference Room 1", 10, true, 10, new OrganizationDTO("Organization 1")));
 
-    private Long testId = 1L;
+    private final Long testId = 1L;
 
     @Before
     public void setUpTestEquipmentService() {
@@ -100,7 +98,7 @@ public class EquipmentServiceTest {
         assertEquals(testEquipment.getConnections(), newTestEquipmentDTO.getConnections());
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void updateWhenEquipmentIdNotExist() {
         //given
         when(testEquipmentRepository.findById(testId)).thenReturn(Optional.empty());

@@ -1,13 +1,10 @@
 package com.przemek.patronage.Equipment;
 
-import com.przemek.patronage.Mapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 public class EquipmentController {
@@ -24,12 +21,12 @@ public class EquipmentController {
     }
 
     @PostMapping("/equipment/{id}")
-    private EquipmentDTO addEquipment(@Valid @RequestBody EquipmentDTO newEquipmentDTO, @PathVariable Long id) throws ParseException {
+    private EquipmentDTO addEquipment(@Valid @RequestBody EquipmentDTO newEquipmentDTO, @PathVariable Long id) {
         return service.save(newEquipmentDTO, id);
     }
 
     @PutMapping("/equipment/{id}")
-    private EquipmentDTO updateEquipment(@Valid @RequestBody EquipmentDTO newEquipmentDTO, @PathVariable Long id) throws ParseException {
+    private EquipmentDTO updateEquipment(@Valid @RequestBody EquipmentDTO newEquipmentDTO, @PathVariable Long id) {
         return service.update(newEquipmentDTO, id);
     }
 

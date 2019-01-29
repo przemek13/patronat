@@ -1,7 +1,5 @@
 package com.przemek.patronage.Reservation;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.przemek.patronage.ConferenceRoom.ConferenceRoom;
 
 import javax.persistence.*;

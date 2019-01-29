@@ -27,7 +27,7 @@ public class EquipmentDTO {
     @Nullable
     private InterfaceConnections connections;
     @JsonSerialize(using = EquipmentConferenceRoomSerializer.class)
-    private ConferenceRoomDTO conferenceroom;
+    private ConferenceRoomDTO conferenceRoom;
 
     public EquipmentDTO() {
     }
@@ -37,19 +37,19 @@ public class EquipmentDTO {
                         @Max(value = 99, message = "Internal number has to be an integer between 0 and 99") int internalNumber,
                         @Nullable @Pattern(regexp = "^(\\+\\d{2}\\s\\d{9})$") String externalNumber,
                         @Nullable InterfaceConnections connections,
-                        ConferenceRoomDTO conferenceroom) {
+                        ConferenceRoomDTO conferenceRoom) {
         this.projectorName = projectorName;
         this.isPhone = isPhone;
         this.internalNumber = internalNumber;
         this.externalNumber = externalNumber;
         this.connections = connections;
-        this.conferenceroom = conferenceroom;
+        this.conferenceRoom = conferenceRoom;
     }
 
-    public EquipmentDTO(@Nullable String projectorName, boolean isPhone, ConferenceRoomDTO conferenceroom) {
+    public EquipmentDTO(@Nullable String projectorName, boolean isPhone, ConferenceRoomDTO conferenceRoom) {
         this.projectorName = projectorName;
         this.isPhone = isPhone;
-        this.conferenceroom = conferenceroom;
+        this.conferenceRoom = conferenceRoom;
     }
 
     @Nullable
@@ -105,11 +105,11 @@ public class EquipmentDTO {
         this.connections = connections;
     }
 
-    public ConferenceRoomDTO getConferenceroom() {
-        return conferenceroom;
+    public ConferenceRoomDTO getConferenceRoom() {
+        return conferenceRoom;
     }
 
-    public void setConferenceroom(ConferenceRoomDTO conferenceroom) {
-        this.conferenceroom = conferenceroom;
+    public void setConferenceRoom(ConferenceRoomDTO conferenceRoom) {
+        this.conferenceRoom = conferenceRoom;
     }
 }

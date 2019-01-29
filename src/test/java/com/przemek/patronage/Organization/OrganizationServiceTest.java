@@ -45,13 +45,13 @@ public class OrganizationServiceTest {
 
     private OrganizationService testOrganizationService;
 
-    private Organization testOrganization = new Organization("Organization 1");
+    private final Organization testOrganization = new Organization("Organization 1");
 
-    private Organization newTestOrganization = new Organization("Organization 2");
+    private final Organization newTestOrganization = new Organization("Organization 2");
 
-    private OrganizationDTO newTestOrganizationDTO = new OrganizationDTO("Organization 2");
+    private final OrganizationDTO newTestOrganizationDTO = new OrganizationDTO("Organization 2");
 
-    private Long testId = 1L;
+    private final Long testId = 1L;
 
     @Before
     public void setUpTestOrganizationService() {
@@ -87,7 +87,7 @@ public class OrganizationServiceTest {
         assertEquals(testOrganization.getName(), newTestOrganization.getName());
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void updateWhenOrganizationIdNotExist() {
         //given
         when(testOrganizationRepository.findById(testId)).thenReturn(Optional.empty());

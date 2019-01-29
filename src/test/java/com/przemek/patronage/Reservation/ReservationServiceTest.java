@@ -8,22 +8,18 @@ import com.przemek.patronage.Mapper;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationDTO;
 import com.przemek.patronage.Organization.OrganizationRepository;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,33 +57,33 @@ public class ReservationServiceTest {
     }
 
     @Autowired
+    private ConferenceRoomRepository testConferenceRoomRepository;
+    @Autowired
     private Mapper testMapper;
     @Autowired
     private ReservationCheck reservationCheck;
     @Mock
     private ReservationRepository testReservationRepository;
     @Autowired
-    private ConferenceRoomRepository testConferenceRoomRepository;
-    @Autowired
     private OrganizationRepository testOrganizationRepository;
     @Autowired
     private ReservationDataChange testReservationDataChange;
 
-    List<ConferenceRoom> roomsList = new ArrayList<>();
+    private final List<ConferenceRoom> roomsList = new ArrayList<>();
 
-    List<Reservation> reservatonsList = new ArrayList<>();
+    private final List<Reservation> reservationsList = new ArrayList<>();
 
-    private Organization testOrganization = new Organization("Organization 1", roomsList);
+    private final Organization testOrganization = new Organization("Organization 1", roomsList);
 
-    private ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 10, true, 10, testOrganization, reservatonsList);
+    private final ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 10, true, 10, testOrganization, reservationsList);
 
-    private Reservation testReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), testConferenceRoom);
+    private final Reservation testReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 0), LocalDateTime.of(2019, 3, 23, 17, 0), testConferenceRoom);
 
-    private Reservation newTestReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 2", 1, true, 10, new Organization("Organization 2")));
+    private final Reservation newTestReservation = new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 0), LocalDateTime.of(2019, 3, 23, 17, 0), new ConferenceRoom("Conference Room 2", 1, true, 10, new Organization("Organization 2")));
 
-    private ReservationDTO newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 17, 00), LocalDateTime.of(2019, 3, 23, 18, 00), new ConferenceRoomDTO("Conference Room 2", 1, true, 10, new OrganizationDTO("Organization 2")));
+    private final ReservationDTO newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 17, 0), LocalDateTime.of(2019, 3, 23, 18, 0), new ConferenceRoomDTO("Conference Room 2", 1, true, 10, new OrganizationDTO("Organization 2")));
 
-    private Long testId = 1L;
+    private final Long testId = 1L;
 
     @Before
     public void setUpTestReservationService() {
@@ -95,11 +91,48 @@ public class ReservationServiceTest {
     }
 
     @Test
+    public void findForConcreteConferenceRoom() {
+        //given
+        testOrganizationRepository.save(testOrganization);
+        testConferenceRoomRepository.save(testConferenceRoom);
+        roomsList.add(testConferenceRoom);
+        reservationsList.add(testReservation);
+        //when
+        List <ReservationDTO> reservationDTOList = testReservationService.findForConcreteConferenceRoom(testOrganization.getId(), testConferenceRoom.getId());
+        //then
+        assertEquals(1,reservationDTOList.size());
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void findForConcreteConferenceRoomWhenOrganizationIdNotExist() {
+        //given
+        testOrganizationRepository.save(testOrganization);
+        testConferenceRoomRepository.save(testConferenceRoom);
+        roomsList.add(testConferenceRoom);
+        reservationsList.add(testReservation);
+        //when
+        testReservationService.findForConcreteConferenceRoom(10L, testConferenceRoom.getId());
+        //then
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void findForConcreteConferenceRoomWhenConferenceRoomIdNotExist() {
+        //given
+        testOrganizationRepository.save(testOrganization);
+        testConferenceRoomRepository.save(testConferenceRoom);
+        roomsList.add(testConferenceRoom);
+        reservationsList.add(testReservation);
+        //when
+        testReservationService.findForConcreteConferenceRoom(testOrganization.getId(), 10L);
+        //then
+    }
+
+    @Test
     public void saveWhenConferenceRoomIdExists() {
         //given
         testOrganizationRepository.save(testOrganization);
         testConferenceRoomRepository.save(testConferenceRoom);
-        reservatonsList.add(testReservation);
+        reservationsList.add(testReservation);
         //when
         testReservationService.save(newTestReservationDTO, testConferenceRoom.getId());
         //then
@@ -111,7 +144,7 @@ public class ReservationServiceTest {
         //given
         testOrganizationRepository.save(testOrganization);
         testConferenceRoomRepository.save(testConferenceRoom);
-        reservatonsList.add(testReservation);
+        reservationsList.add(testReservation);
         //when
         testReservationService.save(newTestReservationDTO, 10L);
     }
@@ -121,8 +154,8 @@ public class ReservationServiceTest {
         //given
         testOrganizationRepository.save(testOrganization);
         testConferenceRoomRepository.save(testConferenceRoom);
-        reservatonsList.add(testReservation);
-        var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 15, 00), LocalDateTime.of(2019, 3, 23, 14, 00), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
+        reservationsList.add(testReservation);
+        var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 15, 0), LocalDateTime.of(2019, 3, 23, 14, 0), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
         //when
         testReservationService.save(newTestReservationDTO, testConferenceRoom.getId());
         //then
@@ -133,8 +166,8 @@ public class ReservationServiceTest {
         //given
         testOrganizationRepository.save(testOrganization);
         testConferenceRoomRepository.save(testConferenceRoom);
-        reservatonsList.add(testReservation);
-        var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 14, 00), LocalDateTime.of(2019, 3, 23, 14, 05), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
+        reservationsList.add(testReservation);
+        var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 14, 0), LocalDateTime.of(2019, 3, 23, 14, 5), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
         //when
         testReservationService.save(newTestReservationDTO, testConferenceRoom.getId());
         //then
@@ -145,8 +178,8 @@ public class ReservationServiceTest {
         //given
         testOrganizationRepository.save(testOrganization);
         testConferenceRoomRepository.save(testConferenceRoom);
-        reservatonsList.add(testReservation);
-        var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 10, 00), LocalDateTime.of(2019, 3, 23, 12, 01), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
+        reservationsList.add(testReservation);
+        var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 10, 0), LocalDateTime.of(2019, 3, 23, 12, 1), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
         //when
         testReservationService.save(newTestReservationDTO, testConferenceRoom.getId());
         //then
@@ -157,8 +190,32 @@ public class ReservationServiceTest {
         //given
         testOrganizationRepository.save(testOrganization);
         testConferenceRoomRepository.save(testConferenceRoom);
-        reservatonsList.add(testReservation);
-        var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
+        reservationsList.add(testReservation);
+        var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 0), LocalDateTime.of(2019, 3, 23, 17, 0), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
+        //when
+        testReservationService.save(newTestReservationDTO, testConferenceRoom.getId());
+        //then
+    }
+
+    @Test(expected = RoomReservedException.class)
+    public void saveWhenReservationStartsDuringOther() {
+        //given
+        testOrganizationRepository.save(testOrganization);
+        testConferenceRoomRepository.save(testConferenceRoom);
+        reservationsList.add(testReservation);
+        var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 30), LocalDateTime.of(2019, 3, 23, 17, 30), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
+        //when
+        testReservationService.save(newTestReservationDTO, testConferenceRoom.getId());
+        //then
+    }
+
+    @Test(expected = RoomReservedException.class)
+    public void saveWhenReservationEndsDuringOther() {
+        //given
+        testOrganizationRepository.save(testOrganization);
+        testConferenceRoomRepository.save(testConferenceRoom);
+        reservationsList.add(testReservation);
+        var newTestReservationDTO = new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 15, 30), LocalDateTime.of(2019, 3, 23, 16, 30), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")));
         //when
         testReservationService.save(newTestReservationDTO, testConferenceRoom.getId());
         //then
@@ -176,7 +233,7 @@ public class ReservationServiceTest {
         assertEquals(testReservation.getReservationEnd(), newTestReservationDTO.getReservationEnd());
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void updateWhenReservationIdNotExist() {
         //given
         when(testReservationRepository.findById(testId)).thenReturn(Optional.empty());

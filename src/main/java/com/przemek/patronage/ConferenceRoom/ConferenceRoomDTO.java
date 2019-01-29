@@ -3,12 +3,12 @@ package com.przemek.patronage.ConferenceRoom;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.przemek.patronage.Serializers.ConferenceRoomEquipmentSerializer;
-import com.przemek.patronage.Serializers.ConferenceRoomOrganizationSerializer;
-import com.przemek.patronage.Serializers.ConferenceRoomReservationSerializer;
 import com.przemek.patronage.Equipment.EquipmentDTO;
 import com.przemek.patronage.Organization.OrganizationDTO;
 import com.przemek.patronage.Reservation.ReservationDTO;
+import com.przemek.patronage.Serializers.ConferenceRoomEquipmentSerializer;
+import com.przemek.patronage.Serializers.ConferenceRoomOrganizationSerializer;
+import com.przemek.patronage.Serializers.ConferenceRoomReservationSerializer;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 

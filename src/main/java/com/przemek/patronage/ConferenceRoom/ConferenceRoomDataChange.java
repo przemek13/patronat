@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConferenceRoomDataChange {
 
-    public void setNewData (ConferenceRoom conferenceRoom, ConferenceRoom newConferenceRoom) {
+    public void setNewData(ConferenceRoom conferenceRoom, ConferenceRoom newConferenceRoom) {
         conferenceRoom.setName(newConferenceRoom.getName());
         conferenceRoom.setOptionalId(newConferenceRoom.getOptionalId());
         conferenceRoom.setFloor(newConferenceRoom.getFloor());

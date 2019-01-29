@@ -14,7 +14,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleIllegalArguments(IllegalArgumentException ex) {
         ApiException apiException = new ApiException(
                 HttpStatus.BAD_REQUEST, ex.getMessage());
-        return new ResponseEntity<Object>(
+        return new ResponseEntity<>(
                 apiException, new HttpHeaders(), apiException.getStatus());
     }
 
@@ -22,7 +22,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleRoomReserved(RoomReservedException ex) {
         ApiException apiException = new ApiException(
                 HttpStatus.CONFLICT, ex.getMessage());
-        return new ResponseEntity<Object>(
+        return new ResponseEntity<>(
                 apiException, new HttpHeaders(), apiException.getStatus());
     }
 }

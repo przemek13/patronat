@@ -1,16 +1,17 @@
 package com.przemek.patronage.ConferenceRoom;
 
+import com.przemek.patronage.Equipment.Equipment;
+import com.przemek.patronage.Equipment.EquipmentDTO;
 import com.przemek.patronage.Mapper;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationDTO;
-import com.przemek.patronage.Organization.OrganizationDataChange;
 import com.przemek.patronage.Organization.OrganizationRepository;
-import org.junit.AfterClass;
+import com.przemek.patronage.Reservation.Reservation;
+import com.przemek.patronage.Reservation.ReservationDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -21,9 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static junit.framework.TestCase.assertSame;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -56,17 +55,32 @@ public class ConferenceRoomServiceTest {
     @Autowired
     private ConferenceRoomDataChange testConferenceRoomDataChange;
 
-    private Long testId = 1L;
+    private final Long testId = 1L;
 
-    List<ConferenceRoom> roomsList = new ArrayList<>();
+    private final List<ConferenceRoom> roomsList = new ArrayList<>();
 
-    private Organization testOrganization = new Organization("Organization 1", roomsList);
+    private final List<ConferenceRoomDTO> roomDTOList = new ArrayList<>();
 
-    private ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 10, true, 10, testOrganization);
+    private final List<Reservation> reservationsList = new ArrayList<>();
 
-    private ConferenceRoom newTestConferenceRoom = new ConferenceRoom ("Conference Room 2", 1, false, 100, new Organization("Organization 2"));
+    private final List<ReservationDTO> reservationDTOList = new ArrayList<>();
 
-    private ConferenceRoomDTO newTestConferenceRoomDTO = new ConferenceRoomDTO("Conference Room 2", 1, false, 100, new OrganizationDTO("Organization 2"));
+    private final Organization testOrganization = new Organization("Organization 1", roomsList);
+
+    private final OrganizationDTO testOrganizationDTO = new OrganizationDTO ("Organization 1", roomDTOList);
+
+    private final ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 10, true, 10, testOrganization);
+
+    private final ConferenceRoomDTO testConferenceRoomDTO = new ConferenceRoomDTO ("Conference Room 1", 10, true, 10, testOrganizationDTO);
+
+    private final ConferenceRoom newTestConferenceRoom = new ConferenceRoom("Conference Room 2","Optional Id 2", 1, false, 100, 50, 10, reservationsList, testOrganization, null);
+
+    private final ConferenceRoomDTO newTestConferenceRoomDTO = new ConferenceRoomDTO("Conference Room 2","Optional Id 2", 1, false, 100, 50, 10, reservationDTOList, testOrganizationDTO, null);
+
+    private final Equipment testEquipment = new Equipment("Hitachi", false, testConferenceRoom);
+
+    private final EquipmentDTO testEquipmentDTO = new EquipmentDTO("Hitachi", false, testConferenceRoomDTO);
+
 
     @Before
     public void setUpTestConferenceRoomService() {
@@ -99,7 +113,7 @@ public class ConferenceRoomServiceTest {
         //given
         testOrganizationRepository.save(testOrganization);
         when(testConferenceRoomRepository.findByName(testConferenceRoom.getName())).thenReturn(testConferenceRoom);
-        var newTestConferenceRoomDTO = new ConferenceRoomDTO ("Conference Room 1", 1, false, 100, new OrganizationDTO("Organization 1"));
+        var newTestConferenceRoomDTO = new ConferenceRoomDTO("Conference Room 1", 1, false, 100, new OrganizationDTO("Organization 1"));
         //when
         testConferenceRoomService.save(newTestConferenceRoomDTO, testConferenceRoom.getOrganization().getId());
         //then
@@ -109,16 +123,21 @@ public class ConferenceRoomServiceTest {
     public void updateWhenConferenceRoomIdExists() {
         //given
         when(testConferenceRoomRepository.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
+        newTestConferenceRoomDTO.setEquipment(testEquipmentDTO);
         //when
         testConferenceRoomService.update(newTestConferenceRoomDTO, testId);
         //then
-        assertEquals(testConferenceRoom.getName(), (newTestConferenceRoom.getName()));
-        assertSame(testConferenceRoom.getFloor(), (newTestConferenceRoom.getFloor()));
-        assertSame(testConferenceRoom.isAvailable(), (newTestConferenceRoom.isAvailable()));
-        assertSame(testConferenceRoom.getSittingAndStandingPlaces(), (newTestConferenceRoom.getSittingAndStandingPlaces()));
+        assertEquals(testConferenceRoom.getName(), newTestConferenceRoom.getName());
+        assertEquals(testConferenceRoom.getFloor(), newTestConferenceRoom.getFloor());
+        assertEquals(testConferenceRoom.isAvailable(), newTestConferenceRoom.isAvailable());
+        assertEquals(testConferenceRoom.getSittingAndStandingPlaces(), newTestConferenceRoom.getSittingAndStandingPlaces());
+        assertEquals(testConferenceRoom.getLyingPlaces(), newTestConferenceRoom.getLyingPlaces());
+        assertEquals(testConferenceRoom.getHangingPlaces(), newTestConferenceRoom.getHangingPlaces());
+        assertEquals(testConferenceRoom.getReservations(), newTestConferenceRoom.getReservations());
+        assertEquals(testConferenceRoom.getEquipment(), newTestConferenceRoom.getEquipment());
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void updateWhenConferenceRoomIdNotExist() {
         //given
         when(testConferenceRoomRepository.findById(testId)).thenReturn(Optional.empty());

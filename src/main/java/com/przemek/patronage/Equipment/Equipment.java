@@ -15,24 +15,24 @@ public class Equipment {
     private String externalNumber;
     private String connections;
     @OneToOne(cascade = CascadeType.ALL)
-    private ConferenceRoom conferenceroom;
+    private ConferenceRoom conferenceRoom;
 
     public Equipment() {
     }
 
-    public Equipment(String projectorName, boolean isPhone, int internalNumber, String externalNumber, InterfaceConnections connections, ConferenceRoom conferenceroom) {
+    public Equipment(String projectorName, boolean isPhone, int internalNumber, String externalNumber, InterfaceConnections connections, ConferenceRoom conferenceRoom) {
         this.projectorName = projectorName;
         this.isPhone = isPhone;
         this.internalNumber = internalNumber;
         this.externalNumber = externalNumber;
         this.connections = connections.toString();
-        this.conferenceroom = conferenceroom;
+        this.conferenceRoom = conferenceRoom;
     }
 
-    public Equipment(String projectorName, boolean isPhone, ConferenceRoom conferenceroom) {
+    public Equipment(String projectorName, boolean isPhone, ConferenceRoom conferenceRoom) {
         this.projectorName = projectorName;
         this.isPhone = isPhone;
-        this.conferenceroom = conferenceroom;
+        this.conferenceRoom = conferenceRoom;
     }
 
     public Long getId() {
@@ -83,11 +83,11 @@ public class Equipment {
         this.connections = connections;
     }
 
-    public ConferenceRoom getConferenceroom() {
-        return conferenceroom;
+    public ConferenceRoom getConferenceRoom() {
+        return conferenceRoom;
     }
 
-    public void setConferenceroom(ConferenceRoom conferenceroom) {
-        this.conferenceroom = conferenceroom;
+    public void setConferenceRoom(ConferenceRoom conferenceRoom) {
+        this.conferenceRoom = conferenceRoom;
     }
 }

@@ -1,7 +1,6 @@
 package com.przemek.patronage.Serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
@@ -15,7 +14,7 @@ public class JsonDateSerializer extends JsonSerializer<LocalDateTime> {
 
     @Override
     public void serialize(LocalDateTime date, JsonGenerator generator, SerializerProvider arg2)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         final String dateString = date.format(this.formatter);
         generator.writeString(dateString);
     }

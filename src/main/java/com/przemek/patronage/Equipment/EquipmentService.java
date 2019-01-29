@@ -42,7 +42,7 @@ public class EquipmentService {
         }
         var room = conferenceRoomRepository.findById(id).get();
         room.setEquipment(newEquipment);
-        newEquipment.setConferenceroom(room);
+        newEquipment.setConferenceRoom(room);
         equipmentRepository.save(newEquipment);
         return mapper.convertToDTO(newEquipment);
     }

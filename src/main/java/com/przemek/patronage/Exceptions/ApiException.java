@@ -6,7 +6,7 @@ public class ApiException {
     private final HttpStatus status;
     private final String message;
 
-    public ApiException(HttpStatus status, String message) {
+    protected ApiException(HttpStatus status, String message) {
         super();
         this.status = status;
         this.message = message;

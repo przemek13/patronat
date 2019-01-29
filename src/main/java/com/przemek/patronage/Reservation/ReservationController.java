@@ -1,13 +1,10 @@
 package com.przemek.patronage.Reservation;
 
-import com.przemek.patronage.Mapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 public class ReservationController {
@@ -34,7 +31,7 @@ public class ReservationController {
     }
 
     @PutMapping("/reservations/{id}")
-    private ReservationDTO updateReservation(@Valid @RequestBody ReservationDTO newReservationDTO, @PathVariable Long id) throws ParseException {
+    private ReservationDTO updateReservation(@Valid @RequestBody ReservationDTO newReservationDTO, @PathVariable Long id) {
         return service.update(newReservationDTO, id);
     }
 

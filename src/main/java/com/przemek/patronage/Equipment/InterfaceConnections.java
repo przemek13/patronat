@@ -8,7 +8,7 @@ public enum InterfaceConnections {
 
     private final String name;
 
-    private InterfaceConnections(String name) {
+    InterfaceConnections(String name) {
         this.name = name;
     }
 

@@ -44,7 +44,7 @@ public class ReservationControllerIntegrationTest {
     @Test
     public void getReservations() throws Exception {
         //given
-        testReservationRepository.save(new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1"))));
+        testReservationRepository.save(new Reservation("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 0), LocalDateTime.of(2019, 3, 23, 17, 0), new ConferenceRoom("Conference Room 1", 1, true, 10, new Organization("Organization 1"))));
         //when
         mvc.perform(get("/reservations")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -72,6 +72,6 @@ public class ReservationControllerIntegrationTest {
                 "{\n" + " \"reservingId\": \"Reserving 1\",\n" + " \"reservationStart\": \"2019-03-23 24:00\",\n" + " \"reservationEnd\": \"2019-03-23 23:00\"\n" + "}"));
         Optional<Reservation> testReservation = testReservationRepository.findById(2L);
         //then
-        Assert.assertTrue(testReservation.equals(Optional.empty()));
+        Assert.assertEquals(testReservation,(Optional.empty()));
     }
 }

@@ -1,13 +1,10 @@
 package com.przemek.patronage.ConferenceRoom;
 
-import com.przemek.patronage.Mapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 public class ConferenceRoomController {
