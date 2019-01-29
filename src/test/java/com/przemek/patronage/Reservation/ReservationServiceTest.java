@@ -98,12 +98,12 @@ public class ReservationServiceTest {
         roomsList.add(testConferenceRoom);
         reservationsList.add(testReservation);
         //when
-        List <ReservationDTO> reservationDTOList = testReservationService.findForConcreteConferenceRoom(testOrganization.getId(), testConferenceRoom.getId());
+        List<ReservationDTO> reservationDTOList = testReservationService.findForConcreteConferenceRoom(testOrganization.getId(), testConferenceRoom.getId());
         //then
-        assertEquals(1,reservationDTOList.size());
+        assertEquals(1, reservationDTOList.size());
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void findForConcreteConferenceRoomWhenOrganizationIdNotExist() {
         //given
         testOrganizationRepository.save(testOrganization);
@@ -115,7 +115,7 @@ public class ReservationServiceTest {
         //then
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void findForConcreteConferenceRoomWhenConferenceRoomIdNotExist() {
         //given
         testOrganizationRepository.save(testOrganization);

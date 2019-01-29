@@ -15,6 +15,7 @@ public class Organization {
     private List<ConferenceRoom> conferenceRoomsList;
 
     public Organization() {
+
     }
 
     public Organization(String name, List<ConferenceRoom> conferenceRooms) {

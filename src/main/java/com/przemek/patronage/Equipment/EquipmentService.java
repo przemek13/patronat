@@ -2,7 +2,6 @@ package com.przemek.patronage.Equipment;
 
 import com.przemek.patronage.ConferenceRoom.ConferenceRoomRepository;
 import com.przemek.patronage.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +15,6 @@ public class EquipmentService {
     private final Mapper mapper;
     private final EquipmentDataChange equipmentDataChange;
 
-    @Autowired
     public EquipmentService(EquipmentRepository equipmentRepository, ConferenceRoomRepository conferenceRoomRepository, Mapper mapper, EquipmentDataChange equipmentDataChange) {
         this.equipmentRepository = Objects.requireNonNull(equipmentRepository, "must be defined.");
         this.conferenceRoomRepository = Objects.requireNonNull(conferenceRoomRepository, "must be defined.");

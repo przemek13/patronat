@@ -16,7 +16,6 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.List;
 
-
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")

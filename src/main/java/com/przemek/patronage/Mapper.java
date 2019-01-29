@@ -23,10 +23,10 @@ public class Mapper {
 
     public Mapper() {
         objectMapper = new ObjectMapper();
-        provideJavaDateModul();
+        provideJavaDateModule();
     }
 
-    private void provideJavaDateModul() {
+    private void provideJavaDateModule() {
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(LocalDateTime.class, new JsonDateSerializer());
         javaTimeModule.addDeserializer(LocalDateTime.class, new JsonDateDeserializer());

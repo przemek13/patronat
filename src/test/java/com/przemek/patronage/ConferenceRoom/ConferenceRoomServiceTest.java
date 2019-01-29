@@ -67,15 +67,15 @@ public class ConferenceRoomServiceTest {
 
     private final Organization testOrganization = new Organization("Organization 1", roomsList);
 
-    private final OrganizationDTO testOrganizationDTO = new OrganizationDTO ("Organization 1", roomDTOList);
+    private final OrganizationDTO testOrganizationDTO = new OrganizationDTO("Organization 1", roomDTOList);
 
     private final ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 10, true, 10, testOrganization);
 
-    private final ConferenceRoomDTO testConferenceRoomDTO = new ConferenceRoomDTO ("Conference Room 1", 10, true, 10, testOrganizationDTO);
+    private final ConferenceRoomDTO testConferenceRoomDTO = new ConferenceRoomDTO("Conference Room 1", 10, true, 10, testOrganizationDTO);
 
-    private final ConferenceRoom newTestConferenceRoom = new ConferenceRoom("Conference Room 2","Optional Id 2", 1, false, 100, 50, 10, reservationsList, testOrganization, null);
+    private final ConferenceRoom newTestConferenceRoom = new ConferenceRoom("Conference Room 2", "Optional Id 2", 1, false, 100, 50, 10, reservationsList, testOrganization, null);
 
-    private final ConferenceRoomDTO newTestConferenceRoomDTO = new ConferenceRoomDTO("Conference Room 2","Optional Id 2", 1, false, 100, 50, 10, reservationDTOList, testOrganizationDTO, null);
+    private final ConferenceRoomDTO newTestConferenceRoomDTO = new ConferenceRoomDTO("Conference Room 2", "Optional Id 2", 1, false, 100, 50, 10, reservationDTOList, testOrganizationDTO, null);
 
     private final Equipment testEquipment = new Equipment("Hitachi", false, testConferenceRoom);
 

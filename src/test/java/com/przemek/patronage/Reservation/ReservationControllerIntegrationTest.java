@@ -72,6 +72,6 @@ public class ReservationControllerIntegrationTest {
                 "{\n" + " \"reservingId\": \"Reserving 1\",\n" + " \"reservationStart\": \"2019-03-23 24:00\",\n" + " \"reservationEnd\": \"2019-03-23 23:00\"\n" + "}"));
         Optional<Reservation> testReservation = testReservationRepository.findById(2L);
         //then
-        Assert.assertEquals(testReservation,(Optional.empty()));
+        Assert.assertEquals(testReservation, (Optional.empty()));
     }
 }

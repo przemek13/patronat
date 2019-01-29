@@ -1,7 +1,6 @@
 package com.przemek.patronage.Organization;
 
 import com.przemek.patronage.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +14,6 @@ public class OrganizationService {
     private final Mapper mapper;
     private final OrganizationDataChange organizationDataChange;
 
-    @Autowired
     public OrganizationService(OrganizationRepository organizations, Mapper mapper, OrganizationDataChange organizationDataChange) {
         this.organizationRepository = Objects.requireNonNull(organizations, "must be defined.");
         this.mapper = Objects.requireNonNull(mapper, "must be defined.");
