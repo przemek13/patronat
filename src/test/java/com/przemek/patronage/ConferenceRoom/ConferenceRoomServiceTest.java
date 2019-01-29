@@ -3,6 +3,7 @@ package com.przemek.patronage.ConferenceRoom;
 import com.przemek.patronage.Mapper;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationDTO;
+import com.przemek.patronage.Organization.OrganizationDataChange;
 import com.przemek.patronage.Organization.OrganizationRepository;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -37,13 +38,23 @@ public class ConferenceRoomServiceTest {
         }
     }
 
+    @TestConfiguration
+    static class ConferenceRoomUpdateImplTestContextConfiguration {
+        @Bean
+        public ConferenceRoomDataChange conferenceRoomDataChange() {
+            return new ConferenceRoomDataChange();
+        }
+    }
+
     private ConferenceRoomService testConferenceRoomService;
     @Autowired
-    private Mapper mapper;
+    private Mapper testMapper;
     @Mock
     private ConferenceRoomRepository testConferenceRoomRepository;
     @Autowired
     private OrganizationRepository testOrganizationRepository;
+    @Autowired
+    private ConferenceRoomDataChange testConferenceRoomDataChange;
 
     private Long testId = 1L;
 
@@ -59,7 +70,7 @@ public class ConferenceRoomServiceTest {
 
     @Before
     public void setUpTestConferenceRoomService() {
-        this.testConferenceRoomService = new ConferenceRoomService(testConferenceRoomRepository, testOrganizationRepository, mapper);
+        this.testConferenceRoomService = new ConferenceRoomService(testConferenceRoomRepository, testOrganizationRepository, testMapper, testConferenceRoomDataChange);
     }
 
     @Test
@@ -107,14 +118,13 @@ public class ConferenceRoomServiceTest {
         assertSame(testConferenceRoom.getSittingAndStandingPlaces(), (newTestConferenceRoom.getSittingAndStandingPlaces()));
     }
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     public void updateWhenConferenceRoomIdNotExist() {
         //given
         when(testConferenceRoomRepository.findById(testId)).thenReturn(Optional.empty());
         //when
         testConferenceRoomService.update(newTestConferenceRoomDTO, testId);
         //then
-        verify(testConferenceRoomRepository, times(1)).save(any(ConferenceRoom.class));
     }
 
     @Test

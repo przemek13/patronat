@@ -32,7 +32,7 @@ public class OrganizationControllerIntegrationTest {
     private OrganizationRepository testOrganizationRepository;
 
     @After
-    public void resetDb() {
+    public void resetOrganizationDb() {
         testOrganizationRepository.deleteAll();
     }
 

@@ -1,12 +1,10 @@
 package com.przemek.patronage.Organization;
 
 import com.przemek.patronage.Mapper;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -30,10 +28,20 @@ public class OrganizationServiceTest {
         }
     }
 
+    @TestConfiguration
+    static class OrganizationUpdateImplTestContextConfiguration {
+        @Bean
+        public OrganizationDataChange organizationDataChange() {
+            return new OrganizationDataChange();
+        }
+    }
+
     @Mock
     private OrganizationRepository testOrganizationRepository;
     @Autowired
-    private Mapper mapper;
+    private Mapper testMapper;
+    @Autowired
+    OrganizationDataChange testOrganizationDataChange;
 
     private OrganizationService testOrganizationService;
 
@@ -47,7 +55,7 @@ public class OrganizationServiceTest {
 
     @Before
     public void setUpTestOrganizationService() {
-        this.testOrganizationService = new OrganizationService(testOrganizationRepository, mapper);
+        this.testOrganizationService = new OrganizationService(testOrganizationRepository, testMapper, testOrganizationDataChange);
     }
 
     @Test
@@ -79,14 +87,13 @@ public class OrganizationServiceTest {
         assertEquals(testOrganization.getName(), newTestOrganization.getName());
     }
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     public void updateWhenOrganizationIdNotExist() {
         //given
         when(testOrganizationRepository.findById(testId)).thenReturn(Optional.empty());
         //when
         testOrganizationService.update(newTestOrganizationDTO, testId);
         //then
-        verify(testOrganizationRepository, times(1)).save(any(Organization.class));
     }
 
     @Test

@@ -19,14 +19,16 @@ public class ReservationService {
     private OrganizationRepository organizationRepository;
     private Mapper mapper;
     private ReservationCheck reservationCheck;
+    private ReservationDataChange reservationDataChange;
 
     @Autowired
-    public ReservationService(ReservationRepository reservations, ConferenceRoomRepository conferenceRooms, OrganizationRepository organizations, Mapper mapper, ReservationCheck reservationCheck) {
+    public ReservationService(ReservationRepository reservations, ConferenceRoomRepository conferenceRooms, OrganizationRepository organizations, Mapper mapper, ReservationCheck reservationCheck, ReservationDataChange reservationDataChange) {
         this.reservationRepository = Objects.requireNonNull(reservations, "must be defined.");
         this.conferenceRoomRepository = Objects.requireNonNull(conferenceRooms, "must be defined");
         this.organizationRepository = Objects.requireNonNull(organizations, "must be defined");
         this.mapper = Objects.requireNonNull(mapper, "must be defined");
         this.reservationCheck = Objects.requireNonNull(reservationCheck, "must be defined");
+        this.reservationDataChange = Objects.requireNonNull(reservationDataChange, "must be defined");
     }
 
     public List<ReservationDTO> findAll() {
@@ -67,15 +69,12 @@ public class ReservationService {
         var newReservation = mapper.convertToEntity(newReservationDTO);
         return reservationRepository.findById(id)
                 .map(reservation -> {
-                    reservation.setReservingId(newReservation.getReservingId());
-                    reservation.setReservationStart(newReservation.getReservationStart());
-                    reservation.setReservationEnd(newReservation.getReservationEnd());
+                    reservationDataChange.setNewData(reservation, newReservation);
                     reservationRepository.save(reservation);
                     return mapper.convertToDTO(reservation);
                 })
                 .orElseGet(() -> {
-                    reservationRepository.save(newReservation);
-                    return mapper.convertToDTO(newReservation);
+                    throw new IllegalArgumentException("The Reservation with id given doesn't exist in the base.");
                 });
     }
 

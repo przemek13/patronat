@@ -45,6 +45,14 @@ public class ReservationServiceTest {
     }
 
     @TestConfiguration
+    static class ReservationUpdateImplTestContextConfiguration {
+        @Bean
+        public ReservationDataChange reservationDataChange() {
+            return new ReservationDataChange();
+        }
+    }
+
+    @TestConfiguration
     static class ReservationCheckImplTestContextConfiguration {
         @Bean
         public ReservationCheck reservationCheck(ConferenceRoomRepository conferenceRoomRepository) {
@@ -53,7 +61,7 @@ public class ReservationServiceTest {
     }
 
     @Autowired
-    private Mapper mapper;
+    private Mapper testMapper;
     @Autowired
     private ReservationCheck reservationCheck;
     @Mock
@@ -62,6 +70,8 @@ public class ReservationServiceTest {
     private ConferenceRoomRepository testConferenceRoomRepository;
     @Autowired
     private OrganizationRepository testOrganizationRepository;
+    @Autowired
+    private ReservationDataChange testReservationDataChange;
 
     List<ConferenceRoom> roomsList = new ArrayList<>();
 
@@ -81,7 +91,7 @@ public class ReservationServiceTest {
 
     @Before
     public void setUpTestReservationService() {
-        this.testReservationService = new ReservationService(testReservationRepository, testConferenceRoomRepository, testOrganizationRepository, mapper, reservationCheck);
+        this.testReservationService = new ReservationService(testReservationRepository, testConferenceRoomRepository, testOrganizationRepository, testMapper, reservationCheck, testReservationDataChange);
     }
 
     @Test
@@ -166,14 +176,13 @@ public class ReservationServiceTest {
         assertEquals(testReservation.getReservationEnd(), newTestReservationDTO.getReservationEnd());
     }
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     public void updateWhenReservationIdNotExist() {
         //given
         when(testReservationRepository.findById(testId)).thenReturn(Optional.empty());
         //when
         testReservationService.update(newTestReservationDTO, testId);
         //then
-        verify(testReservationRepository, times(1)).save(any(Reservation.class));
     }
 
     @Test

@@ -14,12 +14,14 @@ public class EquipmentService {
     private final EquipmentRepository equipmentRepository;
     private final ConferenceRoomRepository conferenceRoomRepository;
     private final Mapper mapper;
+    private final EquipmentDataChange equipmentDataChange;
 
     @Autowired
-    public EquipmentService(EquipmentRepository equipmentRepository, ConferenceRoomRepository conferenceRoomRepository, Mapper mapper) {
+    public EquipmentService(EquipmentRepository equipmentRepository, ConferenceRoomRepository conferenceRoomRepository, Mapper mapper, EquipmentDataChange equipmentDataChange) {
         this.equipmentRepository = Objects.requireNonNull(equipmentRepository, "must be defined.");
         this.conferenceRoomRepository = Objects.requireNonNull(conferenceRoomRepository, "must be defined.");
         this.mapper = Objects.requireNonNull(mapper, "must be defined.");
+        this.equipmentDataChange = Objects.requireNonNull(equipmentDataChange, "must be defined.");
     }
 
     public List<EquipmentDTO> findAll() {
@@ -49,23 +51,18 @@ public class EquipmentService {
         var newEquipment = mapper.convertToEntity(newEquipmentDTO);
         return equipmentRepository.findById(id)
                 .map(equipment -> {
-                    equipment.setProjectorName(newEquipment.getProjectorName());
-                    equipment.setPhone(newEquipment.isPhone());
-                    equipment.setInternalNumber(newEquipment.getInternalNumber());
-                    equipment.setExternalNumber(newEquipment.getExternalNumber());
-                    equipment.setConnections(newEquipment.getConnections());
+                    equipmentDataChange.setNewData(equipment, newEquipment);
                     equipmentRepository.save(equipment);
                     return mapper.convertToDTO(equipment);
                 })
                 .orElseGet(() -> {
-                    equipmentRepository.save(newEquipment);
-                    return mapper.convertToDTO(newEquipment);
+                    throw new IllegalArgumentException("The Equipment with id given doesn't exist in the base.");
                 });
     }
 
     public void delete(Long id) {
         if (equipmentRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("The Organization with id given doesn't exist in the base.");
+            throw new IllegalArgumentException("The Equipment with id given doesn't exist in the base.");
         }
         equipmentRepository.deleteById(id);
     }

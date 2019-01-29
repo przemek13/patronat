@@ -36,13 +36,23 @@ public class EquipmentServiceTest {
         }
     }
 
+    @TestConfiguration
+    static class EquipmentUpdateImplTestContextConfiguration {
+        @Bean
+        public EquipmentDataChange equipmentDataChange() {
+            return new EquipmentDataChange();
+        }
+    }
+
     private EquipmentService testEquipmentService;
     @Autowired
-    private Mapper mapper;
+    private Mapper testMapper;
     @Mock
     private EquipmentRepository testEquipmentRepository;
     @Autowired
     private ConferenceRoomRepository testConferenceRoomRepository;
+    @Autowired
+    private EquipmentDataChange testEquipmentDataChange;
 
     private ConferenceRoom testConferenceRoom = new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 1"));
 
@@ -54,7 +64,7 @@ public class EquipmentServiceTest {
 
     @Before
     public void setUpTestEquipmentService() {
-        this.testEquipmentService = new EquipmentService(testEquipmentRepository, testConferenceRoomRepository, mapper);
+        this.testEquipmentService = new EquipmentService(testEquipmentRepository, testConferenceRoomRepository, testMapper, testEquipmentDataChange);
     }
 
     @Test
@@ -90,14 +100,13 @@ public class EquipmentServiceTest {
         assertEquals(testEquipment.getConnections(), newTestEquipmentDTO.getConnections());
     }
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     public void updateWhenEquipmentIdNotExist() {
         //given
         when(testEquipmentRepository.findById(testId)).thenReturn(Optional.empty());
         //when
         testEquipmentService.update(newTestEquipmentDTO, testId);
         //then
-        verify(testEquipmentRepository, times(1)).save(any(Equipment.class));
     }
 
     @Test

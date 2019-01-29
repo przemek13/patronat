@@ -13,11 +13,13 @@ public class OrganizationService {
 
     private final OrganizationRepository organizationRepository;
     private final Mapper mapper;
+    private final OrganizationDataChange organizationDataChange;
 
     @Autowired
-    public OrganizationService(OrganizationRepository organizations, Mapper mapper) {
+    public OrganizationService(OrganizationRepository organizations, Mapper mapper, OrganizationDataChange organizationDataChange) {
         this.organizationRepository = Objects.requireNonNull(organizations, "must be defined.");
         this.mapper = Objects.requireNonNull(mapper, "must be defined.");
+        this.organizationDataChange = Objects.requireNonNull(organizationDataChange, "must be defined.");
     }
 
     public List<OrganizationDTO> findAll() {
@@ -39,14 +41,12 @@ public class OrganizationService {
         var newOrganization = mapper.convertToEntity(newOrganizationDTO);
         return organizationRepository.findById(id)
                 .map(organization -> {
-                    organization.setName(newOrganization.getName());
-                    organization.setConferenceRoomsList(newOrganization.getConferenceRoomsList());
+                    organizationDataChange.setNewData(organization, newOrganization);
                     organizationRepository.save(organization);
-                    return mapper.convertToDTO(newOrganization);
+                    return mapper.convertToDTO(organization);
                 })
                 .orElseGet(() -> {
-                    organizationRepository.save(newOrganization);
-                    return mapper.convertToDTO(newOrganization);
+                    throw new IllegalArgumentException("The Organization with id given doesn't exist in the base.");
                 });
     }
 

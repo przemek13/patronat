@@ -15,12 +15,14 @@ public class ConferenceRoomService {
     private final ConferenceRoomRepository conferenceRoomRepository;
     private final OrganizationRepository organizationRepository;
     private final Mapper mapper;
+    private final ConferenceRoomDataChange conferenceRoomDataChange;
 
     @Autowired
-    public ConferenceRoomService(ConferenceRoomRepository conferenceRoomRepository, OrganizationRepository organizationRepository, Mapper mapper) {
+    public ConferenceRoomService(ConferenceRoomRepository conferenceRoomRepository, OrganizationRepository organizationRepository, Mapper mapper, ConferenceRoomDataChange conferenceRoomDataChange) {
         this.conferenceRoomRepository = Objects.requireNonNull(conferenceRoomRepository, "must be defined.");
         this.organizationRepository = Objects.requireNonNull(organizationRepository, "must be defined.");
         this.mapper = Objects.requireNonNull(mapper, "must be defined.");
+        this.conferenceRoomDataChange = Objects.requireNonNull(conferenceRoomDataChange, "must be defined.");
     }
 
     public List<ConferenceRoomDTO> findAll() {
@@ -49,21 +51,12 @@ public class ConferenceRoomService {
         var newConferenceRoom = mapper.convertToEntity(newConferenceRoomDTO);
         return conferenceRoomRepository.findById(id)
                 .map(conferenceRoom -> {
-                    conferenceRoom.setName(newConferenceRoom.getName());
-                    conferenceRoom.setOptionalId(newConferenceRoom.getOptionalId());
-                    conferenceRoom.setFloor(newConferenceRoom.getFloor());
-                    conferenceRoom.setAvailable(newConferenceRoom.isAvailable());
-                    conferenceRoom.setSittingAndStandingPlaces(newConferenceRoom.getSittingAndStandingPlaces());
-                    conferenceRoom.setLyingPlaces(newConferenceRoom.getLyingPlaces());
-                    conferenceRoom.setHangingPlaces(newConferenceRoom.getHangingPlaces());
-                    conferenceRoom.setReservations(newConferenceRoom.getReservations());
-                    conferenceRoom.setEquipment(newConferenceRoom.getEquipment());
+                    conferenceRoomDataChange.setNewData(conferenceRoom, newConferenceRoom);
                     conferenceRoomRepository.save(conferenceRoom);
                     return mapper.convertToDTO(conferenceRoom);
                 })
                 .orElseGet(() -> {
-                    conferenceRoomRepository.save(newConferenceRoom);
-                    return mapper.convertToDTO(newConferenceRoom);
+                    throw new IllegalArgumentException("The Conference room with id given doesn't exist in the base.");
                 });
     }
 

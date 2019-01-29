@@ -36,13 +36,14 @@ public class ConferenceRoomControllerIntegrationTest {
     private OrganizationRepository testOrganizationRepository;
 
     @After
-    public void resetDb() {
+    public void resetConferenceRoomtDb() {
         testConferenceRoomRepository.deleteAll();
     }
 
     @Test
     public void getConferenceRooms() throws Exception {
         //given
+
         testConferenceRoomRepository.save(new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 1")));
         //when
         mvc.perform(get("/rooms")

@@ -39,42 +39,19 @@ public class EquipmentControllerIntegrationTest {
     private EquipmentRepository testEquipmentRepository;
 
     @After
-    public void resetDb() {
+    public void resetEquipmentDb() {
         testEquipmentRepository.deleteAll();
     }
 
     @Test
     public void getEquipment() throws Exception {
         //given
-        testEquipmentRepository.save(new Equipment("Hitachi", false, new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 2"))));
+        testEquipmentRepository.save(new Equipment("Hitachi", false, new ConferenceRoom("Conference Room 1", 10, true, 10, new Organization("Organization 1"))));
         //when
         //then
         mvc.perform(get("/equipment")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)));
     }
-
-    @Test
-    public void addEquipmentWhenRecordValid() throws Exception {
-        //given
-        testConferenceRoomRepository.save(new ConferenceRoom("Conference Room 1", 1, false, 100, new Organization("Organization 3")));
-        //when
-        mvc.perform(post("/equipment/1").contentType(MediaType.APPLICATION_JSON).content(
-                "    {\n" + "\"projectorName\": \"BenQ\",\n" + "\"internalNumber\": 0,\n" + "\"externalNumber\": \"+12 123456789\",\n" + "\"connections\": \"BLUETOOTH\",\n" + "\"phone\": true\n" + "}"));
-        List<Equipment> equipmentList = testEquipmentRepository.findAll();
-        //then
-        Assert.assertEquals(equipmentList.size(), 1);
-    }
-
-    @Test
-    public void addEquipmentWhenRecordInValid() throws Exception {
-        //given
-        testConferenceRoomRepository.save(new ConferenceRoom("Conference Room 2", 1, false, 100, new Organization("Organization 4")));
-        //when
-        mvc.perform(post("/equipment/1").contentType(MediaType.APPLICATION_JSON).content(
-                "    {\n" + "\"projectorName\": \"BenQ\",\n" + "\"internalNumber\": 0,\n" + "\"externalNumber\": \"+12123456789\",\n" + "\"connections\": \"BLUETOOTH\",\n" + "\"phone\": true\n" + "}"));
-        List<Equipment> equipmentList = testEquipmentRepository.findAll();
-        //then
-        Assert.assertEquals(equipmentList.size(), 0);
-    }
 }
+
