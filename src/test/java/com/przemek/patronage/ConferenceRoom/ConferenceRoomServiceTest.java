@@ -41,7 +41,7 @@ public class ConferenceRoomServiceTest {
     @Autowired
     private Mapper mapper;
     @Mock
-    private ConferenceRoomRepository testConferenceRoomRepossitory;
+    private ConferenceRoomRepository testConferenceRoomRepository;
     @Autowired
     private OrganizationRepository testOrganizationRepository;
 
@@ -59,25 +59,25 @@ public class ConferenceRoomServiceTest {
 
     @Before
     public void setUpTestConferenceRoomService() {
-        this.testConferenceRoomService = new ConferenceRoomService(testConferenceRoomRepossitory, testOrganizationRepository, mapper);
+        this.testConferenceRoomService = new ConferenceRoomService(testConferenceRoomRepository, testOrganizationRepository, mapper);
     }
 
     @Test
     public void saveWhenOrganizationIdExistsAndConferenceRoomNameNotExist() {
         //given
         testOrganizationRepository.save(testOrganization);
-        when(testConferenceRoomRepossitory.findByName(testConferenceRoom.getName())).thenReturn(null);
+        when(testConferenceRoomRepository.findByName(testConferenceRoom.getName())).thenReturn(null);
         //when
         testConferenceRoomService.save(newTestConferenceRoomDTO, testConferenceRoom.getOrganization().getId());
         //then
-        verify(testConferenceRoomRepossitory, times(1)).save(any(ConferenceRoom.class));
+        verify(testConferenceRoomRepository, times(1)).save(any(ConferenceRoom.class));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void saveWhenOrganizationIdNotExist() {
         //given
         testOrganizationRepository.save(testOrganization);
-        when(testConferenceRoomRepossitory.findByName(testConferenceRoom.getName())).thenReturn(null);
+        when(testConferenceRoomRepository.findByName(testConferenceRoom.getName())).thenReturn(null);
         //when
         testConferenceRoomService.save(newTestConferenceRoomDTO, 10L);
         //then
@@ -87,7 +87,7 @@ public class ConferenceRoomServiceTest {
     public void saveWhenConferenceRoomNameExists() {
         //given
         testOrganizationRepository.save(testOrganization);
-        when(testConferenceRoomRepossitory.findByName(testConferenceRoom.getName())).thenReturn(testConferenceRoom);
+        when(testConferenceRoomRepository.findByName(testConferenceRoom.getName())).thenReturn(testConferenceRoom);
         var newTestConferenceRoomDTO = new ConferenceRoomDTO ("Conference Room 1", 1, false, 100, new OrganizationDTO("Organization 1"));
         //when
         testConferenceRoomService.save(newTestConferenceRoomDTO, testConferenceRoom.getOrganization().getId());
@@ -97,7 +97,7 @@ public class ConferenceRoomServiceTest {
     @Test
     public void updateWhenConferenceRoomIdExists() {
         //given
-        when(testConferenceRoomRepossitory.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
+        when(testConferenceRoomRepository.findById(testId)).thenReturn(Optional.ofNullable(testConferenceRoom));
         //when
         testConferenceRoomService.update(newTestConferenceRoomDTO, testId);
         //then
@@ -110,27 +110,27 @@ public class ConferenceRoomServiceTest {
     @Test
     public void updateWhenConferenceRoomIdNotExist() {
         //given
-        when(testConferenceRoomRepossitory.findById(testId)).thenReturn(Optional.empty());
+        when(testConferenceRoomRepository.findById(testId)).thenReturn(Optional.empty());
         //when
         testConferenceRoomService.update(newTestConferenceRoomDTO, testId);
         //then
-        verify(testConferenceRoomRepossitory, times(1)).save(any(ConferenceRoom.class));
+        verify(testConferenceRoomRepository, times(1)).save(any(ConferenceRoom.class));
     }
 
     @Test
     public void deleteWhenOrganizationIdExists() {
         //given
-        when(testConferenceRoomRepossitory.findById(testId)).thenReturn(Optional.ofNullable(newTestConferenceRoom));
+        when(testConferenceRoomRepository.findById(testId)).thenReturn(Optional.ofNullable(newTestConferenceRoom));
         //when
         testConferenceRoomService.delete(testId);
         //then
-        verify(testConferenceRoomRepossitory, times(1)).deleteById(1L);
+        verify(testConferenceRoomRepository, times(1)).deleteById(1L);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void deleteWhenOrganizationIdNotExist() {
         //given
-        when(testConferenceRoomRepossitory.findById(testId)).thenReturn(Optional.empty());
+        when(testConferenceRoomRepository.findById(testId)).thenReturn(Optional.empty());
         //when
         testConferenceRoomService.delete(testId);
         //then

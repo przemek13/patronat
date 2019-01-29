@@ -41,9 +41,9 @@ public class ReservationControllerTest {
         //given
         when(testService.findAll()).thenReturn(Collections.singletonList(new ReservationDTO("Reserving 1", LocalDateTime.of(2019, 3, 23, 16, 00), LocalDateTime.of(2019, 3, 23, 17, 00), new ConferenceRoomDTO("Conference Room 1", 1, true, 10, new OrganizationDTO("Organization 1")))));
         //when
+        //then
         mvc.perform(get("/reservations")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)));
-        //then
     }
 }

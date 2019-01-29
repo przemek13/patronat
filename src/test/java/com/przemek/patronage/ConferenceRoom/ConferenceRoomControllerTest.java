@@ -1,9 +1,11 @@
 package com.przemek.patronage.ConferenceRoom;
 
+import com.przemek.patronage.Equipment.EquipmentDTO;
 import com.przemek.patronage.Mapper;
 import com.przemek.patronage.Organization.Organization;
 import com.przemek.patronage.Organization.OrganizationDTO;
 import com.przemek.patronage.Organization.OrganizationRepository;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @RunWith(SpringRunner.class)
